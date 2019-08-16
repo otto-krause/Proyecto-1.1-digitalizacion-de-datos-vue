@@ -1,6 +1,6 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+  <nav class="navbar navbar-expand-md navbar-light bg-danger">
+    <a class="navbar-brand" href="#">OK System</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -17,14 +17,16 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <a class="nav-link" href="#">
-            Home
+            Inicio
             <span class="sr-only">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="#">Perfil</a>
         </li>
-        <li class="nav-item dropdown">
+      </ul>
+      <ul class="navbar-nav mr-5">
+        <li class="nav-item dropdown mr-5">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -33,22 +35,15 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-          >Dropdown</a>
+          >Dase de Batos</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Autoridades</a>
             <a class="dropdown-item" href="#">Another action</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
     </div>
   </nav>
 </template>
@@ -61,16 +56,6 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    this.getTasks();
-  },
-  methods: {
-    getTasks() {
-      axios.get("/api/tasks").then(result => {
-        console.log(result.data);
-      });
-    }
-  }
 };
 </script>
 
