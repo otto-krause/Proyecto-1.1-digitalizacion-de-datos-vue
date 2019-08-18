@@ -39,11 +39,11 @@
               <div class="card-body">
                 <label class="form-check">
                   <input class="form-check-input" type="radio" name="exampleRadio" value />
-                  <span class="form-check-label">First hand items</span>
+                  <span class="form-check-label">First option</span>
                 </label>
                 <label class="form-check">
                   <input class="form-check-input" type="radio" name="exampleRadio" value />
-                  <span class="form-check-label">Brand new items</span>
+                  <span class="form-check-label">Brand new option</span>
                 </label>
                 <label class="form-check">
                   <input class="form-check-input" type="radio" name="exampleRadio" value />
@@ -58,10 +58,9 @@
 
             <article class="card-group-item">
               <header class="card-header">
-                <h6 class="title">Barrita</h6>
+                <h6 class="title">Edad</h6>
               </header>
               <div class="card-body">
-                <input class="custom-range" min="0" max="100" name type="range" />
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label>Min</label>
@@ -115,27 +114,17 @@
                 <th scope="col">DNI</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
-                <th scope="col">Tipo</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Ficha Medica</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-for="autoridad in autoridades" v-bind:key="autoridad.idAutoridad">
               <tr>
-                <td>42240922</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Profesor</td>
-              </tr>
-              <tr>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>Profesor</td>
-              </tr>
-              <tr>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                <td>Profesor</td>
+                <td>{{autoridad.dni}}</td>
+                <td>{{autoridad.nombre}}</td>
+                <td>{{autoridad.apellido}}</td>
+                <td>{{autoridad.telefono}}</td>
+                <td>{{autoridad.fichaMedica ? "Si": "No"}}</td>
               </tr>
             </tbody>
           </table>
@@ -156,15 +145,17 @@ export default {
     Navigation
   },
   data() {
-    return {};
+    return {
+      autoridades: []
+    };
   },
-  beforeMount() {
+  mounted() {
     this.getTasks();
   },
   methods: {
     getTasks() {
       axios.get("/api/autoridad").then(result => {
-        console.log({result});
+        this.autoridades = result.data;
       });
     }
   }

@@ -16,13 +16,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">
-            Inicio
-            <span class="sr-only">(current)</span>
-          </a>
+            <router-link to="/" class="nav-link">Inicio</router-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Perfil</a>
+          <router-link to="/" class="nav-link">Perfil</router-link>
         </li>
       </ul>
       <ul class="navbar-nav mr-5">
@@ -37,10 +34,10 @@
             aria-expanded="false"
           >Dase de Batos</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Autoridades</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <router-link to="/autoridades" class="dropdown-item">Autoridades</router-link>
+            <router-link to="/agregarAutoridad" class="dropdown-item">AgregarAutoridad</router-link>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <router-link to="/" class="dropdown-item">Something else here</router-link>
           </div>
         </li>
       </ul>
