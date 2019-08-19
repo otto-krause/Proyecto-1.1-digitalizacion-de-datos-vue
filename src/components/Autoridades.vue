@@ -150,10 +150,10 @@ export default {
     };
   },
   mounted() {
-    this.getTasks();
+    this.GetAutoridades();
   },
   methods: {
-    getTasks() {
+    GetAutoridades() {
       axios.get("/api/autoridad").then(result => {
         this.autoridades = result.data;
       });

@@ -6,7 +6,7 @@
         <div class="row no-gutters">
           <div class="card-body">
             <h3 class="card-title text-center mb-4">Nueva Autoridad</h3>
-            <form autocomplete="off" action="/clients/add" method="POST">
+            <form autocomplete="off" @submit="PostNewAutoridad">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Nombre</label>
@@ -16,6 +16,7 @@
                   name="nombre"
                   class="form-control"
                   placeholder="Nombre"
+                  v-model="nombre"
                   required
                   oninvalid="this.setCustomValidity('Ingrese el nombre de la autoridad')"
                   oninput="setCustomValidity('')"
@@ -30,6 +31,7 @@
                   name="apellido"
                   class="form-control"
                   placeholder="Apellido"
+                  v-model="apellido"
                   required
                   oninvalid="this.setCustomValidity('Ingrese el apellido de la autoridad')"
                   oninput="setCustomValidity('')"
@@ -44,6 +46,7 @@
                   name="DNI"
                   class="form-control"
                   placeholder="DNI"
+                  v-model="dni"
                   required
                   oninvalid="this.setCustomValidity('Ingrese el DNI de la autoridad')"
                   oninput="setCustomValidity('')"
@@ -53,32 +56,32 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text">Direccion</label>
                 </div>
-                <input type="text" name="calle" class="form-control" placeholder="Calle" />
-                <input type="number" name="nCalle" class="form-control col-sm-4" placeholder="Numero" />
+                <input type="text" name="calle" class="form-control" placeholder="Calle" v-model="calle" />
+                <input type="number" name="nCalle" class="form-control col-sm-4" placeholder="Numero" v-model="ncalle"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Telefono</label>
                 </div>
-                <input type="number" name="Telefono" class="form-control" placeholder="Telefono" />
+                <input type="number" name="Telefono" class="form-control" placeholder="Telefono" v-model="telefono"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de ingreso</label>
                 </div>
-                <input type="date" name="fechaIngreso" class="form-control" />
+                <input type="date" name="fechaIngreso" class="form-control"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de cumpleaños</label>
                 </div>
-                <input type="date" name="fechaNacimiento" class="form-control" />
+                <input type="date" name="fechaNacimiento" class="form-control"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Ficha Medica</label>
                 </div>
-                <select class="form-control" name="fichaMedica">
+                <select class="form-control" name="fichaMedica" v-model="fichaMedica">
                   <option value disabled selected>Ficha Medica</option>
                   <option value=1>Si</option>
                   <option value=0>No</option>
@@ -108,17 +111,25 @@ export default {
   },
   data() {
     return {
-      autoridades: []
+      dni:'',
+      telefono:'',
+      calle:'',
+      ncalle:'',
+      nombre:'',
+      apellido:'',
+      fichaMedica:'',
     };
   },
-  mounted() {
-    this.getTasks();
-  },
   methods: {
-    getTasks() {
-      axios.get("/api/autoridad").then(result => {
-        this.autoridades = result.data;
-      });
+    PostNewAutoridad() {
+      axios.post('/api/autoridad/add' ,{
+        dni:this.dni,
+        telefono:this.telefono,
+        direccion:this.calle + ' ' + ncalle,
+        nombre: this.name,
+        apellido:this.apellido,
+        fichaMedica:this.fichaMedica,
+      }).catch(err=> console.log(err))
     }
   }
 };
