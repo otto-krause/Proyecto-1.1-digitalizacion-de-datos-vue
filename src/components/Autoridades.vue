@@ -1,113 +1,72 @@
 <template>
   <div>
     <navigation />
+
     <div class="container-fluid">
       <div class="row">
-        <div class="col-3 col-lg-2">
-          <div class="card">
-            <article class="card-group-item">
-              <header class="card-header">
-                <h6 class="title">Cargos</h6>
-              </header>
-              <div class="card-body">
-                <form>
-                  <label class="form-check">
-                    <input class="form-check-input" type="checkbox" value />
-                    <span class="form-check-label">Profesor</span>
-                  </label>
-                  <!-- form-check.// -->
-                  <label class="form-check">
-                    <input class="form-check-input" type="checkbox" value />
-                    <span class="form-check-label">Preceptor</span>
-                  </label>
-                  <!-- form-check.// -->
-                  <label class="form-check">
-                    <input class="form-check-input" type="checkbox" value />
-                    <span class="form-check-label">Coordinador</span>
-                  </label>
-                  <!-- form-check.// -->
-                </form>
-              </div>
-              <!-- card-body.// -->
-            </article>
-            <!-- card-group-item.// -->
-
-            <article class="card-group-item">
-              <header class="card-header">
-                <h6 class="title">Choose type</h6>
-              </header>
-              <div class="card-body">
-                <label class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadio" value />
-                  <span class="form-check-label">First option</span>
-                </label>
-                <label class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadio" value />
-                  <span class="form-check-label">Brand new option</span>
-                </label>
-                <label class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadio" value />
-                  <span class="form-check-label">Some other option</span>
-                </label>
-              </div>
-              <!-- card-body.// -->
-            </article>
-            <!-- card-group-item.// -->
-
-            <!-- card.// -->
-
-            <article class="card-group-item">
-              <header class="card-header">
-                <h6 class="title">Edad</h6>
-              </header>
-              <div class="card-body">
+        <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
+          <div class="card rounded-0 border-0">
+            <article>
+              <div class="card-body" style="background-color:#FAFAFA">
+                <h6 class="card-title">Busqueda</h6>
                 <div class="form-row">
-                  <div class="form-group col-md-6">
-                    <label>Min</label>
-                    <input type="number" class="form-control" id="inputEmail4" placeholder="18" />
-                  </div>
-                  <div class="form-group col-md-6 text-right">
-                    <label>Max</label>
-                    <input type="number" class="form-control" placeholder="100" />
-                  </div>
+                  <input type="text" v-model="search" class="form-control" placeholder="Buscador" />
                 </div>
               </div>
-              <!-- card-body.// -->
             </article>
-            <!-- card-group-item.// -->
             <article class="card-group-item">
-              <header class="card-header">
-                <h6 class="title">Selection</h6>
-              </header>
-              <div class="card-body">
+              <div class="card-body" style="background-color:#FAFAFA">
+                <h6 class="title">Cargos</h6>
                 <div class="custom-control custom-checkbox">
-                  <span class="float-right badge badge-light round">52</span>
-                  <input type="checkbox" class="custom-control-input" id="Check1" />
-                  <label class="custom-control-label" for="Check1">Xiaomi</label>
+                  <input type="checkbox" class="custom-control-input" id="Check1" v-model="profesor"/>
+                  <label class="custom-control-label" for="Check1">Profesor</label>
                 </div>
-                <!-- form-check.// -->
 
                 <div class="custom-control custom-checkbox">
-                  <span class="float-right badge badge-light round">132</span>
-                  <input type="checkbox" class="custom-control-input" id="Check2" />
-                  <label class="custom-control-label" for="Check2">Panqueque</label>
+                  <input type="checkbox" class="custom-control-input" id="Check2" v-model="preceptor"/>
+                  <label class="custom-control-label" for="Check2">Preceptor</label>
                 </div>
-                <!-- form-check.// -->
 
                 <div class="custom-control custom-checkbox">
-                  <span class="float-right badge badge-light round">17</span>
-                  <input type="checkbox" class="custom-control-input" id="Check3" />
-                  <label class="custom-control-label" for="Check3">Otra</label>
+                  <input type="checkbox" class="custom-control-input" id="Check3" v-model="coordinador"/>
+                  <label class="custom-control-label" for="Check3">Coordinador</label>
                 </div>
-                <!-- form-check.// -->
               </div>
-              <!-- card-body.// -->
             </article>
-            <!-- card-group-item.// -->
+            <article>
+              <div class="card-body" style="background-color:#FAFAFA">
+                <h6 class="card-title">Fecha Ingreso</h6>
+                <div class="form-row">
+                  <div class="form-group col-sm-12">
+                    <label>Desde</label>
+                    <input
+                      type="date"
+                      v-model="fechaInicio"
+                      class="form-control"
+                      data-date-format="YYYY-MM-DD"
+                    />
+                    <label>Hasta</label>
+                    <input
+                      type="date"
+                      v-model="fechaFin"
+                      class="form-control"
+                      data-date-format="YYYY-MM-DD"
+                    />
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
-          <!-- card.// -->
         </div>
         <div class="col">
+          <nav class="navbar navbar-light" style="background-color:#1a1a1d">
+            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Autoridades</h1>
+            <router-link
+              :to="{ name: 'AgregarAutoridad' }"
+              class="btn btn-info"
+
+            >Crear autoridad</router-link>
+          </nav>
           <table class="table">
             <thead>
               <tr>
@@ -115,16 +74,21 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
                 <th scope="col">Telefono</th>
-                <th scope="col">Ficha Medica</th>
+                <th scope="col"></th>
               </tr>
             </thead>
-            <tbody v-for="autoridad in autoridades" v-bind:key="autoridad.idAutoridad">
+            <tbody v-for="autoridad in displayedAutoridades" v-bind:key="autoridad.idAutoridad">
               <tr>
-                <td>{{autoridad.dni}}</td>
-                <td>{{autoridad.nombre}}</td>
-                <td>{{autoridad.apellido}}</td>
-                <td>{{autoridad.telefono}}</td>
-                <td>{{autoridad.fichaMedica ? "Si": "No"}}</td>
+                <th scope="col">{{autoridad.dni}}</th>
+                <th scope="col">{{autoridad.nombre}}</th>
+                <th scope="col">{{autoridad.apellido}}</th>
+                <th scope="col">{{autoridad.telefono}}</th>
+                <th scope="col">
+                  <router-link
+                    :to="{ name: 'AutoridadCompleta', params: {autoridad} }"
+                    class="nav-link btn btn-info fas fa-eye"
+                  ></router-link>
+                </th>
               </tr>
             </tbody>
           </table>
@@ -146,17 +110,66 @@ export default {
   },
   data() {
     return {
+      search: "",
+      profesor: false,
+      preceptor: false,
+      coordinador: false,
+      fechaInicio: new Date("1984-01-01").toISOString(),
+      fechaFin: new Date().toISOString(),
+      page: 1,
+      perPage: 10,
+      pages: [],
       autoridades: []
     };
   },
   mounted() {
     this.GetAutoridades();
   },
+  computed: {
+    filteredAutoridades() {
+      return this.autoridades.filter(autoridad => {
+        return (
+          (this.profesor ? autoridad.idRol.includes("1") : true) &&
+          (this.preceptor ? autoridad.idRol.includes("2") : true) &&
+          (this.coordinador ? autoridad.idRol.includes("3") : true) &&
+          (autoridad.nombre.toLowerCase().includes(this.search.toLowerCase()) ||
+            autoridad.apellido
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+            autoridad.dni.toString().includes(this.search))
+        );
+      });
+    },
+    displayedAutoridades() {
+      return this.paginate();
+    }
+  },
   methods: {
     GetAutoridades() {
       axios.get("/api/autoridad").then(result => {
         this.autoridades = result.data;
       });
+    },
+    paginate() {
+      let from = this.page * this.perPage - this.perPage;
+      let to = this.page * this.perPage;
+
+      return this.filteredAutoridades.slice(from, to);
+    },
+    setAutoridades() {
+      let numberOfAutoridades = Math.ceil(
+        this.filteredAutoridades.length / this.perPage
+      );
+      this.pages = [];
+      for (let i = 1; i <= numberOfAutoridades; i++) {
+        this.pages.push(i);
+      }
+    }
+  },
+  watch: {
+    filteredAutoridades() {
+      this.page = 1;
+      this.setAutoridades();
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-light bg-danger">
+  <nav class="navbar navbar-expand-md navbar-light">
     <a class="navbar-brand" href="#">OK System</a>
     <button
       class="navbar-toggler"
@@ -35,9 +35,9 @@
           >Dase de Batos</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link to="/autoridades" class="dropdown-item">Autoridades</router-link>
-            <router-link to="/agregarAutoridad" class="dropdown-item">AgregarAutoridad</router-link>
+            <router-link to="/" class="dropdown-item">Otra cosa</router-link>
             <div class="dropdown-divider"></div>
-            <router-link to="/" class="dropdown-item">Something else here</router-link>
+            <router-link to="/" class="dropdown-item">Y otra cosa mas</router-link>
           </div>
         </li>
       </ul>
