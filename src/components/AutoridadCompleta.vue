@@ -37,7 +37,7 @@
       <tbody v-bind="autoridad">
         <tr>
           <th>DNI</th>
-          <td>{{autoridad.dni}}</td>
+          <td>{{autoridad.dniAutoridad}}</td>
         </tr>
         <tr>
           <th>Nombre</th>
@@ -78,7 +78,7 @@
               data-target=".deleteModal"
             ></button>
             <router-link
-              :to="{ name: 'AutoridadCompleta', params: {autoridad} }"
+              :to="{ name: 'EditarAutoridad', params: {autoridad} }"
               class="nav-link btn btn-info fas fa-edit"
             ></router-link>
           </td>
@@ -103,6 +103,9 @@ export default {
     };
   },
   mounted() {
+    if(!this.autoridad){
+      this.$router.push({ name: 'Autoridades'})
+    }
     this.SetRoles();
   },
   methods: {
@@ -114,10 +117,10 @@ export default {
     async DeleteAutoridad(){
       $('#myModal').modal('toggle')
       await axios.post("/api/autoridad/delete", {
-        idAutoridad: this.autoridad.idAutoridad
+        dniAutoridad: this.autoridad.dniAutoridad
       })
-      .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownDeletion: 6 }})})
-      .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownDeletion: 7 }})})
+      .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownDeletionProp: 4 }})})
+      .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownDeletionProp: 6 }})})
     }
   }
 };

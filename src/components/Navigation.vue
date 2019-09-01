@@ -35,7 +35,7 @@
           >Dase de Batos</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link to="/autoridades" class="dropdown-item">Autoridades</router-link>
-            <router-link to="/" class="dropdown-item">Otra cosa</router-link>
+            <router-link to="/Roles" class="dropdown-item">Roles</router-link>
             <div class="dropdown-divider"></div>
             <router-link to="/" class="dropdown-item">Y otra cosa mas</router-link>
           </div>

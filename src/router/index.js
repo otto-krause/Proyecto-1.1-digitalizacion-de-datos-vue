@@ -7,6 +7,10 @@ import SignUp from '@/components/SignUp'
 import Autoridades from '@/components/Autoridades'
 import AgregarAutoridad from '@/components/AgregarAutoridad'
 import AutoridadCompleta from '@/components/AutoridadCompleta'
+import EditarAutoridad from '@/components/EditarAutoridad'
+import Roles from '@/components/Roles'
+import AgregarRol from '@/components/AgregarRol'
+import EditarRol from '@/components/EditarRol'
 
 Vue.use(Router)
 
@@ -43,7 +47,31 @@ export default new Router({
     {
       path: '/agregarAutoridad',
       name: 'AgregarAutoridad',
-      component: AgregarAutoridad
+      component: AgregarAutoridad,
+      props: true
+    },
+    {
+      path: '/EditarAutoridad',
+      name: 'EditarAutoridad',
+      component: EditarAutoridad,
+      props: true
+    },
+    {
+      path: '/Roles',
+      name: 'Roles',
+      component: Roles,
+      props: true
+    },
+    {
+      path: '/AgregarRol',
+      name: 'AgregarRol',
+      component: AgregarRol,
+    },
+    {
+      path: '/EditarRol',
+      name: 'EditarRol',
+      component: EditarRol,
+      props: true
     },
     {
       path: '/*',

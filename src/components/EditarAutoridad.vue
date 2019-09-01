@@ -10,7 +10,7 @@
       <div class="card">
         <div class="row no-gutters">
           <div class="card-body">
-            <h3 class="card-title text-center mb-4">Nueva autoridad</h3>
+            <h3 class="card-title text-center mb-4">Editar autoridad</h3>
             <form autocomplete="off" v-on:submit.prevent="PostNewAutoridad">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -92,20 +92,20 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de ingreso</label>
                 </div>
-                <input type="date" v-model="fechaIngreso" name="fechaIngreso" class="form-control" />
+                <input type="date" v-model="fechaIngreso" id="fechaIngreso" name="fechaIngreso" class="form-control" />
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de cumpleaños</label>
                 </div>
-                <input type="date" v-model="fechaNacimiento" name="fechaNacimiento" class="form-control" />
+                <input type="date" v-model="fechaNacimiento" id="fechaNacimiento" name="fechaNacimiento" class="form-control" />
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Ficha Medica</label>
                 </div>
                 <select class="form-control" name="fichaMedica" v-model="fichaMedica">
-                  <option value disabled selected>Ficha Medica</option>
+                  <option value= disabled selected>Ficha Medica</option>
                   <option value="1">Si</option>
                   <option value="0">No</option>
                   <option value="NULL">Desconocido</option>
@@ -119,7 +119,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <button class="btn btn-danger btn-block" type="submit" >Crear nueva Autoridad</button>
+                <button class="btn btn-danger btn-block" type="submit" >Guardar cambios</button>
               </div>
             </form>
           </div>
@@ -136,37 +136,53 @@ import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
-  name: "AgregarRol",
+  name: "EditarAutoridad",
+  props: ["autoridad"],
   components: {
     Navigation,
     Multiselect
   },
   data() {
     return {
-      dniAutoridad: '',
-      telefono: '',
-      calle: '',
-      ncalle: '',
-      nombre: '',
-      apellido: '',
-      fechaIngreso: new Date(null).toISOString(),
-      fechaNacimiento: new Date(null).toISOString(),
-      fichaMedica: '',
-      cargos:[],
+      dniAutoridad: this.autoridad.dniAutoridad,
+      telefono:this.autoridad.telefono,
+      calle: this.autoridad.direccion.split(' ').reverse().pop(),
+      ncalle: (this.autoridad.direccion.split(' ')).reverse()[0],
+      nombre: this.autoridad.nombre,
+      apellido: this.autoridad.apellido,
+      fechaIngreso: this.autoridad.fechaIngreso.slice(0,10),
+      fechaNacimiento: this.autoridad.fechaNacimiento.slice(0,10),
+      fichaMedica: this.autoridad.fichaMedica,
+      cargos:this.autoridad.cargos,
       roles: [],
       isInvalid: false
     };
   },
   created(){
-    this.GetRoles();
+    this.getRoles();
+  },
+  mounted() {
+    if(!this.autoridad){
+      this.$router.push({ name: 'Autoridades'})
+    }
+    this.GetAutoridadesRoles();
   },
   methods: {
-    GetRoles(){
-      axios.get("/api/rol").then(result => {
+    GetAutoridadesRoles() {
+      axios.get("/api/autoridad/roles/" + this.autoridad.dniAutoridad)
+      .then(result => {
+        this.cargos = result.data;
+      });
+    },
+    getRoles(){
+      axios.get('/api/rol').then(result =>{
+        if(result.data != 0){
+          this.ThereAreRoles = true
           result.data.forEach(rol => {
             this.roles.push(rol)
           });
-      });
+        }
+      })
     },
     validar () {
       if (this.cargos.length === 0){
@@ -177,19 +193,19 @@ export default {
     },
     async PostNewAutoridad() {
       if(this.validar()){
-      await axios.post("/api/autoridad/add", {
+      await axios.post("/api/autoridad/update", {
           dniAutoridad: this.dniAutoridad,
           telefono: this.telefono,
           direccion: this.calle + " " + this.ncalle,
           nombre: this.nombre,
           apellido: this.apellido,
-          fechaIngreso: this.fechaIngreso,
-          fechaNacimiento: this.fechaNacimiento,
-          fichaMedica: this.fichaMedica,
+          fechaIngreso: new Date(this.fechaIngreso).toISOString(),
+          fechaNacimiento: new Date(this.fechaNacimiento).toISOString(),
+          FichaMedica: this.fichaMedica,
           cargos: this.cargos
         })
-        .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownCreationProp: 4 }})})
-        .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationProp: 6 }})})
+        .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownEditProp: 6 }})})
+        .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownEditProp: 7 }})})
 
       }
     },

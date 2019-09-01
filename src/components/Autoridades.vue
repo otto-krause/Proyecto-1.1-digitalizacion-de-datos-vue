@@ -2,6 +2,33 @@
   <div>
     <navigation />
     <div class="container-fluid">
+      <b-alert
+          :show="SuccessCountDownEdit"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownEdit =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad se modifico correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownEdit"
+          dismissible
+          variant="warning"
+          @dismissed="ErrorCountDownEdit =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad no pudo ser modificada</p>
+        </b-alert>
+      <b-alert
+          :show="ErrorCountDownRol"
+          dismissible
+          variant="warning"
+          @dismissed="ErrorCountDownRol =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad no puede ser creada porque no existen roles para asignarle. Cree un rol para poder continuar</p>
+        </b-alert>
         <b-alert
           :show="SuccessCountDownCreation"
           dismissible
@@ -111,7 +138,8 @@
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
             <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Autoridades</h1>
-            <router-link :to="{ name: 'AgregarAutoridad' }" class="btn btn-info">Crear autoridad</router-link>
+            <router-link :to="{ name: 'AgregarAutoridad' }" class="btn btn-info" v-if="ThereAreRoles">Crear autoridad</router-link>
+            <button class="btn btn-info" v-if="!ThereAreRoles" v-on:click="ErrorCountDownRol = 6">Crear autoridad</button>
           </nav>
           <table class="table">
             <thead>
@@ -123,9 +151,9 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody v-for="autoridad in displayedAutoridades" v-bind:key="autoridad.idAutoridad">
+            <tbody v-for="autoridad in displayedAutoridades" v-bind:key="autoridad.dniAutoridad">
               <tr>
-                <th scope="col">{{autoridad.dni}}</th>
+                <th scope="col">{{autoridad.dniAutoridad}}</th>
                 <th scope="col">{{autoridad.nombre}}</th>
                 <th scope="col">{{autoridad.apellido}}</th>
                 <th scope="col">{{autoridad.telefono}}</th>
@@ -151,7 +179,7 @@ import axios from "axios";
 
 export default {
   name: "Autoridades",
-  props: ["SuccessCountDownCreation", "ErrorCountDownCreation","SuccessCountDownDeletion","ErrorCountDownDeletion"],
+  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp","SuccessCountDownEditProp","ErrorCountDownEditProp"],
   components: {
     Navigation
   },
@@ -167,11 +195,20 @@ export default {
       perPage: 10,
       pages: [],
       autoridades: [],
-      dismissSecs: 4
+      dismissSecs: 4,
+      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
+      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
+      SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
+      ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
+      SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
+      ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
+      ErrorCountDownRol:0,
+      ThereAreRoles:false
     };
   },
   mounted() {
     this.GetAutoridades();
+    this.getRoles();
   },
   computed: {
     filteredAutoridades() {
@@ -184,7 +221,7 @@ export default {
             autoridad.apellido
               .toLowerCase()
               .includes(this.search.toLowerCase()) ||
-            autoridad.dni.toString().includes(this.search))
+            autoridad.dniAutoridad.toString().includes(this.search))
         );
       });
     },
@@ -193,6 +230,13 @@ export default {
     }
   },
   methods: {
+    getRoles(){
+      axios.get('/api/rol').then(result =>{
+        if(result.data != 0){
+          this.ThereAreRoles = true
+        }
+      })
+    },
     GetAutoridades() {
       axios.get("/api/autoridad").then(result => {
         this.autoridades = result.data;
