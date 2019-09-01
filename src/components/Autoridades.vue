@@ -1,8 +1,43 @@
 <template>
   <div>
     <navigation />
-
     <div class="container-fluid">
+        <b-alert
+          :show="SuccessCountDownCreation"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownCreation =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad se ha creado correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownCreation"
+          dismissible
+          variant="danger"
+          @dismissed="ErrorCountDownCreation = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad no ha podido ser creada. Posiblemente haya un problema con los datos ingresados</p>
+        </b-alert>
+        <b-alert
+          :show="SuccessCountDownDeletion"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownDeletion = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad ha sido eliminada correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownDeletion"
+          dismissible
+          variant="danger"
+          @dismissed="ErrorCountDownDeletion = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad no ha podido ser eliminada</p>
+        </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
@@ -18,17 +53,32 @@
               <div class="card-body" style="background-color:#FAFAFA">
                 <h6 class="title">Cargos</h6>
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="Check1" v-model="profesor"/>
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="Check1"
+                    v-model="profesor"
+                  />
                   <label class="custom-control-label" for="Check1">Profesor</label>
                 </div>
 
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="Check2" v-model="preceptor"/>
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="Check2"
+                    v-model="preceptor"
+                  />
                   <label class="custom-control-label" for="Check2">Preceptor</label>
                 </div>
 
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="Check3" v-model="coordinador"/>
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="Check3"
+                    v-model="coordinador"
+                  />
                   <label class="custom-control-label" for="Check3">Coordinador</label>
                 </div>
               </div>
@@ -61,11 +111,7 @@
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
             <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Autoridades</h1>
-            <router-link
-              :to="{ name: 'AgregarAutoridad' }"
-              class="btn btn-info"
-
-            >Crear autoridad</router-link>
+            <router-link :to="{ name: 'AgregarAutoridad' }" class="btn btn-info">Crear autoridad</router-link>
           </nav>
           <table class="table">
             <thead>
@@ -105,6 +151,7 @@ import axios from "axios";
 
 export default {
   name: "Autoridades",
+  props: ["SuccessCountDownCreation", "ErrorCountDownCreation","SuccessCountDownDeletion","ErrorCountDownDeletion"],
   components: {
     Navigation
   },
@@ -119,7 +166,8 @@ export default {
       page: 1,
       perPage: 10,
       pages: [],
-      autoridades: []
+      autoridades: [],
+      dismissSecs: 4
     };
   },
   mounted() {
@@ -164,6 +212,9 @@ export default {
       for (let i = 1; i <= numberOfAutoridades; i++) {
         this.pages.push(i);
       }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     }
   },
   watch: {

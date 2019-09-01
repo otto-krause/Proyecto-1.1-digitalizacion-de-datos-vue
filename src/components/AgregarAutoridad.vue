@@ -11,7 +11,7 @@
         <div class="row no-gutters">
           <div class="card-body">
             <h3 class="card-title text-center mb-4">Nueva Autoridad</h3>
-            <form autocomplete="off" v-on:submit="PostNewAutoridad">
+            <form autocomplete="off" v-on:submit.prevent="PostNewAutoridad">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Nombre</label>
@@ -112,6 +112,13 @@
                 </select>
               </div>
               <div class="form-group">
+                  <label class="input-group-text text-center">Cargos</label>
+                <div>
+                  <multiselect v-model="cargos" placeholder="Lista de cargos" label="name" track-by="idRol" :options="roles" :multiple="true"></multiselect>
+                  <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar al menos un rol</label>
+                </div>
+              </div>
+              <div class="form-group">
                 <button class="btn btn-danger btn-block" type="submit" >Crear nueva Autoridad</button>
               </div>
             </form>
@@ -125,12 +132,14 @@
 <script>
 import Navigation from "./Navigation";
 
+import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
   name: "AgregarAutoridad",
   components: {
-    Navigation
+    Navigation,
+    Multiselect
   },
   data() {
     return {
@@ -142,12 +151,27 @@ export default {
       apellido: '',
       fechaIngreso: new Date(null).toISOString(),
       fechaNacimiento: new Date(null).toISOString(),
-      fichaMedica: ''
+      fichaMedica: '',
+      cargos:[],
+      roles: [
+        { name: 'Profesor', idRol: '1' },
+        { name: 'Preceptor', idRol: '2' },
+        { name: 'Coordinador', idRol: '3' }
+      ],
+      isInvalid: false
     };
   },
   methods: {
-    PostNewAutoridad() {
-      axios.post("/api/autoridad/add", {
+    validar () {
+      if (this.cargos.length === 0){
+        this.isInvalid = true
+        return false
+      }else
+        return true
+    },
+    async PostNewAutoridad() {
+      if(this.validar()){
+      await axios.post("/api/autoridad/add", {
           dni: this.dni,
           telefono: this.telefono,
           direccion: this.calle + " " + this.ncalle,
@@ -155,14 +179,20 @@ export default {
           apellido: this.apellido,
           fechaIngreso: this.fechaIngreso,
           fechaNacimiento: this.fechaNacimiento,
-          fichaMedica: this.fichaMedica
+          fichaMedica: this.fichaMedica,
+          cargos: this.cargos
         })
-        .then(response => console.log(response))
-        .catch(err => console.log(err));
+        .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownCreation: 6 }})})
+        .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreation: 7 }})})
+
+      }
+    },
+    onTouch () {
+      this.isTouched = true
     }
   }
 };
 </script>
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 </style>

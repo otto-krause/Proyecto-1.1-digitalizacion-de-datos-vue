@@ -89,6 +89,7 @@
 </template>
 <script>
 import Navigation from "./Navigation";
+import axios from "axios";
 
 export default {
   name: "AutoridadCompleta",
@@ -110,8 +111,13 @@ export default {
         ? (this.roles = this.autoridad.idRol.split(","))
         : this.roles.push(this.autoridad.idRol);
     },
-    DeleteAutoridad(){
-
+    async DeleteAutoridad(){
+      $('#myModal').modal('toggle')
+      await axios.post("/api/autoridad/delete", {
+        idAutoridad: this.autoridad.idAutoridad
+      })
+      .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownDeletion: 6 }})})
+      .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownDeletion: 7 }})})
     }
   }
 };

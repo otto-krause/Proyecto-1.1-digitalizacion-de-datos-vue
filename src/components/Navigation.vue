@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-light">
+  <nav class="navbar navbar-expand-md navbar-light" style="background-color:#ee4540">
     <a class="navbar-brand" href="#">OK System</a>
     <button
       class="navbar-toggler"

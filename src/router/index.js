@@ -31,7 +31,8 @@ export default new Router({
     {
       path: '/Autoridades',
       name: 'Autoridades',
-      component: Autoridades
+      component: Autoridades,
+      props: true
     },
     {
       path: '/Autoridad',
