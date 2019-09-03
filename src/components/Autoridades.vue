@@ -79,34 +79,14 @@
             <article class="card-group-item">
               <div class="card-body" style="background-color:#FAFAFA">
                 <h6 class="title">Cargos</h6>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control custom-checkbox" v-for="ObjetoRol in roles" v-bind:key="ObjetoRol.idRol" >
                   <input
                     type="checkbox"
                     class="custom-control-input"
-                    id="Check1"
-                    v-model="profesor"
+                    :id="ObjetoRol.idRol"
+                    v-model="roleFiltersBoolean[ObjetoRol.idRol - 1]"
                   />
-                  <label class="custom-control-label" for="Check1">Profesor</label>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="Check2"
-                    v-model="preceptor"
-                  />
-                  <label class="custom-control-label" for="Check2">Preceptor</label>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="Check3"
-                    v-model="coordinador"
-                  />
-                  <label class="custom-control-label" for="Check3">Coordinador</label>
+                  <label class="custom-control-label" :for="ObjetoRol.idRol">{{ObjetoRol.rol}}</label>
                 </div>
               </div>
             </article>
@@ -119,15 +99,15 @@
                     <input
                       type="date"
                       v-model="fechaInicio"
+                      id="fechaInicio"
                       class="form-control"
-                      data-date-format="YYYY-MM-DD"
                     />
                     <label>Hasta</label>
                     <input
                       type="date"
                       v-model="fechaFin"
+                      id="fechaFin"
                       class="form-control"
-                      data-date-format="YYYY-MM-DD"
                     />
                   </div>
                 </div>
@@ -159,7 +139,7 @@
                 <th scope="col">{{autoridad.telefono}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'AutoridadCompleta', params: {autoridad} }"
+                    :to="{ name: 'AutoridadCompleta', params: {autoridad,roles} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>
@@ -186,15 +166,15 @@ export default {
   data() {
     return {
       search: "",
-      profesor: false,
-      preceptor: false,
-      coordinador: false,
       fechaInicio: new Date("1984-01-01").toISOString(),
       fechaFin: new Date().toISOString(),
       page: 1,
       perPage: 10,
       pages: [],
       autoridades: [],
+      roles:[],
+      roleFilters:[],
+      roleFiltersBoolean:[],
       dismissSecs: 4,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
@@ -207,33 +187,40 @@ export default {
     };
   },
   mounted() {
-    this.GetAutoridades();
+    this.GetAutoridades()
     this.getRoles();
   },
   computed: {
     filteredAutoridades() {
       return this.autoridades.filter(autoridad => {
         return (
-          (this.profesor ? autoridad.idRol.includes("1") : true) &&
-          (this.preceptor ? autoridad.idRol.includes("2") : true) &&
-          (this.coordinador ? autoridad.idRol.includes("3") : true) &&
+          (this.roles.every((rol) => {
+            return this.roleFiltersBoolean[rol.idRol - 1] ? autoridad.idRol.includes(this.roleFilters[rol.idRol - 1]) : true
+          })) &&
           (autoridad.nombre.toLowerCase().includes(this.search.toLowerCase()) ||
-            autoridad.apellido
-              .toLowerCase()
-              .includes(this.search.toLowerCase()) ||
-            autoridad.dniAutoridad.toString().includes(this.search))
+          autoridad.apellido.toLowerCase().includes(this.search.toLowerCase()) ||
+          autoridad.dniAutoridad.toString().includes(this.search)
+          ) &&
+          (
+            autoridad.fechaIngreso >= this.fechaInicio && autoridad.fechaIngreso <= this.fechaFin
+          )
         );
       });
     },
     displayedAutoridades() {
       return this.paginate();
-    }
+    },
   },
   methods: {
     getRoles(){
       axios.get('/api/rol').then(result =>{
         if(result.data != 0){
           this.ThereAreRoles = true
+          this.roles = result.data;
+          this.roles.forEach(rol => {
+            this.roleFiltersBoolean.push(false)
+            this.roleFilters.push(rol.idRol)
+          });
         }
       })
     },
@@ -263,6 +250,12 @@ export default {
   },
   watch: {
     filteredAutoridades() {
+      if(!this.fechaInicio){
+        this.fechaInicio = new Date("1984-01-01").toISOString()
+      }
+      if(!this.fechaFin){
+        this.fechaFin = new Date().toISOString()
+      }
       this.page = 1;
       this.setAutoridades();
     }

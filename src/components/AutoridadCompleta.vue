@@ -62,10 +62,8 @@
         <tr>
           <th>Cargos</th>
           <td>
-            <div
-              v-for="(rol,index) in roles"
-              v-bind:key="index"
-            >{{rol == 1 ? 'Profesor' : rol == 2 ? 'Preceptor' : rol ==3 ? 'Coordinador' : 'No posee'}}</div>
+            <div v-for="rol in rolesMostrar" v-bind:key="rol.idRol"
+            >{{rol.rol}}</div>
           </td>
         </tr>
         <tr>
@@ -93,26 +91,27 @@ import axios from "axios";
 
 export default {
   name: "AutoridadCompleta",
-  props: ["autoridad"],
+  props: ["autoridad","roles"],
   components: {
     Navigation
   },
   data() {
     return {
-      roles: []
+      rolesMostrar: []
     };
   },
   mounted() {
-    if(!this.autoridad){
+    if(!this.autoridad || !this.roles){
       this.$router.push({ name: 'Autoridades'})
     }
     this.SetRoles();
   },
   methods: {
     SetRoles() {
-      this.autoridad.idRol.length > 1
-        ? (this.roles = this.autoridad.idRol.split(","))
-        : this.roles.push(this.autoridad.idRol);
+      this.rolesMostrar = this.roles.filter(rol => {
+        return this.autoridad.idRol.split(",").some(elemento => elemento == rol.idRol)
+      });
+      console.log(this.rolesMostrar)
     },
     async DeleteAutoridad(){
       $('#myModal').modal('toggle')
