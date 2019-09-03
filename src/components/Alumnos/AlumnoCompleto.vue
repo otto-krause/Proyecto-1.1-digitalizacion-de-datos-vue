@@ -76,13 +76,13 @@
         </tr>
       </tbody>
     </table>
-    <hr/>
-    <div class="container">
+    <hr class="border border-dark"/>
+    <div class="">
       <nav class="navbar navbar-light">
             <h1 class="navbar-brand col-sm-3 col-md-2 mr-0">Contactos del Alumno</h1>
             <router-link :to="{ name: 'AgregarContacto' }" class="btn btn-info">Crear contacto</router-link>
           </nav>
-          <table class="table">
+          <table class="table table-bordered border-dark">
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
