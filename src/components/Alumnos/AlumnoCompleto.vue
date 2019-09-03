@@ -76,6 +76,38 @@
         </tr>
       </tbody>
     </table>
+    <hr/>
+    <div class="container">
+      <nav class="navbar navbar-light">
+            <h1 class="navbar-brand col-sm-3 col-md-2 mr-0">Contactos del Alumno</h1>
+            <router-link :to="{ name: 'AgregarContacto' }" class="btn btn-info">Crear contacto</router-link>
+          </nav>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Relacion</th>
+                <th scope="col">Celular</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody v-for="contactoAlumno in contactosAlumno" :key="contactoAlumno.idContacto">
+              <tr>
+                <th scope="col">{{contactoAlumno.nombre}}</th>
+                <th scope="col">{{contactoAlumno.apellido}}</th>
+                <th scope="col">{{contactoAlumno.relacion}}</th>
+                <th scope="col">{{contactoAlumno.celular}}</th>
+                <th scope="col">
+                  <router-link
+                    :to="{ name: 'ContactoCompleto', params: {contactoAlumno} }"
+                    class="nav-link btn btn-info fas fa-eye"
+                  ></router-link>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+    </div>
   </div>
 </template>
 <script>
@@ -90,14 +122,24 @@ export default {
   },
   data() {
     return {
+      contactosAlumno: [],
     };
   },
   mounted() {
     if(!this.alumno){
       this.$router.push({ name: 'Alumnos'})
     }
+    this.GetContactos();
   },
   methods: {
+    GetContactos(){
+      axios.get("/api/contacto_alumno/", {
+        dniAlumno: this.alumno.dniAlumno
+      })
+      .then(result =>{
+        this.contactosAlumno = result.data;
+      })
+    },
     async DeleteAlumno(){
       $('#myModal').modal('toggle')
       await axios.post("/api/alumno/delete", {
