@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import Navigation from "./Navigation";
+import Navigation from "../Navegacion/Navigation";
 
 import axios from "axios";
 
@@ -166,7 +166,7 @@ export default {
   data() {
     return {
       search: "",
-      fechaInicio: new Date("1984-01-01").toISOString(),
+      fechaInicio: new Date("1970-01-01").toISOString(),
       fechaFin: new Date().toISOString(),
       page: 1,
       perPage: 10,
@@ -251,7 +251,7 @@ export default {
   watch: {
     filteredAutoridades() {
       if(!this.fechaInicio){
-        this.fechaInicio = new Date("1984-01-01").toISOString()
+        this.fechaInicio = new Date("1970-01-01").toISOString()
       }
       if(!this.fechaFin){
         this.fechaFin = new Date().toISOString()

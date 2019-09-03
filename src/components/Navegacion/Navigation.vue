@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-light" style="background-color:#ee4540">
-    <a class="navbar-brand" href="#">OK System</a>
+    <a class="navbar-brand" href="/">OK System</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -36,6 +36,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link to="/autoridades" class="dropdown-item">Autoridades</router-link>
             <router-link to="/Roles" class="dropdown-item">Roles</router-link>
+            <router-link to="/alumnos" class="dropdown-item">Alumnos</router-link>
             <div class="dropdown-divider"></div>
             <router-link to="/" class="dropdown-item">Y otra cosa mas</router-link>
           </div>

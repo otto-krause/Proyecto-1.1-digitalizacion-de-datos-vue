@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import Navigation from "./Navigation";
+import Navigation from "../Navegacion/Navigation";
 
 import axios from "axios";
 

@@ -105,10 +105,8 @@
                   <label class="input-group-text">Ficha Medica</label>
                 </div>
                 <select class="form-control" name="fichaMedica" v-model="fichaMedica">
-                  <option value= disabled selected>Ficha Medica</option>
                   <option value="1">Si</option>
-                  <option value="0">No</option>
-                  <option value="NULL">Desconocido</option>
+                  <option value="0" selected>No</option>
                 </select>
               </div>
               <div class="form-group">
@@ -130,7 +128,7 @@
 </template>
 
 <script>
-import Navigation from "./Navigation";
+import Navigation from "../Navegacion/Navigation";
 
 import Multiselect from 'vue-multiselect'
 import axios from "axios";

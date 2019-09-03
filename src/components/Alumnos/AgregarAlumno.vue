@@ -3,15 +3,15 @@
     <navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light" >
-        <router-link to="/Autoridades" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link to="/Alumnos" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div class="col-md-8 col-lg-5 mx-auto mt-3">
       <div class="card">
         <div class="row no-gutters">
           <div class="card-body">
-            <h3 class="card-title text-center mb-4">Nueva autoridad</h3>
-            <form autocomplete="off" v-on:submit.prevent="PostNewAutoridad">
+            <h3 class="card-title text-center mb-4">Nuevo Alumno</h3>
+            <form autocomplete="off" v-on:submit.prevent="PostNewAlumno">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Nombre</label>
@@ -23,7 +23,7 @@
                   placeholder="Nombre"
                   v-model="nombre"
                   required
-                  oninvalid="this.setCustomValidity('Ingrese el nombre de la autoridad')"
+                  oninvalid="this.setCustomValidity('Ingrese el nombre del alumno')"
                   oninput="setCustomValidity('')"
                 />
               </div>
@@ -38,7 +38,7 @@
                   placeholder="Apellido"
                   v-model="apellido"
                   required
-                  oninvalid="this.setCustomValidity('Ingrese el apellido de la autoridad')"
+                  oninvalid="this.setCustomValidity('Ingrese el apellido del alumno')"
                   oninput="setCustomValidity('')"
                 />
               </div>
@@ -48,12 +48,12 @@
                 </div>
                 <input
                   type="number"
-                  name="dniAutoridad"
+                  name="dniAlumno"
                   class="form-control"
                   placeholder="DNI"
-                  v-model="dniAutoridad"
+                  v-model="dniAlumno"
                   required
-                  oninvalid="this.setCustomValidity('Ingrese el DNI de la autoridad')"
+                  oninvalid="this.setCustomValidity('Ingrese el DNI del alumno')"
                   oninput="setCustomValidity('')"
                 />
               </div>
@@ -102,24 +102,15 @@
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text">Ficha Medica</label>
+                  <label class="input-group-text">Es Repetidor?</label>
                 </div>
-                <select class="form-control" name="fichaMedica" v-model="fichaMedica">
-                  <option value disabled selected>Ficha Medica</option>
+                <select class="form-control" name="repetidor" v-model="repetidor">
                   <option value="1">Si</option>
-                  <option value="0">No</option>
-                  <option value="NULL">Desconocido</option>
+                  <option value="0" selected>No</option>
                 </select>
               </div>
               <div class="form-group">
-                  <label class="input-group-text text-center">Cargos</label>
-                <div>
-                  <multiselect v-model="cargos" placeholder="Lista de cargos" label="rol" track-by="idRol" :options="roles" :multiple="true"></multiselect>
-                  <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar al menos un rol</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <button class="btn btn-danger btn-block" type="submit" >Crear nueva Autoridad</button>
+                <button class="btn btn-danger btn-block" type="submit" >Crear nuevo alumno</button>
               </div>
             </form>
           </div>
@@ -130,20 +121,18 @@
 </template>
 
 <script>
-import Navigation from "./Navigation";
+import Navigation from "../Navegacion/Navigation";
 
-import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
-  name: "AgregarRol",
+  name: "AgregarAlumno",
   components: {
     Navigation,
-    Multiselect
   },
   data() {
     return {
-      dniAutoridad: '',
+      dniAlumno: '',
       telefono: '',
       calle: '',
       ncalle: '',
@@ -151,54 +140,29 @@ export default {
       apellido: '',
       fechaIngreso: new Date(null).toISOString(),
       fechaNacimiento: new Date(null).toISOString(),
-      fichaMedica: '',
+      repetidor: 0,
       cargos:[],
       roles: [],
       isInvalid: false
     };
   },
-  created(){
-    this.GetRoles();
-  },
   methods: {
-    GetRoles(){
-      axios.get("/api/rol").then(result => {
-          result.data.forEach(rol => {
-            this.roles.push(rol)
-          });
-      });
-    },
-    validar () {
-      if (this.cargos.length === 0){
-        this.isInvalid = true
-        return false
-      }else
-        return true
-    },
-    async PostNewAutoridad() {
-      if(this.validar()){
-      await axios.post("/api/autoridad/add", {
-          dniAutoridad: this.dniAutoridad,
-          telefono: this.telefono,
-          direccion: this.calle + " " + this.ncalle,
-          nombre: this.nombre,
-          apellido: this.apellido,
-          fechaIngreso: this.fechaIngreso,
-          fechaNacimiento: this.fechaNacimiento,
-          fichaMedica: this.fichaMedica,
-          cargos: this.cargos
-        })
-        .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownCreationProp: 4 }})})
-        .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationProp: 6 }})})
-
-      }
-    },
-    onTouch () {
-      this.isTouched = true
+    async PostNewAlumno() {
+      await axios.post("/api/alumno/add", {
+        dniAlumno: this.dniAlumno,
+        telefono: this.telefono,
+        direccion: this.calle + " " + this.ncalle,
+        nombre: this.nombre,
+        apellido: this.apellido,
+        fechaIngreso: this.fechaIngreso,
+        fechaNacimiento: this.fechaNacimiento,
+        repetidor: this.repetidor,
+      })
+      .then(res=>{this.$router.push({ name: 'Alumnos', params: {SuccessCountDownCreationProp: 4 }})})
+      .catch(err=>{this.$router.push({ name: 'Alumnos', params: {ErrorCountDownCreationProp: 6 }})})
     }
   }
 };
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 </style>

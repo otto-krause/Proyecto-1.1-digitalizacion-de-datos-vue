@@ -49,11 +49,11 @@
         </tr>
         <tr>
           <th>Fecha de Ingreso</th>
-          <td>{{autoridad.fechaIngreso ? autoridad.fechaIngreso.slice(0,10) : 'No tiene'}}</td>
+          <td>{{autoridad.fechaIngreso != '1970-01-01T03:00:00.000Z' ? autoridad.fechaIngreso.slice(0,10) : 'No tiene'}}</td>
         </tr>
         <tr>
           <th>Fecha de Nacimineto</th>
-          <td>{{autoridad.fechaNacimiento ? autoridad.fechaNacimiento.slice(0,10) : 'No tiene'}}</td>
+          <td>{{autoridad.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? autoridad.fechaNacimiento.slice(0,10) : 'No tiene'}}</td>
         </tr>
         <tr>
           <th>Ficha Medica</th>
@@ -86,7 +86,7 @@
   </div>
 </template>
 <script>
-import Navigation from "./Navigation";
+import Navigation from "../Navegacion/Navigation";
 import axios from "axios";
 
 export default {
