@@ -3,24 +3,6 @@
     <navigation />
     <div class="container-fluid">
       <b-alert
-          :show="SuccessCountDownEdit"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownEdit =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La autoridad se modifico correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownEdit"
-          dismissible
-          variant="warning"
-          @dismissed="ErrorCountDownEdit =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La autoridad no pudo ser modificada</p>
-        </b-alert>
-      <b-alert
           :show="ErrorCountDownRol"
           dismissible
           variant="warning"
@@ -159,7 +141,7 @@ import axios from "axios";
 
 export default {
   name: "Autoridades",
-  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp","SuccessCountDownEditProp","ErrorCountDownEditProp"],
+  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
   components: {
     Navigation
   },
@@ -180,8 +162,6 @@ export default {
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
       SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
       ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
-      SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
-      ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       ErrorCountDownRol:0,
       ThereAreRoles:false
     };

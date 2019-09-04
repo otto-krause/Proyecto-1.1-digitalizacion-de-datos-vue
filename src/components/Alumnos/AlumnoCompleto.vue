@@ -133,9 +133,7 @@ export default {
   },
   methods: {
     GetContactos(){
-      axios.get("/api/contacto_alumno/", {
-        dniAlumno: this.alumno.dniAlumno
-      })
+      axios.get("/api/contacto_alumno/" + this.alumno.dniAlumno)
       .then(result =>{
         this.contactosAlumno = result.data;
       })

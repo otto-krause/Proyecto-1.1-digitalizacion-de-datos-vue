@@ -3,7 +3,7 @@
     <navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light" >
-        <router-link to="/Autoridades" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link :to="{ name: 'AutoridadCompleta', params:{autoridad,roles:rolesReenviar}}" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div class="col-md-8 col-lg-5 mx-auto mt-3">
@@ -11,7 +11,7 @@
         <div class="row no-gutters">
           <div class="card-body">
             <h3 class="card-title text-center mb-4">Editar autoridad</h3>
-            <form autocomplete="off" v-on:submit.prevent="PostNewAutoridad">
+            <form autocomplete="off" v-on:submit.prevent="PostNewAutoridad(rolesReenviar)">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Nombre</label>
@@ -135,7 +135,7 @@ import axios from "axios";
 
 export default {
   name: "EditarAutoridad",
-  props: ["autoridad"],
+  props: ["autoridad","rolesReenviar","rolesMostrar"],
   components: {
     Navigation,
     Multiselect
@@ -151,8 +151,9 @@ export default {
       fechaIngreso: this.autoridad.fechaIngreso.slice(0,10),
       fechaNacimiento: this.autoridad.fechaNacimiento.slice(0,10),
       fichaMedica: this.autoridad.fichaMedica,
-      cargos:this.autoridad.cargos,
+      cargos:this.rolesMostrar,
       roles: [],
+      autoridadesReenviar:this.autoridades,
       isInvalid: false
     };
   },
@@ -163,15 +164,8 @@ export default {
     if(!this.autoridad){
       this.$router.push({ name: 'Autoridades'})
     }
-    this.GetAutoridadesRoles();
   },
   methods: {
-    GetAutoridadesRoles() {
-      axios.get("/api/autoridad/roles/" + this.autoridad.dniAutoridad)
-      .then(result => {
-        this.cargos = result.data;
-      });
-    },
     getRoles(){
       axios.get('/api/rol').then(result =>{
         if(result.data != 0){
@@ -189,7 +183,7 @@ export default {
       }else
         return true
     },
-    async PostNewAutoridad() {
+    async PostNewAutoridad(rolesReenviar) {
       if(this.validar()){
       await axios.post("/api/autoridad/update", {
           dniAutoridad: this.dniAutoridad,
@@ -202,8 +196,14 @@ export default {
           FichaMedica: this.fichaMedica,
           cargos: this.cargos
         })
-        .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownEditProp: 6 }})})
-        .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownEditProp: 7 }})})
+        .then(async(res)=>{
+          await axios.get("/api/autoridad/" + this.autoridad.dniAutoridad)
+          .then(result =>{
+            this.autoridadesReenviar = result.data[0]
+            this.$router.push({ name: 'AutoridadCompleta', params: {autoridad:this.autoridadesReenviar,roles:rolesReenviar, SuccessCountDownEditProp: 6 }})
+          })
+        })
+        .catch(err=>{this.$router.push({ name: 'AutoridadCompleta', params: {autoridad,roles:rolesReenviar, ErrorCountDownEditProp: 7 }})})
 
       }
     },

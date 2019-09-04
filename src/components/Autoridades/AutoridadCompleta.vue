@@ -1,6 +1,24 @@
 <template>
   <div>
     <Navigation />
+    <b-alert
+          :show="SuccessCountDownEdit"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownEdit =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad se modifico correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownEdit"
+          dismissible
+          variant="warning"
+          @dismissed="ErrorCountDownEdit =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>La autoridad no pudo ser modificada</p>
+        </b-alert>
     <div
       class="modal fade deleteModal"
       id="myModal"
@@ -76,7 +94,7 @@
               data-target=".deleteModal"
             ></button>
             <router-link
-              :to="{ name: 'EditarAutoridad', params: {autoridad} }"
+              :to="{ name: 'EditarAutoridad', params: {autoridad,rolesReenviar:roles,rolesMostrar} }"
               class="nav-link btn btn-info fas fa-edit"
             ></router-link>
           </td>
@@ -91,13 +109,15 @@ import axios from "axios";
 
 export default {
   name: "AutoridadCompleta",
-  props: ["autoridad","roles"],
+  props: ["autoridad","roles","SuccessCountDownEditProp","ErrorCountDownEditProp"],
   components: {
     Navigation
   },
   data() {
     return {
-      rolesMostrar: []
+      rolesMostrar: [],
+      SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
+      ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
     };
   },
   mounted() {
@@ -111,7 +131,6 @@ export default {
       this.rolesMostrar = this.roles.filter(rol => {
         return this.autoridad.idRol.split(",").some(elemento => elemento == rol.idRol)
       });
-      console.log(this.rolesMostrar)
     },
     async DeleteAutoridad(){
       $('#myModal').modal('toggle')
@@ -120,6 +139,9 @@ export default {
       })
       .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownDeletionProp: 4 }})})
       .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownDeletionProp: 6 }})})
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     }
   }
 };
