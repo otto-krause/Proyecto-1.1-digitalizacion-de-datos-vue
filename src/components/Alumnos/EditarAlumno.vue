@@ -3,7 +3,7 @@
     <navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light" >
-        <router-link to="/Alumnos" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link :to="{ name: 'AlumnoCompleto', params: {alumno}}" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div class="col-md-8 col-lg-5 mx-auto mt-3">
@@ -142,6 +142,7 @@ export default {
       fechaIngreso: this.alumno.fechaIngreso.slice(0,10),
       fechaNacimiento: this.alumno.fechaNacimiento.slice(0,10),
       repetidor: this.alumno.repetidor,
+      alumnoReenviar: this.alumno
     };
   },
   mounted() {
@@ -151,7 +152,7 @@ export default {
   },
   methods: {
     async PostNewAlumno() {
-      await axios.post("/api/alumnos/update", {
+      await axios.post("/api/alumno/update", {
         dniAlumno: this.dniAlumno,
         telefono: this.telefono,
         direccion: this.calle + " " + this.ncalle,
@@ -161,8 +162,14 @@ export default {
         fechaNacimiento: new Date(this.fechaNacimiento).toISOString(),
         repetidor: this.repetidor,
         })
-        .then(res=>{this.$router.push({ name: 'Alumnos', params: {SuccessCountDownEditProp: 6 }})})
-        .catch(err=>{this.$router.push({ name: 'Alumnos', params: {ErrorCountDownEditProp: 7 }})})
+        .then(async(res)=>{
+          await axios.get("/api/alumno/" + this.alumno.dniAlumno)
+          .then(result =>{
+            this.alumnoReenviar = result.data[0]
+            this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumnoReenviar,SuccessCountDownEditProp: 6 }})
+          })
+        })
+        .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,ErrorCountDownEditProp: 7 }})})
     }
   }
 };

@@ -3,15 +3,15 @@
     <navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light" >
-        <router-link :to="{ name:'AlumnoCompleto', params:{alumno}}" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link :to="{ name: 'AlumnoCompleto', params: {alumno}}" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div class="col-md-8 col-lg-5 mx-auto mt-3">
       <div class="card">
         <div class="row no-gutters">
           <div class="card-body">
-            <h3 class="card-title text-center mb-4">Nuevo Contacto del Alumno <br> {{alumno.apellido}}, {{alumno.nombre}} <br> DNI:{{alumno.dniAlumno}}</h3>
-            <form autocomplete="off" v-on:submit.prevent="PostNewContactoAlumno(alumno)">
+            <h3 class="card-title text-center mb-4">Editar Contacto Alumno</h3>
+            <form autocomplete="off" v-on:submit.prevent="PostNewContactoAlumno">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Nombre</label>
@@ -20,7 +20,7 @@
                   type="text"
                   name="nombre"
                   class="form-control"
-                  placeholder="Nombre - Campo obligatorio"
+                  placeholder="Nombre"
                   v-model="nombre"
                   required
                   oninvalid="this.setCustomValidity('Ingrese el nombre del contacto')"
@@ -35,7 +35,7 @@
                   type="text"
                   name="apellido"
                   class="form-control"
-                  placeholder="Apellido - Campo obligatorio"
+                  placeholder="Apellido"
                   v-model="apellido"
                   required
                   oninvalid="this.setCustomValidity('Ingrese el apellido del contacto')"
@@ -52,6 +52,9 @@
                   class="form-control"
                   placeholder="DNI"
                   v-model="dniContacto"
+                  required
+                  oninvalid="this.setCustomValidity('Ingrese el DNI del contacto')"
+                  oninput="setCustomValidity('')"
                 />
               </div>
               <div class="form-group input-group">
@@ -90,7 +93,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <button class="btn btn-danger btn-block" type="submit" >Crear nuevo alumno</button>
+                <button class="btn btn-danger btn-block" type="submit" >Guardar cambios</button>
               </div>
             </form>
           </div>
@@ -106,34 +109,42 @@ import Navigation from "../Navegacion/Navigation";
 import axios from "axios";
 
 export default {
-  name: "AgregarContactoAlumno",
-  props:["alumno"],
+  name: "EditarContactoAlumno",
+  props: ["contactoAlumno","alumno"],
   components: {
     Navigation,
   },
   data() {
     return {
-      celular: '',
-      nombre: '',
-      apellido: '',
-      relacion: '',
-      mail:'',
-      dniContacto:'',
+      idContacto: this.contactoAlumno.idContacto,
+      nombre: this.contactoAlumno.nombre,
+      apellido: this.contactoAlumno.apellido,
+      relacion: this.contactoAlumno.relacion,
+      celular: this.contactoAlumno.celular,
+      mail:this.contactoAlumno.mail,
+      dniContacto:this.contactoAlumno.dniContacto
     };
   },
+  mounted() {
+    if(!this.alumno || !this.contactoAlumno){
+      this.$router.push({ name: 'Alumnos'})
+    }
+  },
   methods: {
-    async PostNewContactoAlumno(alumno) {
-      await axios.post("/api/contacto_alumno/add", {
-        dniAlumno: this.alumno.dniAlumno,
-        celular: this.celular,
+    async PostNewContactoAlumno() {
+      await axios.post("/api/contacto_alumno/update", {
+        idContacto: this.idContacto,
         nombre: this.nombre,
         apellido: this.apellido,
-        mail:this.mail,
-        dniContacto: this.dniContacto,
         relacion: this.relacion,
+        celular: this.celular,
+        mail:this.mail,
+        dniContacto:this.dniContacto
       })
-      .then(res=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,SuccessCountDownCreationProp: 4 }})})
-      .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,ErrorCountDownCreationProp: 6 }})})
+      .then(async(res)=>{
+        this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,SuccessCountDownEditContactoProp: 4 }})
+      })
+      .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,ErrorCountDownEditContactoProp: 6 }})})
     }
   }
 };

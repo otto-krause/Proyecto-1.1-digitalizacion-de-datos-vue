@@ -15,6 +15,9 @@ import Alumnos from '@/components/Alumnos/Alumnos'
 import AgregarAlumno from '@/components/Alumnos/AgregarAlumno'
 import AlumnoCompleto from '@/components/Alumnos/AlumnoCompleto'
 import EditarAlumno from '@/components/Alumnos/EditarAlumno'
+import AgregarContactoAlumno from '@/components/Alumnos/AgregarContactoAlumno'
+import EditarContactoAlumno from '@/components/Alumnos/EditarContactoAlumno'
+
 
 Vue.use(Router)
 
@@ -98,6 +101,18 @@ export default new Router({
       path: '/EditarAlumno',
       name: 'EditarAlumno',
       component: EditarAlumno,
+      props: true
+    },
+    {
+      path: '/AgregarContactoAlumno',
+      name: 'AgregarContactoAlumno',
+      component: AgregarContactoAlumno,
+      props: true
+    },
+    {
+      path: '/EditarContactoAlumno',
+      name: 'EditarContactoAlumno',
+      component: EditarContactoAlumno,
       props: true
     },
     {

@@ -1,9 +1,41 @@
 <template>
   <div>
     <Navigation />
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-md navbar-light" style="background-color:#1a1a1d">
+        <router-link to="/Alumnos" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+      </nav>
+    </div>
     <div
-      class="modal fade deleteModal"
-      id="myModal"
+      class="modal fade DeleteContactoAlumno"
+      id="DeleteContactoAlumno"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-confirm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box">
+              <i class="material-icons fas fa-times"></i>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>
+          <h4 class="modal-title">Eliminar este contacto?</h4>
+          <div class="modal-body">
+            <p>Desea eliminar este contacto? Este proceso no puede deshacerse.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger" v-on:click="DeleteContactoAlumno">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade DeleteAlumno"
+      id="DeleteAlumno"
       tabindex="-1"
       role="dialog"
       aria-labelledby="deleteModalLabel"
@@ -28,11 +60,80 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid">
-      <nav class="navbar navbar-expand-md navbar-light" style="background-color:#1a1a1d">
-        <router-link to="/Alumnos" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
-      </nav>
-    </div>
+    <b-alert
+          :show="SuccessCountDownEditContacto"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownEditContacto =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>El contacto se ha modificado correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownEditContacto"
+          dismissible
+          variant="danger"
+          @dismissed="ErrorCountDownEditContacto =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>El contacto no ha podido ser modificado</p>
+        </b-alert>
+    <b-alert
+          :show="SuccessCountDownDeletion"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownDeletion =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>El contacto se ha eliminado correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownDeletion"
+          dismissible
+          variant="danger"
+          @dismissed="ErrorCountDownDeletion =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>El contacto no ha podido ser eliminado</p>
+        </b-alert>
+    <b-alert
+          :show="SuccessCountDownCreation"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownCreation =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>El contacto se ha creado correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownCreation"
+          dismissible
+          variant="danger"
+          @dismissed="ErrorCountDownCreation = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>El contacto no ha podido ser creado. Posiblemente haya un problema con los datos ingresados</p>
+        </b-alert>
+    <b-alert
+          :show="SuccessCountDownEdit"
+          dismissible
+          variant="success"
+          @dismissed="SuccessCountDownEdit =0"
+          @dismiss-count-down="countDownChanged"
+          class="col-md-10 col-lg-7 mx-auto mt-3"
+        >
+          <p>El alumno se modifico correctamente</p>
+        </b-alert>
+        <b-alert
+          :show="ErrorCountDownEdit"
+          dismissible
+          variant="warning"
+          @dismissed="ErrorCountDownEdit =0"
+          @dismiss-count-down="countDownChanged"
+          class="col-md-10 col-lg-7 mx-auto mt-3"
+        >
+          <p>El alumno no pudo ser modificado</p>
+        </b-alert>
     <div class="row">
       <div class="col mx-5">
         <div class="card mt-5">
@@ -72,7 +173,7 @@
                         type="button"
                         class="nav-link btn btn-danger fas fa-trash"
                         data-toggle="modal"
-                        data-target=".deleteModal"
+                        data-target=".DeleteAlumno"
                       ></button>
                       <router-link
                         :to="{ name: 'EditarAlumno', params: {alumno} }"
@@ -91,7 +192,7 @@
           <div class="card-body">
             <nav class="navbar">
               <h4 class="card-title">Contactos del alumno</h4>
-              <router-link :to="{ name: 'AgregarContacto' }" class="btn btn-info">Crear contacto</router-link>
+              <router-link :to="{ name: 'AgregarContactoAlumno',params: {alumno} }" class="btn btn-info">Crear contacto</router-link>
             </nav>
             <div class="table-responsive">
               <table class="table">
@@ -117,10 +218,11 @@
                         type="button"
                         class="nav-link btn btn-danger fas fa-trash"
                         data-toggle="modal"
-                        data-target=".deleteModal"
+                        v-on:click="contactoSeleccionado = contactoAlumno"
+                        data-target=".DeleteContactoAlumno"
                       ></button>
                       <router-link
-                        :to="{ name: 'EditarContacto', params: {contactoAlumno} }"
+                        :to="{ name: 'EditarContactoAlumno', params: {contactoAlumno,alumno} }"
                         class="nav-link btn btn-info fas fa-edit"
                       ></router-link>
                     </th>
@@ -140,13 +242,22 @@ import axios from "axios";
 
 export default {
   name: "AlumnoCompleto",
-  props: ["alumno"],
+  props: ["alumno","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
   components: {
     Navigation
   },
   data() {
     return {
-      contactosAlumno: []
+      contactosAlumno: [],
+      contactoSeleccionado: {},
+      SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
+      ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
+      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
+      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
+      SuccessCountDownEditContacto:this.SuccessCountDownEditContactoProp ? this.SuccessCountDownEditContactoProp : 0,
+      ErrorCountDownEditContacto:this.ErrorCountDownEditContactoProp ? this.ErrorCountDownEditContactoProp : 0,
+      SuccessCountDownDeletion:0,
+      ErrorCountDownDeletion:0
     };
   },
   mounted() {
@@ -164,7 +275,7 @@ export default {
         });
     },
     async DeleteAlumno() {
-      $("#myModal").modal("toggle");
+      $("#DeleteAlumno").modal("toggle");
       await axios
         .post("/api/alumno/delete", {
           dniAlumno: this.alumno.dniAlumno
@@ -181,6 +292,24 @@ export default {
             params: { ErrorCountDownDeletionProp: 6 }
           });
         });
+    },
+    async DeleteContactoAlumno() {
+      $("#DeleteContactoAlumno").modal("toggle");
+      await axios
+        .post("/api/contacto_alumno/delete", {
+          idContacto: this.contactoSeleccionado.idContacto
+        })
+        .then(res => {
+          this.SuccessCountDownDeletion = 4
+          this.GetContactos();
+        })
+        .catch(err => {
+          this.ErrorCountDownDeletion = 6
+          this.GetContactos();
+        });
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     }
   }
 };
