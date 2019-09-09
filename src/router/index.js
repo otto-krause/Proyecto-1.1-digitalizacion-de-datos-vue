@@ -17,7 +17,8 @@ import AlumnoCompleto from '@/components/Alumnos/AlumnoCompleto'
 import EditarAlumno from '@/components/Alumnos/EditarAlumno'
 import AgregarContactoAlumno from '@/components/Alumnos/AgregarContactoAlumno'
 import EditarContactoAlumno from '@/components/Alumnos/EditarContactoAlumno'
-
+import Divisiones from '@/components/Division/Divisiones'
+import AgregarDivision from '@/components/Division/AgregarDivision'
 
 Vue.use(Router)
 
@@ -114,6 +115,17 @@ export default new Router({
       name: 'EditarContactoAlumno',
       component: EditarContactoAlumno,
       props: true
+    },
+    {
+      path: '/Divisiones',
+      name: 'Divisiones',
+      component: Divisiones,
+      props: true
+    },
+    {
+      path: '/AgregarDivision',
+      name: 'AgregarDivision',
+      component: AgregarDivision,
     },
     {
       path: '/*',

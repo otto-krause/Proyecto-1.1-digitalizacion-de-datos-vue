@@ -36,9 +36,12 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link to="/autoridades" class="dropdown-item">Autoridades</router-link>
             <router-link to="/Roles" class="dropdown-item">Roles</router-link>
+            <div class="dropdown-divider"></div>
             <router-link to="/alumnos" class="dropdown-item">Alumnos</router-link>
             <div class="dropdown-divider"></div>
-            <router-link to="/" class="dropdown-item">Y otra cosa mas</router-link>
+            <router-link to="/Divisiones" class="dropdown-item">Division</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link to="/" class="dropdown-item">Planes de estudio</router-link>
           </div>
         </li>
       </ul>

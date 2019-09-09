@@ -190,9 +190,6 @@ export default {
         .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationProp: 6 }})})
 
       }
-    },
-    onTouch () {
-      this.isTouched = true
     }
   }
 };

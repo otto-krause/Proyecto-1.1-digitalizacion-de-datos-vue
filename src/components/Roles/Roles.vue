@@ -109,21 +109,28 @@
                 <th scope="col">Opciones</th>
               </tr>
             </thead>
-            <tbody v-for="(rol,index) in displayedRoles" v-bind:key="index">
+            <tbody>
               <tr>
-                <th scope="col">{{index}}</th>
+                <th scope="col">1</th>
+                <th scope="col">preceptor</th>
+                <th scope="col">No se puede modificar</th>
+              </tr>
+            </tbody>
+            <tbody v-for="rol in displayedRoles" v-bind:key="rol.idRol">
+              <tr>
+                <th scope="col">{{rol.idRol}}</th>
                 <th scope="col">{{rol.rol}}</th>
                 <th scope="col">
                   <button
-              type="button"
-              class="nav-link btn btn-danger fas fa-trash"
-              data-toggle="modal"
-              data-target=".deleteModal"
-            ></button>
-            <router-link
-              :to="{ name: 'EditarRol', params: {rol} }"
-              class="nav-link btn btn-info fas fa-edit"
-            ></router-link>
+                    type="button"
+                    class="nav-link btn btn-danger fas fa-trash"
+                    data-toggle="modal"
+                    data-target=".deleteModal"
+                  ></button>
+                  <router-link
+                    :to="{ name: 'EditarRol', params: {rol} }"
+                    class="nav-link btn btn-info fas fa-edit"
+                  ></router-link>
                 </th>
               </tr>
             </tbody>
@@ -179,6 +186,7 @@ export default {
   methods: {
     GetRoles() {
       axios.get("/api/rol").then(result => {
+        result.data.shift();
         this.roles = result.data;
       });
     },
@@ -202,7 +210,7 @@ export default {
     },
     async DeleteRol(){
       $('#myModal').modal('toggle')
-      await axios.post("/api//delete", {
+      await axios.post("/api/delete", {
         dniAutoridad: this.autoridad.dniAutoridad
       })
       .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownDeletionProp: 4 }})})
