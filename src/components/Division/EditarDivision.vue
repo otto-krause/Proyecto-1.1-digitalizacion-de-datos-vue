@@ -3,14 +3,14 @@
     <navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light" >
-        <router-link to="/Divisiones" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link :to="{ name: 'DivisionCompleta', params:{division}}" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div class="col-md-8 col-lg-5 mx-auto mt-3">
       <div class="card">
         <div class="row no-gutters">
           <div class="card-body">
-            <h3 class="card-title text-center mb-4">Nueva division</h3>
+            <h3 class="card-title text-center mb-4">Editar division</h3>
             <form autocomplete="off" v-on:submit.prevent="PostNewDivision">
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -47,13 +47,13 @@
               <div class="form-group">
                   <label class="input-group-text text-center">Especialidades</label>
                 <div>
-                  <multiselect v-model="especialidadSeleccionada" placeholder="Lista de especialidades" :searchable="true" :options="especialidades" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                  <multiselect v-model="especialidad" placeholder="Lista de especialidades" :searchable="true" :options="especialidades" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
                 </div>
               </div>
               <div class="form-group">
                   <label class="input-group-text text-center">Turno</label>
                 <div>
-                  <multiselect v-model="turnoSeleccionado" placeholder="Lista de Turnos" label="name" track-by="value" :searchable="true" :options="turnos" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                  <multiselect v-model="turno" placeholder="Lista de Turnos" label="name" track-by="value" :searchable="true" :options="turnos" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
                   <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar el turno</label>
                 </div>
               </div>
@@ -80,7 +80,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <button class="btn btn-danger btn-block" type="submit" >Crear nueva division</button>
+                <button class="btn btn-danger btn-block" type="submit" >Guardar cambios</button>
               </div>
             </form>
           </div>
@@ -97,35 +97,47 @@ import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
-  name: "AgregarDivision",
+  name: "EditarDivision",
+  props: ["division"],
   components: {
     Navigation,
     Multiselect
   },
   data() {
     return {
-      especialidad: '',
-      año: '',
-      numDivision: '',
-      cicloLectivo: '',
-      turnoSeleccionado:'',
+      especialidad: this.division.especialidad,
+      año:this.division.año,
+      turno: this.division.turno ? { name: 'Tarde', value: 1 } : { name: 'Mañana', value: 0 },
+      numDivision: this.division.numDivision,
+      cicloLectivo: this.division.cicloLectivo,
       turnos:[{ name: 'Mañana', value: 0 },{ name: 'Tarde', value: 1 }],
-      especialidadSeleccionada:'',
       especialidades:['computacion','electronica','electricidad','construcciones','mecanica','quimica'],
       preceptorSeleccionado:[''],
       preceptores: [''],
       isInvalid: false
     };
   },
+  mounted() {
+    if(!this.division){
+      this.$router.push({ name: 'Divisiones'})
+    }
+  },
   created(){
+    this.GetPreceptor();
     this.GetPreceptores();
   },
   methods: {
     LabelPreceptor({dniAutoridad,nombre,apellido}){
       return dniAutoridad + ` - ` + nombre + ', ' + apellido;
     },
+    async GetPreceptor(){
+      await axios.get("/api/autoridad/" + this.division.dniPreceptor)
+      .then(res =>{
+        this.preceptorSeleccionado = res.data[0];
+      });
+    },
     validar () {
-      if (!this.turnoSeleccionado){
+      if (!this.turno){
         this.isInvalid = true
         return false
       }else
@@ -140,22 +152,36 @@ export default {
     },
     async PostNewDivision() {
       if(this.validar()){
-      await axios.post("/api/division/add", {
-          dniPreceptor: this.preceptorSeleccionado.dniAutoridad,
-          especialidad: this.especialidadSeleccionada,
-          año: this.año,
-          turno: this.turnoSeleccionado.value,
-          numDivision: this.numDivision,
-          cicloLectivo: this.cicloLectivo,
-        })
-        .then(res=>{this.$router.push({ name: 'Divisiones', params: {SuccessCountDownCreationProp: 4 }})})
-        .catch(err=>{this.$router.push({ name: 'Divisiones', params: {ErrorCountDownCreationProp: 6 }})})
-
+        await axios.post("/api/division/update", {
+            idDivision: this.division.idDivision,
+            especialidad: this.especialidad,
+            año:this.año,
+            turno: this.turno.value,
+            numDivision: this.numDivision,
+            cicloLectivo: this.cicloLectivo,
+            dniPreceptor:this.preceptorSeleccionado ? this.preceptorSeleccionado.dniAutoridad : null
+          })
+          .then(async(res)=>{
+            await axios.get("/api/division/" + this.division.idDivision)
+            .then((res)=>{
+              this.$router.push({ name: 'DivisionCompleta', params: {division:res.data[0], SuccessCountDownEditProp: 6 }})
+            })
+          })
+          .catch(err=>{this.$router.push({ name: 'DivisionCompleta', params: {division:this.division, ErrorCountDownEditProp: 7 }})})
       }
+    },
+    onTouch () {
+      this.isTouched = true
     }
   }
 };
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
+.container {
+  padding: 0 !important;
+}
+[class*="container-fluid"] {
+  padding: 0 !important;
+}
 </style>

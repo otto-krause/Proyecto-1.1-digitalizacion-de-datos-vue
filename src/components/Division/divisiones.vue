@@ -27,7 +27,7 @@
           @dismissed="ErrorCountDownCreation = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La division no ha podido ser creada. Posiblemente haya un problema con los datos ingresados</p>
+          <p>La division no ha podido ser creada. Posiblemente haya un problema con los datos ingresados o esten duplicados</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownDeletion"
@@ -50,6 +50,14 @@
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
+            <article>
+              <div class="card-body" style="background-color:#FAFAFA">
+                <h6 class="card-title">Ciclo Lectivo</h6>
+                <div class="form-row">
+                  <input type="number" v-model="searchCicloLectivo" class="form-control" />
+                </div>
+              </div>
+            </article>
             <article class="card-group-item">
               <div class="card-body" style="background-color:#FAFAFA">
                 <h6 class="title">Especialidades</h6>
@@ -143,7 +151,7 @@
                 <th scope="col">{{division.turno ? 'Tarde' : 'Mañana'}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'AutoridadCompleta', params: {division} }"
+                    :to="{ name: 'DivisionCompleta', params: {division} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>
@@ -172,6 +180,7 @@ export default {
   },
   data() {
     return {
+      searchCicloLectivo: new Date().getFullYear(),
       año: '',
       optionsaño:['','1','2','3','4','5','6'],
       division:'',
@@ -202,7 +211,13 @@ export default {
       return this.divisiones.filter(division => {
         return (
           (
+            division.cicloLectivo == this.searchCicloLectivo
+          ) &&
+          (
             this.año ? division.año.toString().includes(this.año) : true
+          ) &&
+          (
+            this.division ? division.numDivision.toString().includes(this.division) : true
           ) &&
           (
             this.computacion ? division.especialidad == 'computacion' : true
@@ -237,6 +252,7 @@ export default {
       });
       let unique = [...new Set(numDivisiones)]
       this.optionsdivision = unique;
+      this.optionsdivision.unshift('');
     },
     GetDivisiones() {
       axios.get("/api/division/").then(result => {
