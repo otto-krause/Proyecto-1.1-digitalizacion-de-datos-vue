@@ -116,9 +116,9 @@
                 <th scope="col">No se puede modificar</th>
               </tr>
             </tbody>
-            <tbody v-for="rol in displayedRoles" v-bind:key="rol.idRol">
+            <tbody v-for="(rol,index) in displayedRoles" v-bind:key="index">
               <tr>
-                <th scope="col">{{rol.idRol}}</th>
+                <th scope="col">{{index + 2}}</th>
                 <th scope="col">{{rol.rol}}</th>
                 <th scope="col">
                   <button
