@@ -90,9 +90,9 @@
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text">Fecha de ingreso</label>
+                  <label class="input-group-text">Fecha de Alta</label>
                 </div>
-                <input type="date" v-model="fechaIngreso" name="fechaIngreso" class="form-control" />
+                <input type="date" v-model="fechaAlta" name="fechaAlta" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha de alta de la autoridad')" oninput="setCustomValidity('')"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -147,7 +147,7 @@ export default {
       ncalle: '',
       nombre: '',
       apellido: '',
-      fechaIngreso: new Date(null).toISOString(),
+      fechaAlta: new Date(null).toISOString(),
       fechaNacimiento: new Date(null).toISOString(),
       fichaMedica: 0,
       cargos:[],
@@ -181,14 +181,18 @@ export default {
           direccion: this.calle + " " + this.ncalle,
           nombre: this.nombre,
           apellido: this.apellido,
-          fechaIngreso: this.fechaIngreso,
+          fechaAlta: this.fechaAlta,
           fechaNacimiento: this.fechaNacimiento,
           fichaMedica: this.fichaMedica,
           cargos: this.cargos
         })
         .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownCreationProp: 4 }})})
-        .catch(err=>{this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationProp: 6 }})})
-
+        .catch(err=>{
+          if(err.message.includes('409')){
+            this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationRepeatedProp: 7 }})
+          }else
+            this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationProp: 6 }})
+          })
       }
     }
   }

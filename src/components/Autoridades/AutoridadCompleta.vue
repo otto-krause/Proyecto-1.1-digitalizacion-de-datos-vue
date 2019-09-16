@@ -77,10 +77,10 @@
                   </tr>
                   <tr>
                     <th>Fecha de Ingreso</th>
-                    <td>{{autoridad.fechaIngreso != '1970-01-01T03:00:00.000Z' ? autoridad.fechaIngreso.slice(0,10) : 'No tiene'}}</td>
+                    <td>{{autoridad.fechaAlta != '1970-01-01T03:00:00.000Z' ? autoridad.fechaAlta.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
-                    <th>Fecha de Nacimineto</th>
+                    <th>Fecha de Nacimiento</th>
                     <td>{{autoridad.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? autoridad.fechaNacimiento.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
@@ -105,6 +105,15 @@
                       <router-link
                         :to="{ name: 'EditarAutoridad', params: {autoridad,rolesReenviar:roles,rolesMostrar} }"
                         class="nav-link btn btn-info fas fa-edit"
+                      ></router-link>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Historias Altas</th>
+                    <td>
+                      <router-link
+                        :to="{ name: 'HistorialAutoridad', params: {autoridad,roles} }"
+                        class="nav-link btn btn-info fas fa-clipboard"
                       ></router-link>
                     </td>
                   </tr>

@@ -8,6 +8,7 @@ import Autoridades from '@/components/Autoridades/Autoridades'
 import AgregarAutoridad from '@/components/Autoridades/AgregarAutoridad'
 import AutoridadCompleta from '@/components/Autoridades/AutoridadCompleta'
 import EditarAutoridad from '@/components/Autoridades/EditarAutoridad'
+import HistorialAutoridad from '@/components/Autoridades/HistorialAutoridad'
 import Roles from '@/components/Roles/Roles'
 import AgregarRol from '@/components/Roles/AgregarRol'
 import EditarRol from '@/components/Roles/EditarRol'
@@ -17,10 +18,15 @@ import AlumnoCompleto from '@/components/Alumnos/AlumnoCompleto'
 import EditarAlumno from '@/components/Alumnos/EditarAlumno'
 import AgregarContactoAlumno from '@/components/Alumnos/AgregarContactoAlumno'
 import EditarContactoAlumno from '@/components/Alumnos/EditarContactoAlumno'
+import HistorialAlumno from '@/components/Alumnos/HistorialAlumno'
 import Divisiones from '@/components/Division/Divisiones'
 import AgregarDivision from '@/components/Division/AgregarDivision'
 import DivisionCompleta from '@/components/Division/DivisionCompleta'
 import EditarDivision from '@/components/Division/EditarDivision'
+import PlanEstudios from '@/components/PlanEstudios/PlanEstudios'
+import AgregarPlanEstudios from '@/components/PlanEstudios/AgregarPlanEstudios'
+import PlanEstudioCompleto from '@/components/PlanEstudios/PlanEstudioCompleto'
+import EditarPlanEstudio from '@/components/PlanEstudios/EditarPlanEstudio'
 
 Vue.use(Router)
 
@@ -64,6 +70,12 @@ export default new Router({
       path: '/EditarAutoridad',
       name: 'EditarAutoridad',
       component: EditarAutoridad,
+      props: true
+    },
+    {
+      path: '/HistorialAutoridad',
+      name: 'HistorialAutoridad',
+      component: HistorialAutoridad,
       props: true
     },
     {
@@ -119,6 +131,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/HistorialAlumno',
+      name: 'HistorialAlumno',
+      component: HistorialAlumno,
+      props:true
+    },
+    {
       path: '/Divisiones',
       name: 'Divisiones',
       component: Divisiones,
@@ -140,6 +158,28 @@ export default new Router({
       name: 'EditarDivision',
       component: EditarDivision,
       props: true
+    },
+    {
+      path: '/PlanEstudios',
+      name: 'PlanEstudios',
+      component: PlanEstudios
+    },
+    {
+      path: '/AgregarPlanEstudios',
+      name: 'AgregarPlanEstudios',
+      component: AgregarPlanEstudios
+    },
+    {
+      path: '/PlanEstudioCompleto',
+      name: 'PlanEstudioCompleto',
+      component: PlanEstudioCompleto,
+      props:true
+    },
+    {
+      path: '/EditarPlanEstudio',
+      name: 'EditarPlanEstudio',
+      component: EditarPlanEstudio,
+      props:true
     },
     {
       path: '/*',

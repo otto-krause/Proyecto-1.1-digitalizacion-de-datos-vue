@@ -9,7 +9,7 @@
           @dismissed="ErrorCountDownCreationRepeated =0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>(DNI Existente) - La autoridad ya existe. Debe darla de baja para registrarla nuevamente</p>
+          <p>(resolucion Existente) - El plan de estudios ya existe.</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownCreation"
@@ -18,7 +18,7 @@
           @dismissed="SuccessCountDownCreation =0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad se ha creado correctamente</p>
+          <p>El plan de estudios se ha creado correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownCreation"
@@ -27,7 +27,7 @@
           @dismissed="ErrorCountDownCreation = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad no ha podido ser creada. Posiblemente haya un problema con los datos ingresados</p>
+          <p>El plan de estudios no ha podido ser creado. Posiblemente haya un problema con los datos ingresados</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownDeletion"
@@ -36,7 +36,7 @@
           @dismissed="SuccessCountDownDeletion = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad ha sido eliminada correctamente</p>
+          <p>El plan de estudios ha sido eliminado correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownDeletion"
@@ -45,36 +45,22 @@
           @dismissed="ErrorCountDownDeletion = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad no ha podido ser eliminada</p>
+          <p>El plan de estudios no ha podido ser eliminado</p>
         </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
             <article>
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="card-title">Busqueda</h6>
+                <h6 class="card-title">Resolucion</h6>
                 <div class="form-row">
-                  <input type="text" v-model="search" class="form-control" placeholder="Buscador" />
-                </div>
-              </div>
-            </article>
-            <article class="card-group-item">
-              <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="title">Cargos</h6>
-                <div class="custom-control custom-checkbox" v-for="ObjetoRol in roles" v-bind:key="ObjetoRol.idRol" >
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    :id="ObjetoRol.idRol"
-                    v-model="roleFiltersBoolean[ObjetoRol.idRol - 1]"
-                  />
-                  <label class="custom-control-label" :for="ObjetoRol.idRol">{{ObjetoRol.rol}}</label>
+                  <input type="text" v-model="searchResolucion" class="form-control" placeholder="Resolucion" />
                 </div>
               </div>
             </article>
             <article>
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="card-title">Fecha Alta</h6>
+                <h6 class="card-title">Fecha vigente</h6>
                 <div class="form-row">
                   <div class="form-group col-sm-12">
                     <label>Desde</label>
@@ -99,28 +85,26 @@
         </div>
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
-            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Autoridades</h1>
-            <router-link :to="{ name: 'AgregarAutoridad' }" class="btn btn-info">Crear autoridad</router-link>
+            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Planes de estudio</h1>
+            <router-link :to="{ name: 'AgregarPlanEstudios' }" class="btn btn-info">Crear plan de estudios</router-link>
           </nav>
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">DNI</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Telefono</th>
-                <th scope="col"></th>
+                <th scope="col">RESOLUCION</th>
+                <th scope="col">Vigencia Desde</th>
+                <th scope="col">Vigencia Hasta</th>
+                <th scope="col">Opciones</th>
               </tr>
             </thead>
-            <tbody v-for="autoridad in displayedAutoridades" v-bind:key="autoridad.dniAutoridad">
+            <tbody v-for="PL in displayedPL" :key="PL.resolucion">
               <tr>
-                <th scope="col">{{autoridad.dniAutoridad}}</th>
-                <th scope="col">{{autoridad.nombre}}</th>
-                <th scope="col">{{autoridad.apellido}}</th>
-                <th scope="col">{{autoridad.telefono}}</th>
+                <th scope="col">{{PL.resolucion}}</th>
+                <th scope="col">{{PL.vigenciaDesde != '1970-01-01T03:00:00.000Z' ? PL.vigenciaDesde.slice(0,10) : ' - '}}</th>
+                <th scope="col">{{PL.vigenciaHasta != '1970-01-01T03:00:00.000Z' ? PL.vigenciaHasta.slice(0,10) : ' - '}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'AutoridadCompleta', params: {autoridad,roles} }"
+                    :to="{ name: 'PlanEstudioCompleto', params: {PlanEstudio:PL} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>
@@ -139,83 +123,67 @@ import Navigation from "../Navegacion/Navigation";
 import axios from "axios";
 
 export default {
-  name: "Autoridades",
+  name: "PlanEstudios",
   props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","ErrorCountDownCreationRepeatedProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
   components: {
     Navigation
   },
   data() {
     return {
-      search: "",
+      searchResolucion: "",
       fechaInicio: new Date("1970-01-01").toISOString(),
       fechaFin: new Date().toISOString(),
       page: 1,
       perPage: 10,
       pages: [],
-      autoridades: [],
-      roles:[],
-      roleFilters:[],
-      roleFiltersBoolean:[],
+      planesEstudio: [],
       dismissSecs: 4,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
       SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
       ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
       ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0,
+      ThereAreRoles:false
     };
   },
   mounted() {
-    this.GetAutoridades()
-    this.getRoles();
+    this.GetPlanesEstudio()
   },
   computed: {
-    filteredAutoridades() {
-      return this.autoridades.filter(autoridad => {
+    filteredPL() {
+      return this.planesEstudio.filter(PL => {
         return (
-          (this.roles.every((rol) => {
-            return this.roleFiltersBoolean[rol.idRol - 1] ? autoridad.idRol.includes(this.roleFilters[rol.idRol - 1]) : true
-          })) &&
-          (autoridad.nombre.toLowerCase().includes(this.search.toLowerCase()) ||
-          autoridad.apellido.toLowerCase().includes(this.search.toLowerCase()) ||
-          autoridad.dniAutoridad.toString().includes(this.search)
+          (
+          PL.resolucion.toString().includes(this.searchResolucion)
           ) &&
           (
-            autoridad.fechaAlta >= this.fechaInicio && autoridad.fechaAlta <= this.fechaFin
+            PL.vigenciaDesde >= this.fechaInicio && PL.vigenciaHasta <= this.fechaFin
           )
         );
       });
     },
-    displayedAutoridades() {
+    displayedPL() {
       return this.paginate();
     },
   },
   methods: {
-    getRoles(){
-      axios.get('/api/rol').then(result =>{
-        this.roles = result.data;
-        this.roles.forEach(rol => {
-          this.roleFiltersBoolean.push(false)
-          this.roleFilters.push(rol.idRol)
-        });
-      })
-    },
-    GetAutoridades() {
-      axios.get("/api/autoridad").then(result => {
-        this.autoridades = result.data;
+    GetPlanesEstudio() {
+      axios.get("/api/plan_estudios/").then(result => {
+        this.planesEstudio = result.data;
       });
     },
     paginate() {
       let from = this.page * this.perPage - this.perPage;
       let to = this.page * this.perPage;
 
-      return this.filteredAutoridades.slice(from, to);
+      return this.filteredPL.slice(from, to);
     },
-    setAutoridades() {
-      let numberOfAutoridades = Math.ceil(
-        this.filteredAutoridades.length / this.perPage
+    setPL() {
+      let numberOfPL = Math.ceil(
+        this.filteredPL.length / this.perPage
       );
       this.pages = [];
-      for (let i = 1; i <= numberOfAutoridades; i++) {
+      for (let i = 1; i <= numberOfPL; i++) {
         this.pages.push(i);
       }
     },
@@ -224,7 +192,7 @@ export default {
     }
   },
   watch: {
-    filteredAutoridades() {
+    filteredPL() {
       if(!this.fechaInicio){
         this.fechaInicio = new Date("1970-01-01").toISOString()
       }
@@ -232,7 +200,7 @@ export default {
         this.fechaFin = new Date().toISOString()
       }
       this.page = 1;
-      this.setAutoridades();
+      this.setPL();
     }
   }
 };

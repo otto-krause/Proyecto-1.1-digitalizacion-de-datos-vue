@@ -41,7 +41,7 @@
             <div class="dropdown-divider"></div>
             <router-link to="/Divisiones" class="dropdown-item">Division</router-link>
             <div class="dropdown-divider"></div>
-            <router-link to="/" class="dropdown-item">Planes de estudio</router-link>
+            <router-link to="/PlanEstudios" class="dropdown-item">Planes de estudio</router-link>
           </div>
         </li>
       </ul>

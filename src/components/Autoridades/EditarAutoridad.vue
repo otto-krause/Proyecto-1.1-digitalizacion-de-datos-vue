@@ -90,9 +90,9 @@
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text">Fecha de ingreso</label>
+                  <label class="input-group-text">Fecha de Alta</label>
                 </div>
-                <input type="date" v-model="fechaIngreso" id="fechaIngreso" name="fechaIngreso" class="form-control" />
+                <input type="date" v-model="fechaAlta" id="fechaAlta" name="fechaAlta" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha de alta de la autoridad')" oninput="setCustomValidity('')"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -148,7 +148,7 @@ export default {
       ncalle: (this.autoridad.direccion.split(' ')).reverse()[0],
       nombre: this.autoridad.nombre,
       apellido: this.autoridad.apellido,
-      fechaIngreso: this.autoridad.fechaIngreso.slice(0,10),
+      fechaAlta: this.autoridad.fechaAlta.slice(0,10),
       fechaNacimiento: this.autoridad.fechaNacimiento.slice(0,10),
       fichaMedica: this.autoridad.fichaMedica,
       cargos:this.rolesMostrar,
@@ -191,13 +191,13 @@ export default {
           direccion: this.calle + " " + this.ncalle,
           nombre: this.nombre,
           apellido: this.apellido,
-          fechaIngreso: new Date(this.fechaIngreso).toISOString(),
+          fechaAlta: new Date(this.fechaAlta).toISOString(),
           fechaNacimiento: new Date(this.fechaNacimiento).toISOString(),
           FichaMedica: this.fichaMedica,
           cargos: this.cargos
         })
         .then(async(res)=>{
-          await axios.get("/api/autoridad/" + this.autoridad.dniAutoridad)
+          await axios.get("/api/autoridad/" + this.dniAutoridad)
           .then(result =>{
             this.autoridadesReenviar = result.data[0]
             this.$router.push({ name: 'AutoridadCompleta', params: {autoridad:this.autoridadesReenviar,roles:rolesReenviar, SuccessCountDownEditProp: 6 }})

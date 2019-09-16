@@ -3,12 +3,12 @@
     <Navigation />
     <div class="container-fluid">
       <nav class="navbar navbar-expand-md navbar-light" style="background-color:#1a1a1d">
-        <router-link to="/Alumnos" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link to="/PlanEstudios" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div
-      class="modal fade DeleteContactoAlumno"
-      id="DeleteContactoAlumno"
+      class="modal fade DeletePL"
+      id="DeletePL"
       tabindex="-1"
       role="dialog"
       aria-labelledby="deleteModalLabel"
@@ -22,40 +22,13 @@
             </div>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
-          <h4 class="modal-title">Eliminar este contacto?</h4>
+          <h4 class="modal-title">Eliminar plan de estudios</h4>
           <div class="modal-body">
-            <p>Desea eliminar este contacto? Este proceso no puede deshacerse.</p>
+            <p>Desea eliminar este plan de estudios? Este proceso no puede deshacerse.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-danger" v-on:click="DeleteContactoAlumno">Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="modal fade DeleteAlumno"
-      id="DeleteAlumno"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="deleteModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-confirm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="icon-box">
-              <i class="material-icons fas fa-times"></i>
-            </div>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          </div>
-          <h4 class="modal-title">Eliminar alumno</h4>
-          <div class="modal-body">
-            <p>Desea eliminar este alumno? Este proceso no puede deshacerse.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-danger" v-on:click="DeleteAlumno">Eliminar</button>
+            <button type="submit" class="btn btn-danger" v-on:click="DeletePL">Eliminar</button>
           </div>
         </div>
       </div>
@@ -135,37 +108,30 @@
           <p>El alumno no pudo ser modificado</p>
         </b-alert>
     <div class="row">
-      <div class="col col-sm-6 mx-5">
-        <div class="card mt-5">
+      <div class="col-md-8 col-lg-5 mx-auto">
+        <div class="card mt-4">
           <div class="card-body">
-            <h4 class="card-title">Alumno</h4>
+            <h4 class="card-title">Plan de estudios</h4>
             <div class="table-responsive">
               <table class="table">
-                <tbody v-bind="alumno">
+                <tbody v-bind="PlanEstudio">
                   <tr>
-                    <th>DNI</th>
-                    <td>{{alumno.dniAlumno}}</td>
+                    <th>resolucion</th>
+                    <td>{{PlanEstudio.resolucion}}</td>
                   </tr>
                   <tr>
-                    <th>Nombre</th>
-                    <td>{{alumno.nombre}}</td>
+                    <th>Vigencia Desde</th>
+                    <td>{{PlanEstudio.vigenciaDesde != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaDesde.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
-                    <th>Apellido</th>
-                    <td>{{alumno.apellido}}</td>
+                    <th>Vigencia Hasta</th>
+                    <td>{{PlanEstudio.vigenciaHasta != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaHasta.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
-                    <th>Fecha de Alta</th>
-                    <td>{{alumno.fechaAlta != '1970-01-01T03:00:00.000Z' ? alumno.fechaAlta.slice(0,10) : 'No tiene'}}</td>
+                    <th>Descripcion</th>
+                    <td><textarea class="form-control" name="descripcion"  cols="40" rows="12" v-model="PlanEstudio.descripcion"></textarea></td>
                   </tr>
                   <tr>
-                    <th>Fecha de Nacimineto</th>
-                    <td>{{alumno.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? alumno.fechaNacimiento.slice(0,10) : 'No tiene'}}</td>
-                  </tr>
-                  <tr>
-                    <th>es Repetidor?</th>
-                    <td>{{alumno.repetidor ? 'Si' : 'No'}}</td>
-                  </tr>
                   <tr>
                     <th>Opciones</th>
                     <td>
@@ -176,65 +142,10 @@
                         data-target=".DeleteAlumno"
                       ></button>
                       <router-link
-                        :to="{ name: 'EditarAlumno', params: {alumno} }"
+                        :to="{ name: 'EditarPlanEstudio', params: {PlanEstudio} }"
                         class="nav-link btn btn-info fas fa-edit"
                       ></router-link>
                     </td>
-                  </tr>
-                  <tr>
-                    <th>Historias Altas</th>
-                    <td>
-                      <router-link
-                        :to="{ name: 'HistorialAlumno', params: {alumno} }"
-                        class="nav-link btn btn-info fas fa-clipboard"
-                      ></router-link>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col mx-5">
-        <div class="card mt-5">
-          <div class="card-body">
-            <nav class="navbar">
-              <h4 class="card-title">Contactos del alumno</h4>
-              <router-link :to="{ name: 'AgregarContactoAlumno',params: {alumno} }" class="btn btn-info">Crear contacto</router-link>
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
-                    <th scope="col">Relacion</th>
-                    <th scope="col">Celular</th>
-                    <th scope="col">Mail</th>
-                    <th scope="col">Opciones</th>
-                  </tr>
-                </thead>
-                <tbody v-for="contactoAlumno in contactosAlumno" :key="contactoAlumno.idContacto">
-                  <tr>
-                    <th scope="col">{{contactoAlumno.nombre}}</th>
-                    <th scope="col">{{contactoAlumno.apellido}}</th>
-                    <th scope="col">{{contactoAlumno.relacion}}</th>
-                    <th scope="col">{{contactoAlumno.celular}}</th>
-                    <th scope="col">{{contactoAlumno.mail}}</th>
-                    <th scope="col">
-                      <button
-                        type="button"
-                        class="nav-link btn btn-danger fas fa-trash"
-                        data-toggle="modal"
-                        v-on:click="contactoSeleccionado = contactoAlumno"
-                        data-target=".DeleteContactoAlumno"
-                      ></button>
-                      <router-link
-                        :to="{ name: 'EditarContactoAlumno', params: {contactoAlumno,alumno} }"
-                        class="nav-link btn btn-info fas fa-edit"
-                      ></router-link>
-                    </th>
                   </tr>
                 </tbody>
               </table>
@@ -250,15 +161,13 @@ import Navigation from "../Navegacion/Navigation";
 import axios from "axios";
 
 export default {
-  name: "AlumnoCompleto",
-  props: ["alumno","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
+  name: "PlanEstudioCompleto",
+  props: ["PlanEstudio","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
   components: {
     Navigation
   },
   data() {
     return {
-      contactosAlumno: [],
-      contactoSeleccionado: {},
       SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
       ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
@@ -270,21 +179,13 @@ export default {
     };
   },
   mounted() {
-    if (!this.alumno) {
-      this.$router.push({ name: "Alumnos" });
+    if (!this.PlanEstudio) {
+      this.$router.push({ name: "PlanEstudios" });
     }
-    this.GetContactos();
   },
   methods: {
-    GetContactos() {
-      axios
-        .get("/api/contacto_alumno/" + this.alumno.dniAlumno)
-        .then(result => {
-          this.contactosAlumno = result.data;
-        });
-    },
-    async DeleteAlumno() {
-      $("#DeleteAlumno").modal("toggle");
+    async DeletePL() {
+      $("#DeletePL").modal("toggle");
       await axios
         .post("/api/alumno/delete", {
           dniAlumno: this.alumno.dniAlumno
@@ -300,21 +201,6 @@ export default {
             name: "Alumnos",
             params: { ErrorCountDownDeletionProp: 6 }
           });
-        });
-    },
-    async DeleteContactoAlumno() {
-      $("#DeleteContactoAlumno").modal("toggle");
-      await axios
-        .post("/api/contacto_alumno/delete", {
-          idContacto: this.contactoSeleccionado.idContacto
-        })
-        .then(res => {
-          this.SuccessCountDownDeletion = 4
-          this.GetContactos();
-        })
-        .catch(err => {
-          this.ErrorCountDownDeletion = 6
-          this.GetContactos();
         });
     },
     countDownChanged(dismissCountDown) {

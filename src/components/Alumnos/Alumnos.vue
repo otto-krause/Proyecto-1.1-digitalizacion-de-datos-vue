@@ -2,6 +2,15 @@
   <div>
     <navigation />
     <div class="container-fluid">
+      <b-alert
+          :show="ErrorCountDownCreationRepeated"
+          dismissible
+          variant="warning"
+          @dismissed="ErrorCountDownCreationRepeated =0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>(DNI Existente) - El alumno ya existe. Debe darlo de baja para registrarlo nuevamente</p>
+        </b-alert>
         <b-alert
           :show="SuccessCountDownCreation"
           dismissible
@@ -117,7 +126,7 @@ import axios from "axios";
 
 export default {
   name: "Alumnos",
-  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
+  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","ErrorCountDownCreationRepeatedProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
   components: {
     Navigation
   },
@@ -135,6 +144,7 @@ export default {
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
       SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
       ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
+      ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0,
       ThereAreRoles:false
     };
   },
@@ -150,7 +160,7 @@ export default {
           alumno.dniAlumno.toString().includes(this.search)
           ) &&
           (
-            alumno.fechaIngreso >= this.fechaInicio && alumno.fechaIngreso <= this.fechaFin
+            alumno.fechaAlta >= this.fechaInicio && alumno.fechaAlta <= this.fechaFin
           )
         );
       });
