@@ -158,6 +158,23 @@
               </tr>
             </tbody>
           </table>
+          <nav class="d-flex justify-content-center" v-if="filteredDivisiones.length >9">
+          <ul class="pagination">
+            <li class="page-item" v-if="page != 1">
+              <a class="page-link" href="#" v-on:click="page = 1">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li v-for="pageNumber in pages.slice(Math.max(0,page-4), page+4)" v-bind:key="pageNumber" v-on:click="page = pageNumber" class="page-item"><a class="page-link" href="#">{{pageNumber}}</a></li>
+            <li class="page-item" v-if="page < pages.length">
+              <a class="page-link" href="#" v-on:click="page = pages.length">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
         </div>
       </div>
     </div>
@@ -186,7 +203,7 @@ export default {
       division:'',
       optionsdivision:[],
       page: 1,
-      perPage: 10,
+      perPage: 9,
       pages: [],
       divisiones: [],
       dismissSecs: 4,

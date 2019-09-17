@@ -47,6 +47,7 @@
                   <label class="input-group-text">DNI</label>
                 </div>
                 <input
+                  disabled
                   type="number"
                   name="dniAutoridad"
                   class="form-control"

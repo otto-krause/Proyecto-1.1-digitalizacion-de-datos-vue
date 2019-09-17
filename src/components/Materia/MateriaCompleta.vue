@@ -3,7 +3,7 @@
     <Navigation />
     <div class="container-fluid">
       <nav class="navbar navbar-expand-md navbar-light" style="background-color:#1a1a1d">
-        <router-link to="/PlanEstudios" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link to="/Materias" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div
@@ -22,9 +22,9 @@
             </div>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
-          <h4 class="modal-title">Eliminar plan de estudios</h4>
+          <h4 class="modal-title">Eliminar materia</h4>
           <div class="modal-body">
-            <p>Desea eliminar este plan de estudios? Este proceso no puede deshacerse.</p>
+            <p>Desea eliminar esta materia? Este proceso no puede deshacerse.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
@@ -111,25 +111,25 @@
       <div class="col-md-8 col-lg-5 mx-auto">
         <div class="card mt-4">
           <div class="card-body">
-            <h4 class="card-title">Plan de estudios</h4>
+            <h4 class="card-title">Materia</h4>
             <div class="table-responsive">
               <table class="table">
-                <tbody v-bind="PlanEstudio">
+                <tbody v-bind="materia">
                   <tr>
-                    <th>resolucion</th>
-                    <td>{{PlanEstudio.resolucion}}</td>
+                    <th>Titulo</th>
+                    <td>{{materia.titulo}}</td>
                   </tr>
                   <tr>
-                    <th>Vigencia Desde</th>
-                    <td>{{PlanEstudio.vigenciaDesde != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaDesde.slice(0,10) : 'No tiene'}}</td>
-                  </tr>
-                  <tr>
-                    <th>Vigencia Hasta</th>
-                    <td>{{PlanEstudio.vigenciaHasta != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaHasta.slice(0,10) : 'No tiene'}}</td>
+                    <th>Horas catedra</th>
+                    <td>{{materia.cantHoras}}</td>
                   </tr>
                   <tr>
                     <th>Descripcion</th>
-                    <td><p class="form-control">{{PlanEstudio.descripcion}}</p></td>
+                    <td><p class="form-control">{{materia.descripcion}}</p></td>
+                  </tr>
+                  <tr>
+                    <th>Resoluciones</th>
+                    <td><div v-for="resolucion in resoluciones" v-bind:key="resolucion.resolucion">{{resolucion.resolucion}}</div></td>
                   </tr>
                   <tr>
                   <tr>
@@ -142,7 +142,7 @@
                         data-target=".DeleteAlumno"
                       ></button>
                       <router-link
-                        :to="{ name: 'EditarPlanEstudio', params: {PlanEstudio} }"
+                        :to="{ name: 'EditarMateria', params: {materia,resoluciones} }"
                         class="nav-link btn btn-info fas fa-edit"
                       ></router-link>
                     </td>
@@ -161,13 +161,14 @@ import Navigation from "../Navegacion/Navigation";
 import axios from "axios";
 
 export default {
-  name: "PlanEstudioCompleto",
-  props: ["PlanEstudio","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
+  name: "MateriaCompleta",
+  props: ["materia","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
   components: {
     Navigation
   },
   data() {
     return {
+      resoluciones:[],
       SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
       ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
@@ -179,11 +180,17 @@ export default {
     };
   },
   mounted() {
-    if (!this.PlanEstudio) {
-      this.$router.push({ name: "PlanEstudios" });
+    if (!this.materia) {
+      this.$router.push({ name: "Materias" });
     }
+    this.GetResolucion();
   },
   methods: {
+    GetResolucion() {
+      axios.get("/api/materia/plan_Materia/Resolucion/"+ this.materia.idMateria).then(result => {
+        this.resoluciones = result.data;
+      });
+    },
     async DeletePL() {
       $("#DeletePL").modal("toggle");
       await axios

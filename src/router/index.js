@@ -27,6 +27,11 @@ import PlanEstudios from '@/components/PlanEstudios/PlanEstudios'
 import AgregarPlanEstudios from '@/components/PlanEstudios/AgregarPlanEstudios'
 import PlanEstudioCompleto from '@/components/PlanEstudios/PlanEstudioCompleto'
 import EditarPlanEstudio from '@/components/PlanEstudios/EditarPlanEstudio'
+import Materias from '@/components/Materia/Materias'
+import MateriaCompleta from '@/components/Materia/MateriaCompleta'
+import EditarMateria from '@/components/Materia/EditarMateria'
+import AgregarMateria from '@/components/Materia/AgregarMateria'
+import ActasPrevia from '@/components/ActasPrevia/ActasPrevia'
 
 Vue.use(Router)
 
@@ -180,6 +185,34 @@ export default new Router({
       name: 'EditarPlanEstudio',
       component: EditarPlanEstudio,
       props:true
+    },
+    {
+      path: '/Materias',
+      name: 'Materias',
+      component: Materias,
+      props:true
+    },
+    {
+      path: '/MateriaCompleta',
+      name: 'MateriaCompleta',
+      component: MateriaCompleta,
+      props:true
+    },
+    {
+      path: '/EditarMateria',
+      name: 'EditarMateria',
+      component: EditarMateria,
+      props:true
+    },
+    {
+      path: '/AgregarMateria',
+      name: 'AgregarMateria',
+      component: AgregarMateria
+    },
+    {
+      path: '/ActasPrevia',
+      name: 'ActasPrevia',
+      component: ActasPrevia
     },
     {
       path: '/*',

@@ -9,7 +9,7 @@
           @dismissed="ErrorCountDownCreationRepeated =0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>(DNI Existente) - La autoridad ya existe. Debe darla de baja para registrarla nuevamente</p>
+          <p>(Materia Existente) - La materia ya existe.</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownCreation"
@@ -18,7 +18,7 @@
           @dismissed="SuccessCountDownCreation =0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad se ha creado correctamente</p>
+          <p>La materia se ha creado correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownCreation"
@@ -27,7 +27,7 @@
           @dismissed="ErrorCountDownCreation = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad no ha podido ser creada. Posiblemente haya un problema con los datos ingresados</p>
+          <p>La materia no ha podido ser creada. Posiblemente haya un problema con los datos ingresados</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownDeletion"
@@ -36,7 +36,7 @@
           @dismissed="SuccessCountDownDeletion = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad ha sido eliminada correctamente</p>
+          <p>La materia ha sido eliminada correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownDeletion"
@@ -45,53 +45,24 @@
           @dismissed="ErrorCountDownDeletion = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad no ha podido ser eliminada</p>
+          <p>La materia no ha podido ser eliminada</p>
         </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
             <article>
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="card-title">Busqueda</h6>
+                <h6 class="card-title">Materia</h6>
                 <div class="form-row">
-                  <input type="text" v-model="search" class="form-control" placeholder="Buscador" />
+                  <input type="text" v-model="searchMateria" class="form-control" placeholder="Busqueda" />
                 </div>
               </div>
             </article>
             <article class="card-group-item">
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="title">Cargos</h6>
-                <div class="custom-control custom-checkbox" v-for="ObjetoRol in roles" v-bind:key="ObjetoRol.idRol" >
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    :id="ObjetoRol.idRol"
-                    v-model="roleFiltersBoolean[ObjetoRol.idRol - 1]"
-                  />
-                  <label class="custom-control-label" :for="ObjetoRol.idRol">{{ObjetoRol.rol}}</label>
-                </div>
-              </div>
-            </article>
-            <article>
-              <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="card-title">Fecha Alta</h6>
-                <div class="form-row">
-                  <div class="form-group col-sm-12">
-                    <label>Desde</label>
-                    <input
-                      type="date"
-                      v-model="fechaInicio"
-                      id="fechaInicio"
-                      class="form-control"
-                    />
-                    <label>Hasta</label>
-                    <input
-                      type="date"
-                      v-model="fechaFin"
-                      id="fechaFin"
-                      class="form-control"
-                    />
-                  </div>
+                <h6 class="title">Resolucion</h6>
+                <div class="form-group input-group">
+                  <multiselect class="col" v-model="selectedResolucion" :options="opcionresoluciones" :searchable="true" :close-on-select="true" :show-labels="false" placeholder="resoluciones"></multiselect>
                 </div>
               </div>
             </article>
@@ -99,35 +70,33 @@
         </div>
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
-            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Autoridades</h1>
-            <router-link :to="{ name: 'AgregarAutoridad' }" class="btn btn-info">Crear autoridad</router-link>
+            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Materias</h1>
+            <router-link :to="{ name: 'AgregarMateria' }" class="btn btn-info">Crear materia</router-link>
           </nav>
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">DNI</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Telefono</th>
-                <th scope="col"></th>
+                <th scope="col">ID</th>
+                <th scope="col">Titulo</th>
+                <th scope="col">Horas Catedra</th>
+                <th scope="col">Opciones</th>
               </tr>
             </thead>
-            <tbody v-for="autoridad in displayedAutoridades" v-bind:key="autoridad.dniAutoridad">
+            <tbody v-for="materia in displayedMaterias" :key="materia.idMateria">
               <tr>
-                <th scope="col">{{autoridad.dniAutoridad}}</th>
-                <th scope="col">{{autoridad.nombre}}</th>
-                <th scope="col">{{autoridad.apellido}}</th>
-                <th scope="col">{{autoridad.telefono}}</th>
+                <th scope="col">{{materia.idMateria}}</th>
+                <th scope="col">{{materia.titulo}}</th>
+                <th scope="col">{{materia.cantHoras}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'AutoridadCompleta', params: {autoridad,roles} }"
+                    :to="{ name: 'MateriaCompleta', params: {materia} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>
               </tr>
             </tbody>
           </table>
-          <nav class="d-flex justify-content-center" v-if="filteredAutoridades.length >10">
+          <nav class="d-flex justify-content-center" v-if="filteredMaterias.length >9">
           <ul class="pagination">
             <li class="page-item" v-if="page != 1">
               <a class="page-link" href="#" v-on:click="page = 1">
@@ -153,86 +122,79 @@
 <script>
 import Navigation from "../Navegacion/Navigation";
 
+import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
-  name: "Autoridades",
+  name: "Materias",
   props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","ErrorCountDownCreationRepeatedProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
   components: {
-    Navigation
+    Navigation,
+    Multiselect
   },
   data() {
     return {
-      search: "",
-      fechaInicio: new Date("1970-01-01").toISOString(),
-      fechaFin: new Date().toISOString(),
+      searchMateria: "",
       page: 1,
-      perPage: 10,
+      perPage: 9,
       pages: [],
-      autoridades: [],
-      roles:[],
-      roleFilters:[],
-      roleFiltersBoolean:[],
+      materias: [],
+      opcionresoluciones:[],
+      selectedResolucion:'',
       dismissSecs: 4,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
       SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
       ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
-      ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0,
+      ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0
     };
   },
   mounted() {
-    this.GetAutoridades()
-    this.getRoles();
+    this.GetMaterias(),
+    this.GetResoluciones()
   },
   computed: {
-    filteredAutoridades() {
-      return this.autoridades.filter(autoridad => {
+    filteredMaterias() {
+      return this.materias.filter(materia => {
         return (
-          (this.roles.every((rol) => {
-            return this.roleFiltersBoolean[rol.idRol - 1] ? autoridad.idRol.includes(this.roleFilters[rol.idRol - 1]) : true
-          })) &&
-          (autoridad.nombre.toLowerCase().includes(this.search.toLowerCase()) ||
-          autoridad.apellido.toLowerCase().includes(this.search.toLowerCase()) ||
-          autoridad.dniAutoridad.toString().includes(this.search)
+          (
+          materia.titulo.toString().includes(this.searchMateria)
           ) &&
           (
-            autoridad.fechaAlta >= this.fechaInicio && autoridad.fechaAlta <= this.fechaFin
+            materia.cantHoras.toString().includes(this.searchMateria)
           )
         );
       });
     },
-    displayedAutoridades() {
+    displayedMaterias() {
       return this.paginate();
     },
   },
   methods: {
-    getRoles(){
-      axios.get('/api/rol').then(result =>{
-        this.roles = result.data;
-        this.roles.forEach(rol => {
-          this.roleFiltersBoolean.push(false)
-          this.roleFilters.push(rol.idRol)
-        });
-      })
+    GetMaterias() {
+      axios.get("/api/materia/").then(result => {
+        this.materias = result.data;
+      });
     },
-    GetAutoridades() {
-      axios.get("/api/autoridad").then(result => {
-        this.autoridades = result.data;
+    GetResoluciones(){
+      axios.get("/api/plan_estudios/").then(result => {
+        result.data.forEach(PL => {
+          this.opcionresoluciones.push(PL.resolucion);
+        });
       });
     },
     paginate() {
       let from = this.page * this.perPage - this.perPage;
       let to = this.page * this.perPage;
 
-      return this.filteredAutoridades.slice(from, to);
+      return this.filteredMaterias.slice(from, to);
     },
-    setAutoridades() {
-      let numberOfAutoridades = Math.ceil(
-        this.filteredAutoridades.length / this.perPage
+    setMaterias() {
+      let numberOfMaterias = Math.ceil(
+        this.filteredMaterias.length / this.perPage
       );
       this.pages = [];
-      for (let i = 1; i <= numberOfAutoridades; i++) {
+      for (let i = 1; i <= numberOfMaterias; i++) {
         this.pages.push(i);
       }
     },
@@ -241,7 +203,7 @@ export default {
     }
   },
   watch: {
-    filteredAutoridades() {
+    filteredMaterias() {
       if(!this.fechaInicio){
         this.fechaInicio = new Date("1970-01-01").toISOString()
       }
@@ -249,12 +211,13 @@ export default {
         this.fechaFin = new Date().toISOString()
       }
       this.page = 1;
-      this.setAutoridades();
+      this.setMaterias();
     }
   }
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 .container {
   padding: 0 !important;
