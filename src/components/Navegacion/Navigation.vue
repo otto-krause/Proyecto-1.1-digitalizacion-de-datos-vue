@@ -43,6 +43,7 @@
             <router-link to="/alumnos" class="dropdown-item">Alumnos</router-link>
             <div class="dropdown-divider"></div>
             <router-link to="/Divisiones" class="dropdown-item">Division</router-link>
+            <router-link to="/Cursada" class="dropdown-item">Cursadas</router-link>
             <div class="dropdown-divider"></div>
             <router-link to="/PlanEstudios" class="dropdown-item">Planes de estudio</router-link>
             <div class="dropdown-divider"></div>

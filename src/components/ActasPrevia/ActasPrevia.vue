@@ -2,15 +2,6 @@
   <div>
     <navigation />
     <div class="container-fluid">
-      <b-alert
-          :show="ErrorCountDownCreationRepeated"
-          dismissible
-          variant="warning"
-          @dismissed="ErrorCountDownCreationRepeated =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>(Acta previa Existente) - El acta ya existe.</p>
-        </b-alert>
         <b-alert
           :show="SuccessCountDownCreation"
           dismissible
@@ -81,7 +72,7 @@
                 <th scope="col">{{actaPrevia.cantHoras}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'MateriaCompleta', params: {actaPrevia} }"
+                    :to="{ name: 'ActaPreviaCompleta', params: {actaPrevia} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>

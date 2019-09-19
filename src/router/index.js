@@ -32,6 +32,8 @@ import MateriaCompleta from '@/components/Materia/MateriaCompleta'
 import EditarMateria from '@/components/Materia/EditarMateria'
 import AgregarMateria from '@/components/Materia/AgregarMateria'
 import ActasPrevia from '@/components/ActasPrevia/ActasPrevia'
+import ActaPreviaCompleta from '@/components/ActasPrevia/ActaPreviaCompleta'
+import Cursada from '@/components/Cursada/Cursada'
 
 Vue.use(Router)
 
@@ -213,6 +215,16 @@ export default new Router({
       path: '/ActasPrevia',
       name: 'ActasPrevia',
       component: ActasPrevia
+    },
+    {
+      path: '/ActaPreviaCompleta',
+      name: 'ActaPreviaCompleta',
+      component: ActaPreviaCompleta
+    },
+    {
+      path: '/Cursada',
+      name: 'Cursada',
+      component: Cursada
     },
     {
       path: '/*',
