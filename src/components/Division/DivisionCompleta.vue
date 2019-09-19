@@ -63,7 +63,7 @@
             <div class="table-responsive">
               <table class="table">
                 <tbody v-bind="division">
-                  <tr>
+                  <tr v-if="division.especialidad">
                     <th>Especialidad</th>
                     <td>{{division.especialidad}}</td>
                   </tr>
@@ -138,7 +138,7 @@
                   </tr>
                   <tr>
                     <th>Fecha de Ingreso</th>
-                    <td>{{preceptor.fechaIngreso != '1970-01-01T03:00:00.000Z' ? preceptor.fechaIngreso.slice(0,10) : 'No tiene'}}</td>
+                    <td>{{preceptor.fechaIngreso != '1970-01-01T03:00:00.000Z' && preceptor.fechaIngreso != null ? preceptor.fechaIngreso.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                 </tbody>
               </table>

@@ -115,6 +115,15 @@
                   />
                   <label class="custom-control-label" for="mecanica">Mecanica</label>
                 </div>
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="CicloBasico"
+                    v-model="CicloBasico"
+                  />
+                  <label class="custom-control-label" for="CicloBasico">Ciclo Basico</label>
+                </div>
               </div>
             </article>
             <article class="card-group-item">
@@ -217,7 +226,8 @@ export default {
       electricidad:false,
       quimica:false,
       mecanica:false,
-      construcciones:false
+      construcciones:false,
+      CicloBasico:false
     };
   },
   mounted() {
@@ -253,6 +263,9 @@ export default {
           ) &&
           (
             this.construcciones ? division.especialidad == 'construcciones' : true
+          ) &&
+          (
+            this.CicloBasico ? division.especialidad == 'Ciclo Basico' : true
           )
         );
       });

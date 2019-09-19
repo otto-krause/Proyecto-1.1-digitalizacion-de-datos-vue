@@ -58,45 +58,37 @@
                 </div>
               </div>
             </article>
-            <article class="card-group-item">
-              <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="title">Resolucion</h6>
-                <div class="form-group input-group">
-                  <multiselect class="col" v-model="selectedResolucion" :options="opcionresoluciones" :searchable="true" :close-on-select="true" :show-labels="false" placeholder="resoluciones"></multiselect>
-                </div>
-              </div>
-            </article>
           </div>
         </div>
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
-            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Materias</h1>
-            <router-link :to="{ name: 'AgregarMateria' }" class="btn btn-info">Crear materia</router-link>
+            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Actas de previas</h1>
+            <router-link :to="{ name: 'AgregarMateria' }" class="btn btn-info">Crear Acta de previa</router-link>
           </nav>
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Titulo</th>
-                <th scope="col">Horas Catedra</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Alumno</th>
+                <th scope="col">Profesor</th>
                 <th scope="col">Opciones</th>
               </tr>
             </thead>
             <tbody v-for="actaPrevia in displayedActas" :key="actaPrevia.idActa">
               <tr>
                 <th scope="col">{{actaPrevia.idMateria}}</th>
-                <th scope="col">{{materia.titulo}}</th>
-                <th scope="col">{{materia.cantHoras}}</th>
+                <th scope="col">{{actaPrevia.titulo}}</th>
+                <th scope="col">{{actaPrevia.cantHoras}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'MateriaCompleta', params: {materia} }"
+                    :to="{ name: 'MateriaCompleta', params: {actaPrevia} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>
               </tr>
             </tbody>
           </table>
-          <nav class="d-flex justify-content-center" v-if="filteredMaterias.length >9">
+          <nav class="d-flex justify-content-center" v-if="ActasPrevias.length >9">
           <ul class="pagination">
             <li class="page-item" v-if="page != 1">
               <a class="page-link" href="#" v-on:click="page = 1">
@@ -122,15 +114,13 @@
 <script>
 import Navigation from "../Navegacion/Navigation";
 
-import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
   name: "ActasPrevia",
   props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","ErrorCountDownCreationRepeatedProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
   components: {
-    Navigation,
-    Multiselect
+    Navigation
   },
   data() {
     return {
@@ -151,8 +141,8 @@ export default {
     this.GetActas()
   },
   computed: {
-    filteredMaterias() {
-      return this.materias.filter(materia => {
+    filteredActas() {
+      return this.ActasPrevias.filter(Acta => {
         return ( true
         );
       });
@@ -171,14 +161,14 @@ export default {
       let from = this.page * this.perPage - this.perPage;
       let to = this.page * this.perPage;
 
-      return this.filteredMaterias.slice(from, to);
+      return this.filteredActas.slice(from, to);
     },
     setActas() {
-      let numberOfMaterias = Math.ceil(
-        this.filteredMaterias.length / this.perPage
+      let numberOfActas = Math.ceil(
+        this.filteredActas.length / this.perPage
       );
       this.pages = [];
-      for (let i = 1; i <= numberOfMaterias; i++) {
+      for (let i = 1; i <= numberOfActas; i++) {
         this.pages.push(i);
       }
     },
@@ -187,7 +177,7 @@ export default {
     }
   },
   watch: {
-    filteredMaterias() {
+    filteredActas() {
       this.page = 1;
       this.setActas();
     }
@@ -195,7 +185,6 @@ export default {
 };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 .container {
   padding: 0 !important;

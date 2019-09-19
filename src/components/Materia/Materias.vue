@@ -63,7 +63,7 @@
                 <h6 class="title">Resolucion</h6>
                 <div class="form-group input-group">
                   <multiselect class="col" v-model="selectedResolucion" :options="opcionresoluciones" :searchable="true" :close-on-select="true" :show-labels="false" placeholder="resoluciones"></multiselect>
-                </div>
+               </div>
               </div>
             </article>
           </div>
@@ -140,7 +140,7 @@ export default {
       pages: [],
       materias: [],
       opcionresoluciones:[],
-      selectedResolucion:'',
+      selectedResolucion:[],
       dismissSecs: 4,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
@@ -162,6 +162,9 @@ export default {
           ) &&
           (
             materia.cantHoras.toString().includes(this.searchMateria)
+          )&&
+          (
+            this.selectedResolucion ? materia.resolucion.includes(this.selectedResolucion) : true
           )
         );
       });
@@ -172,14 +175,14 @@ export default {
   },
   methods: {
     GetMaterias() {
-      axios.get("/api/materia/").then(result => {
+      axios.get("/api/materia/planmateria").then(result => {
         this.materias = result.data;
       });
     },
     GetResoluciones(){
-      axios.get("/api/plan_estudios/").then(result => {
-        result.data.forEach(PL => {
-          this.opcionresoluciones.push(PL.resolucion);
+      axios.get("/api/plan_estudios/resoluciones").then(result => {
+        result.data.forEach(resolucion => {
+          this.opcionresoluciones.push(resolucion.resolucion)
         });
       });
     },
@@ -204,12 +207,6 @@ export default {
   },
   watch: {
     filteredMaterias() {
-      if(!this.fechaInicio){
-        this.fechaInicio = new Date("1970-01-01").toISOString()
-      }
-      if(!this.fechaFin){
-        this.fechaFin = new Date().toISOString()
-      }
       this.page = 1;
       this.setMaterias();
     }

@@ -159,7 +159,7 @@
                     <td>{{alumno.fechaAlta != '1970-01-01T03:00:00.000Z' ? alumno.fechaAlta.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
-                    <th>Fecha de Nacimineto</th>
+                    <th>Fecha de Nacimiento</th>
                     <td>{{alumno.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? alumno.fechaNacimiento.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
