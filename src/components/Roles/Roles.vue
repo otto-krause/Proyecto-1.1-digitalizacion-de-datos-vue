@@ -106,14 +106,14 @@
               <tr>
                 <th scope="col">Index</th>
                 <th scope="col">Rol</th>
-                <th scope="col">Opciones</th>
+                <!-- <th scope="col">Opciones</th> -->
               </tr>
             </thead>
             <tbody v-for="(rol,index) in displayedRoles" v-bind:key="index">
               <tr>
                 <th scope="col">{{index + 2}}</th>
                 <th scope="col">{{rol.rol}}</th>
-                <th scope="col">
+                <!-- <th scope="col">
                   <button
                     type="button"
                     class="nav-link btn btn-danger fas fa-trash"
@@ -124,7 +124,7 @@
                     :to="{ name: 'EditarRol', params: {rol} }"
                     class="nav-link btn btn-info fas fa-edit"
                   ></router-link>
-                </th>
+                </th> -->
               </tr>
             </tbody>
           </table>

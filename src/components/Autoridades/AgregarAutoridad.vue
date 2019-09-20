@@ -96,7 +96,7 @@
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text">Fecha de cumpleaños</label>
+                  <label class="input-group-text">Fecha de nacimiento</label>
                 </div>
                 <input type="date" v-model="fechaNacimiento" name="fechaNacimiento" class="form-control" />
               </div>

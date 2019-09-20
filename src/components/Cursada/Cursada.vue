@@ -3,13 +3,13 @@
     <navigation />
     <div class="container-fluid">
       <b-alert
-          :show="ErrorCountDownRol"
+          :show="ErrorCountDownCreationRepeated"
           dismissible
           variant="warning"
-          @dismissed="ErrorCountDownRol =0"
+          @dismissed="ErrorCountDownCreationRepeated =0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La autoridad no puede ser creada porque no existen roles para asignarle. Cree un rol para poder continuar</p>
+          <p>(Cursada Existente) - La cursada ya existe. Debe darla de baja para registrarla nuevamente</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownCreation"
@@ -18,7 +18,7 @@
           @dismissed="SuccessCountDownCreation =0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La division se ha creado correctamente</p>
+          <p>La cursada se ha creado correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownCreation"
@@ -27,7 +27,7 @@
           @dismissed="ErrorCountDownCreation = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La division no ha podido ser creada. Posiblemente haya un problema con los datos ingresados o esten duplicados</p>
+          <p>La cursada no pudo ser creada. Posiblemente haya un problema con los datos ingresados</p>
         </b-alert>
         <b-alert
           :show="SuccessCountDownDeletion"
@@ -36,7 +36,7 @@
           @dismissed="SuccessCountDownDeletion = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La division ha sido eliminada correctamente</p>
+          <p>La cursada ha sido eliminada correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownDeletion"
@@ -45,16 +45,16 @@
           @dismissed="ErrorCountDownDeletion = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>La division no ha podido ser eliminada</p>
+          <p>La cursada no ha podido ser eliminada</p>
         </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
             <article>
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="card-title">Cursadas</h6>
+                <h6 class="card-title">Actas cursada</h6>
                 <div class="form-row">
-                  <input type="text" v-model="searchCursada" class="form-control" />
+                  <input type="text" placeholder="Buscador" v-model="searchCursada" class="form-control" />
                 </div>
               </div>
             </article>
@@ -135,21 +135,21 @@
                 </div>
               </div>
             </article>
-            <article class="card-group-item">
+            <!-- <article class="card-group-item">
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="title">Horario</h6>
+                <h6 class="title">Horario inicio-fin</h6>
                 <div class="form-group input-group">
-                  <input class="col-sm-6" type="time" v-model="horarioInicioString" placeholder="Horario inicio">
-                  <input class="col-sm-6" type="time" v-model="horarioFinString" placeholder="Horario final">
+                  <input class="col-sm-5 mr-2" type="time" v-model="horarioInicioString" placeholder="Horario inicio">
+                  <input class="col-sm-5 ml-2" type="time" v-model="horarioFinString" placeholder="Horario final">
                 </div>
               </div>
-            </article>
+            </article> -->
           </div>
         </div>
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
-            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Divisiones</h1>
-            <router-link :to="{ name: 'AgregarDivision' }" class="btn btn-info">Crear division</router-link>
+            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Actas cursada</h1>
+            <router-link :to="{ name: 'AgregarCursada' }" class="btn btn-info">Crear acta cursada</router-link>
           </nav>
           <table class="table">
             <thead>
@@ -161,22 +161,22 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody v-for="division in displayedDivisiones" v-bind:key="division.idDivision">
+            <tbody v-for="cursada in displayedCursada" v-bind:key="cursada.idDivision">
               <tr>
-                <th scope="col">{{division.especialidad}}</th>
-                <th scope="col">{{division.año}}</th>
-                <th scope="col">{{division.numDivision}}</th>
-                <th scope="col">{{division.turno ? 'Tarde' : 'Mañana'}}</th>
+                <th scope="col">{{cursada.titulo}}</th>
+                <th scope="col">{{cursada.dniProfesor}} - {{cursada.nombre}},{{cursada.apellido}}</th>
+                <th scope="col">{{cursada.especialidad}} {{cursada.año}}/{{cursada.numDivision}}</th>
+                <th scope="col">{{cursada.entrada ? cursada.entrada.slice(0,5) : ' - '}}-{{cursada.salida ? cursada.salida.slice(0,5) : ' - '}}</th>
                 <th scope="col">
                   <router-link
-                    :to="{ name: 'DivisionCompleta', params: {division} }"
+                    :to="{ name: 'CursadaCompleta', params: {cursada} }"
                     class="nav-link btn btn-info fas fa-eye"
                   ></router-link>
                 </th>
               </tr>
             </tbody>
           </table>
-          <nav class="d-flex justify-content-center" v-if="filteredDivisiones.length >9">
+          <nav class="d-flex justify-content-center" v-if="filteredCursadas.length >9">
           <ul class="pagination">
             <li class="page-item" v-if="page != 1">
               <a class="page-link" href="#" v-on:click="page = 1">
@@ -208,7 +208,7 @@ import axios from "axios";
 
 export default {
   name: "Cursada",
-  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
+  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp ","ErrorCountDownCreationRepeatedProp"],
   components: {
     Navigation,
     Multiselect
@@ -234,7 +234,7 @@ export default {
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
       SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
       ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
-      ErrorCountDownRol:0,
+      ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0,
       computacion:false,
       electronica:false,
       electricidad:false,
@@ -245,7 +245,6 @@ export default {
     };
   },
   mounted() {
-    this.GetDivisiones()
     this.GetCursadas()
   },
   beforeUpdate(){
@@ -255,37 +254,39 @@ export default {
   computed: {
     filteredCursadas() {
       return this.Cursadas.filter(Cursada => {
-        return ( true
-          // (
-          //   Cursada.cicloLectivo == this.searchCicloLectivo
-          // ) &&
-          // (
-          //   this.año ? Cursada.año.toString().includes(this.año) : true
-          // ) &&
-          // (
-          //   this.division ? division.numDivision.toString().includes(this.division) : true
-          // ) &&
-          // (
-          //   this.computacion ? division.especialidad == 'computacion' : true
-          // ) &&
-          // (
-          //   this.electronica ? division.especialidad == 'electronica' : true
-          // ) &&
-          // (
-          //   this.electricidad ? division.especialidad == 'electricidad' : true
-          // ) &&
-          // (
-          //   this.quimica ? division.especialidad == 'quimica' : true
-          // ) &&
-          // (
-          //   this.mecanica ? division.especialidad == 'mecanica' : true
-          // ) &&
-          // (
-          //   this.construcciones ? division.especialidad == 'construcciones' : true
-          // ) &&
-          // (
-          //   this.CicloBasico ? division.especialidad == 'Ciclo Basico' : true
-          // )
+        return (
+          (
+            Cursada.nombre.toLowerCase().includes(this.searchCursada.toLowerCase()) ||
+            Cursada.apellido.toLowerCase().includes(this.searchCursada.toLowerCase()) ||
+            Cursada.titulo.toLowerCase().includes(this.searchCursada.toLowerCase())
+          ) &&
+          (
+            this.año ? Cursada.año.toString().includes(this.año) : true
+          ) &&
+          (
+            this.division ? Cursada.numDivision.toString().includes(this.division) : true
+          ) &&
+          (
+            this.computacion ? Cursada.especialidad == 'computacion' : true
+          ) &&
+          (
+            this.electronica ? Cursada.especialidad == 'electronica' : true
+          ) &&
+          (
+            this.electricidad ? Cursada.especialidad == 'electricidad' : true
+          ) &&
+          (
+            this.quimica ? Cursada.especialidad == 'quimica' : true
+          ) &&
+          (
+            this.mecanica ? Cursada.especialidad == 'mecanica' : true
+          ) &&
+          (
+            this.construcciones ? Cursada.especialidad == 'construcciones' : true
+          ) &&
+          (
+            this.CicloBasico ? Cursada.especialidad == 'Ciclo Basico' : true
+          )
         );
       });
     },
@@ -296,15 +297,15 @@ export default {
   methods: {
     filterNumDiv(){
       let numDivisiones = [];
-      this.filteredCursadas.forEach(division => {
-        numDivisiones.push(division.numDivision);
+      this.filteredCursadas.forEach(cursada => {
+        numDivisiones.push(cursada.numDivision);
       });
       let unique = [...new Set(numDivisiones)]
       this.optionsdivision = unique;
       this.optionsdivision.unshift('');
     },
     GetCursadas() {
-      axios.get("/api/cursada/").then(result => {
+      axios.get("/api/cursada/completa").then(result => {
         this.Cursadas = result.data;
       });
     },
@@ -316,7 +317,7 @@ export default {
     },
     setDivisiones() {
       let numberOfDivisiones = Math.ceil(
-        this.filteredDivisiones.length / this.perPage
+        this.filteredCursadas.length / this.perPage
       );
       this.pages = [];
       for (let i = 1; i <= numberOfDivisiones; i++) {
@@ -348,5 +349,15 @@ export default {
 }
 [class*="col"] {
   padding: 0 !important;
+}
+input {
+  border: 1px solid #ccc;
+  color: #888;
+  vertical-align: middle;
+  outline: 0;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  width: calc(100% - 3em - 2px);
+  font-family: sans-serif;
 }
 </style>
