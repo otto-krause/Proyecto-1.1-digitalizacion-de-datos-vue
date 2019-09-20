@@ -7,8 +7,8 @@
       </nav>
     </div>
     <div
-      class="modal fade DeletePL"
-      id="DeletePL"
+      class="modal fade DeleteMateria"
+      id="DeleteMateria"
       tabindex="-1"
       role="dialog"
       aria-labelledby="deleteModalLabel"
@@ -28,85 +28,67 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-danger" v-on:click="DeletePL">Eliminar</button>
+            <button type="submit" class="btn btn-danger" v-on:click="DeleteMateria">Eliminar</button>
           </div>
         </div>
       </div>
     </div>
     <b-alert
-          :show="SuccessCountDownEditContacto"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownEditContacto =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto se ha modificado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownEditContacto"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownEditContacto =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto no ha podido ser modificado</p>
-        </b-alert>
+      :show="SuccessCountDownDeletion"
+      dismissible
+      variant="success"
+      @dismissed="SuccessCountDownDeletion =0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>La materia se ha eliminado correctamente</p>
+    </b-alert>
     <b-alert
-          :show="SuccessCountDownDeletion"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownDeletion =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto se ha eliminado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownDeletion"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownDeletion =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto no ha podido ser eliminado</p>
-        </b-alert>
+      :show="ErrorCountDownDeletion"
+      dismissible
+      variant="danger"
+      @dismissed="ErrorCountDownDeletion =0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>La materia no ha podido ser eliminado</p>
+    </b-alert>
     <b-alert
-          :show="SuccessCountDownCreation"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownCreation =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto se ha creado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownCreation"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownCreation = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto no ha podido ser creado. Posiblemente haya un problema con los datos ingresados</p>
-        </b-alert>
+      :show="SuccessCountDownCreation"
+      dismissible
+      variant="success"
+      @dismissed="SuccessCountDownCreation =0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>La materia se ha creado correctamente</p>
+    </b-alert>
     <b-alert
-          :show="SuccessCountDownEdit"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownEdit =0"
-          @dismiss-count-down="countDownChanged"
-          class="col-md-10 col-lg-7 mx-auto mt-3"
-        >
-          <p>El alumno se modifico correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownEdit"
-          dismissible
-          variant="warning"
-          @dismissed="ErrorCountDownEdit =0"
-          @dismiss-count-down="countDownChanged"
-          class="col-md-10 col-lg-7 mx-auto mt-3"
-        >
-          <p>El alumno no pudo ser modificado</p>
-        </b-alert>
+      :show="ErrorCountDownCreation"
+      dismissible
+      variant="danger"
+      @dismissed="ErrorCountDownCreation = 0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>La materia no ha podido ser creado. Posiblemente haya un problema con los datos ingresados</p>
+    </b-alert>
+    <b-alert
+      :show="SuccessCountDownEdit"
+      dismissible
+      variant="success"
+      @dismissed="SuccessCountDownEdit =0"
+      @dismiss-count-down="countDownChanged"
+      class="col-md-10 col-lg-7 mx-auto mt-3"
+    >
+      <p>La materia se modifico correctamente</p>
+    </b-alert>
+    <b-alert
+      :show="ErrorCountDownEdit"
+      dismissible
+      variant="warning"
+      @dismissed="ErrorCountDownEdit =0"
+      @dismiss-count-down="countDownChanged"
+      class="col-md-10 col-lg-7 mx-auto mt-3"
+    >
+      <p>La materia no pudo ser modificado</p>
+    </b-alert>
     <div class="row">
       <div class="col-md-8 col-lg-5 mx-auto">
         <div class="card mt-4">
@@ -125,7 +107,7 @@
                   </tr>
                   <tr>
                     <th>Descripcion</th>
-                    <td><p class="form-control">{{materia.descripcion}}</p></td>
+                    <td>{{materia.descripcion}}</td>
                   </tr>
                   <tr>
                     <th>Resoluciones</th>
@@ -139,7 +121,7 @@
                         type="button"
                         class="nav-link btn btn-danger fas fa-trash"
                         data-toggle="modal"
-                        data-target=".DeleteAlumno"
+                        data-target=".DeleteMateria"
                       ></button>
                       <router-link
                         :to="{ name: 'EditarMateria', params: {materia,resoluciones} }"
@@ -162,7 +144,7 @@ import axios from "axios";
 
 export default {
   name: "MateriaCompleta",
-  props: ["materia","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
+  props: ["materia","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp"],
   components: {
     Navigation
   },
@@ -173,8 +155,6 @@ export default {
       ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
-      SuccessCountDownEditContacto:this.SuccessCountDownEditContactoProp ? this.SuccessCountDownEditContactoProp : 0,
-      ErrorCountDownEditContacto:this.ErrorCountDownEditContactoProp ? this.ErrorCountDownEditContactoProp : 0,
       SuccessCountDownDeletion:0,
       ErrorCountDownDeletion:0
     };
@@ -191,21 +171,21 @@ export default {
         this.resoluciones = result.data;
       });
     },
-    async DeletePL() {
-      $("#DeletePL").modal("toggle");
+    async DeleteMateria() {
+      $("#DeleteMateria").modal("toggle");
       await axios
-        .post("/api/alumno/delete", {
-          dniAlumno: this.alumno.dniAlumno
+        .post("/api/materia/delete", {
+          idMateria: this.materia.idMateria
         })
         .then(res => {
           this.$router.push({
-            name: "Alumnos",
+            name: "Materias",
             params: { SuccessCountDownDeletionProp: 4 }
           });
         })
         .catch(err => {
           this.$router.push({
-            name: "Alumnos",
+            name: "Materias",
             params: { ErrorCountDownDeletionProp: 6 }
           });
         });

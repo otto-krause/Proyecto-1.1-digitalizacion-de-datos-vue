@@ -26,9 +26,27 @@
     >
       <p>La division no pudo ser modificada</p>
     </b-alert>
+    <b-alert
+      :show="SuccessCountDownDeletion"
+      dismissible
+      variant="success"
+      @dismissed="SuccessCountDownDeletion =0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>La division se ha eliminado correctamente</p>
+    </b-alert>
+    <b-alert
+      :show="ErrorCountDownDeletion"
+      dismissible
+      variant="danger"
+      @dismissed="ErrorCountDownDeletion =0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>La division no ha podido ser eliminado</p>
+    </b-alert>
     <div
-      class="modal fade deleteModal"
-      id="myModal"
+      class="modal fade DeleteDivision"
+      id="DeleteDivision"
       tabindex="-1"
       role="dialog"
       aria-labelledby="deleteModalLabel"
@@ -90,7 +108,7 @@
                         type="button"
                         class="nav-link btn btn-danger fas fa-trash"
                         data-toggle="modal"
-                        data-target=".deleteModal"
+                        data-target=".DeleteDivision"
                       ></button>
                       <router-link
                         :to="{ name: 'EditarDivision', params: {division} }"
@@ -149,6 +167,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Navigation from "../Navegacion/Navigation";
 import axios from "axios";
@@ -158,7 +177,9 @@ export default {
   props: [
     "division",
     "SuccessCountDownEditProp",
-    "ErrorCountDownEditProp"
+    "ErrorCountDownEditProp",
+    "SuccessCountDownDeletionProp",
+    "ErrorCountDownDeletionProp"
   ],
   components: {
     Navigation
@@ -168,12 +189,14 @@ export default {
       rolesMostrar: [],
       SuccessCountDownEdit: this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
       ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
+      SuccessCountDownDeletion:0,
+      ErrorCountDownDeletion:0,
       preceptor:{}
     };
   },
   mounted() {
     if (!this.division) {
-      this.$router.push({ name: "Divisiones" });
+      this.$router.push({ name: "divisiones" });
     }
     this.GetPreceptor();
   },
@@ -185,20 +208,20 @@ export default {
       });
     },
     async DeleteDivision() {
-      $("#myModal").modal("toggle");
+      $("#DeleteDivision").modal("toggle");
       await axios
-        .post("/api/autoridad/delete", {
-          dniAutoridad: this.autoridad.dniAutoridad
+        .post("/api/division/delete", {
+          idDivision: this.division.idDivision
         })
         .then(res => {
           this.$router.push({
-            name: "Autoridades",
+            name: "Divisiones",
             params: { SuccessCountDownDeletionProp: 4 }
           });
         })
         .catch(err => {
           this.$router.push({
-            name: "Autoridades",
+            name: "Divisiones",
             params: { ErrorCountDownDeletionProp: 6 }
           });
         });

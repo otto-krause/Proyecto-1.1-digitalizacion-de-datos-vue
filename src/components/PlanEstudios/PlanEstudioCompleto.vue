@@ -7,8 +7,8 @@
       </nav>
     </div>
     <div
-      class="modal fade DeletePL"
-      id="DeletePL"
+      class="modal fade DownPlanEstudio"
+      id="DownPlanEstudio"
       tabindex="-1"
       role="dialog"
       aria-labelledby="deleteModalLabel"
@@ -18,17 +18,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <div class="icon-box">
-              <i class="material-icons fas fa-times"></i>
+              <i class="material-icons fas fa-archive"></i>
             </div>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
-          <h4 class="modal-title">Eliminar plan de estudios</h4>
+          <h4 class="modal-title">Archivar plan de estudios</h4>
           <div class="modal-body">
-            <p>Desea eliminar este plan de estudios? Este proceso no puede deshacerse.</p>
+            <p>Desea archivar este plan de estudios? Este proceso no puede deshacerse.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-danger" v-on:click="DeletePL">Eliminar</button>
+            <button type="submit" class="btn btn-danger" v-on:click="DownPlanEstudio">Archivar</button>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@
           @dismiss-count-down="countDownChanged"
           class="col-md-10 col-lg-7 mx-auto mt-3"
         >
-          <p>El alumno se modifico correctamente</p>
+          <p>El plan de estudio se modifico correctamente</p>
         </b-alert>
         <b-alert
           :show="ErrorCountDownEdit"
@@ -105,7 +105,7 @@
           @dismiss-count-down="countDownChanged"
           class="col-md-10 col-lg-7 mx-auto mt-3"
         >
-          <p>El alumno no pudo ser modificado</p>
+          <p>El plan de estudio no pudo ser modificado</p>
         </b-alert>
     <div class="row">
       <div class="col-md-8 col-lg-5 mx-auto">
@@ -121,25 +121,24 @@
                   </tr>
                   <tr>
                     <th>Vigencia Desde</th>
-                    <td>{{PlanEstudio.vigenciaDesde != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaDesde.slice(0,10) : 'No tiene'}}</td>
+                    <td>{{PlanEstudio.vigenciaDesde != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaDesde.slice(0,10) : '-'}}</td>
                   </tr>
                   <tr>
                     <th>Vigencia Hasta</th>
-                    <td>{{PlanEstudio.vigenciaHasta != '1970-01-01T03:00:00.000Z' ? PlanEstudio.vigenciaHasta.slice(0,10) : 'No tiene'}}</td>
+                    <td>{{PlanEstudio.vigenciaHasta != null ? PlanEstudio.vigenciaHasta.slice(0,10) : '-'}}</td>
                   </tr>
                   <tr>
                     <th>Descripcion</th>
                     <td><p class="form-control">{{PlanEstudio.descripcion}}</p></td>
                   </tr>
-                  <tr>
-                  <tr>
+                  <tr v-if="!PlanEstudio.vigenciaHasta">
                     <th>Opciones</th>
                     <td>
                       <button
                         type="button"
-                        class="nav-link btn btn-danger fas fa-trash"
+                        class="nav-link btn btn-danger fas fa-archive"
                         data-toggle="modal"
-                        data-target=".DeleteAlumno"
+                        data-target=".DownPlanEstudio"
                       ></button>
                       <router-link
                         :to="{ name: 'EditarPlanEstudio', params: {PlanEstudio} }"
@@ -184,21 +183,21 @@ export default {
     }
   },
   methods: {
-    async DeletePL() {
-      $("#DeletePL").modal("toggle");
+    async DownPlanEstudio() {
+      $("#DownPlanEstudio").modal("toggle");
       await axios
-        .post("/api/alumno/delete", {
-          dniAlumno: this.alumno.dniAlumno
+        .post("/api/plan_estudios/down", {
+          resolucion: this.PlanEstudio.resolucion
         })
         .then(res => {
           this.$router.push({
-            name: "Alumnos",
+            name: "PlanEstudios",
             params: { SuccessCountDownDeletionProp: 4 }
           });
         })
         .catch(err => {
           this.$router.push({
-            name: "Alumnos",
+            name: "PlanEstudios",
             params: { ErrorCountDownDeletionProp: 6 }
           });
         });
