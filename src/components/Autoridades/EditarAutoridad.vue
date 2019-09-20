@@ -145,8 +145,9 @@ export default {
     return {
       dniAutoridad: this.autoridad.dniAutoridad,
       telefono:this.autoridad.telefono,
-      calle: this.autoridad.direccion.split(' ').reverse().pop(),
-      ncalle: (this.autoridad.direccion.split(' ')).reverse()[0],
+      calle: this.calleModificada,
+      calle: this.autoridad.direccion.split(' ').slice(0,this.autoridad.direccion.split(' ').length -1).join(' '),
+      ncalle: this.autoridad.direccion.split(' ').pop(),
       nombre: this.autoridad.nombre,
       apellido: this.autoridad.apellido,
       fechaAlta: this.autoridad.fechaAlta.slice(0,10),

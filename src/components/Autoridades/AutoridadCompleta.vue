@@ -76,6 +76,11 @@
                     <td>{{autoridad.apellido}}</td>
                   </tr>
                   <tr>
+                    <tr>
+                    <th>Direccion</th>
+                    <td>{{autoridad.direccion}}</td>
+                  </tr>
+                  <tr>
                     <th>Fecha de Ingreso</th>
                     <td>{{autoridad.fechaAlta != '1970-01-01T03:00:00.000Z' ? autoridad.fechaAlta.slice(0,10) : 'No tiene'}}</td>
                   </tr>
