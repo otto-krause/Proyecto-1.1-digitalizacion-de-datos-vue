@@ -129,7 +129,7 @@
                   </tr>
                   <tr>
                     <th>Descripcion</th>
-                    <td><p class="form-control">{{PlanEstudio.descripcion}}</p></td>
+                    <td class="scrollbar scrollbar-primary">{{PlanEstudio.descripcion}}</td>
                   </tr>
                   <tr>
                   <tr>

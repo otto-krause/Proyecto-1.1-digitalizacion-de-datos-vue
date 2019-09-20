@@ -83,18 +83,6 @@
                     <th>Ciclo Lectivo</th>
                     <td>{{cursada.cicloLectivo}}</td>
                   </tr>
-                  <tr>
-                    <th>Dia</th>
-                    <td>{{dia}}</td>
-                  </tr>
-                  <tr>
-                    <th>Hora entrada</th>
-                    <td>{{cursada.entrada ? cursada.entrada.slice(0,5) : ' - '}}</td>
-                  </tr>
-                  <tr>
-                    <th>Hora salida</th>
-                    <td>{{cursada.salida ? cursada.salida.slice(0,5) : ' - '}}</td>
-                  </tr>
                   <!-- <tr>
                     <th>Opciones</th>
                     <td>
@@ -205,6 +193,42 @@
           </div>
         </div>
       </div>
+      <div class="col-10 mx-auto">
+        <div class="card mt-5">
+          <div class="card-body">
+            <nav class="navbar">
+              <h4 class="card-title">Horarios</h4>
+              <!-- <button
+                type="button"
+                class="nav-link btn btn-info"
+                data-toggle="modal"
+                v-on:click="contactoSeleccionado = contactoAlumno"
+                data-target=".DeleteContactoAlumno"
+              >Agregar alumno</button> -->
+            </nav>
+            <div class="table-responsive">
+              <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Dia</th>
+                <th scope="col">Hora Entrada</th>
+                <th scope="col">Hora salida</th>
+                <th scope="col">Opciones</th>
+              </tr>
+            </thead>
+            <tbody v-for="horario in horarios" :key="horario.idHorario">
+              <tr>
+                <th scope="col">{{dia}}</th>
+                <th scope="col">{{horario.entrada ? horario.entrada.slice(0,5) : ' - '}}</th>
+                <th scope="col">{{horario.salida ? horario.salida.slice(0,5) : ' - '}}</th>
+                <th scope="col"></th>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -228,7 +252,8 @@ export default {
       SuccessCountDownEdit: this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
       ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       preceptor:{},
-      alumnos:[]
+      alumnos:[],
+      horarios:[]
     };
   },
   mounted() {
@@ -261,6 +286,12 @@ export default {
       axios.get('/api/alumno/HistorialDivision/' + this.cursada.idDivision)
       .then(res=>{
         this.alumnos = res.data;
+      })
+    },
+    GetHorarios(){
+      axios.get('/api/cursada/horarios/' + this.cursada.idCursada)
+      .then(res=>{
+        this.horarios = res.data;
       })
     },
     async DeleteCursada() {
