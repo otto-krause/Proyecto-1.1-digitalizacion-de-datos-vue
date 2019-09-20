@@ -44,12 +44,6 @@
                 </div>
                 <input type="date" v-model="vigenciaDesde" name="vigenciaDesde" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha del comienzo de la vigencia')" oninput="setCustomValidity('')"/>
               </div>
-              <div class="form-group input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text">Vigencia hasta</label>
-                </div>
-                <input type="date" v-model="vigenciaHasta" name="vigenciaHasta" class="form-control" />
-              </div>
               <div class="form-group">
                 <button class="btn btn-danger btn-block" type="submit" >Crear nuevo plan de estudios</button>
               </div>
@@ -75,8 +69,7 @@ export default {
     return {
       resolucion: '',
       descripcion: '',
-      vigenciaDesde: new Date(null).toISOString(),
-      vigenciaHasta: new Date(null).toISOString(),
+      vigenciaDesde: new Date(null).toISOString()
     };
   },
   methods: {
@@ -84,8 +77,7 @@ export default {
       await axios.post("/api/plan_estudios/add", {
         resolucion: this.resolucion,
         descripcion: this.descripcion,
-        vigenciaDesde: this.vigenciaDesde,
-        vigenciaHasta: this.vigenciaHasta,
+        vigenciaDesde: this.vigenciaDesde
       })
       .then(res=>{this.$router.push({ name: 'PlanEstudios', params: {SuccessCountDownCreationProp: 4 }})})
       .catch(err=>{

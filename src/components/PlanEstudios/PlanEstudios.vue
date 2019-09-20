@@ -101,7 +101,7 @@
               <tr>
                 <th scope="col">{{PL.resolucion}}</th>
                 <th scope="col">{{PL.vigenciaDesde != '1970-01-01T03:00:00.000Z' ? PL.vigenciaDesde.slice(0,10) : ' - '}}</th>
-                <th scope="col">{{PL.vigenciaHasta != '1970-01-01T03:00:00.000Z' ? PL.vigenciaHasta.slice(0,10) : ' - '}}</th>
+                <th scope="col">{{PL.vigenciaHasta != null ? PL.vigenciaHasta.slice(0,10) : ' - '}}</th>
                 <th scope="col">
                   <router-link
                     :to="{ name: 'PlanEstudioCompleto', params: {PlanEstudio:PL} }"
@@ -173,7 +173,7 @@ export default {
           PL.resolucion.toString().includes(this.searchResolucion)
           ) &&
           (
-            PL.vigenciaDesde >= this.fechaInicio && PL.vigenciaHasta <= this.fechaFin
+            PL.vigenciaDesde >= this.fechaInicio
           )
         );
       });

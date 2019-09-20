@@ -44,12 +44,6 @@
                 </div>
                 <input type="date" v-model="vigenciaDesde" name="vigenciaDesde" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha del comienzo de la vigencia')" oninput="setCustomValidity('')"/>
               </div>
-              <div class="form-group input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text">Vigencia hasta</label>
-                </div>
-                <input type="date" v-model="vigenciaHasta" name="vigenciaHasta" class="form-control" />
-              </div>
               <div class="form-group">
                 <button class="btn btn-danger btn-block" type="submit" >Guardar cambios</button>
               </div>
@@ -76,8 +70,7 @@ export default {
     return {
       resolucion: this.PlanEstudio.resolucion,
       descripcion: this.PlanEstudio.descripcion,
-      vigenciaDesde: this.PlanEstudio.vigenciaDesde.slice(0,10),
-      vigenciaHasta: this.PlanEstudio.vigenciaHasta.slice(0,10)
+      vigenciaDesde: this.PlanEstudio.vigenciaDesde.slice(0,10)
     };
   },
   mounted() {
@@ -90,8 +83,7 @@ export default {
       await axios.post("/api/plan_estudios/update", {
         resolucion: this.resolucion,
         descripcion: this.descripcion,
-        vigenciaDesde: new Date(this.vigenciaDesde).toISOString(),
-        vigenciaHasta: new Date(this.vigenciaHasta).toISOString(),
+        vigenciaDesde: new Date(this.vigenciaDesde).toISOString()
         })
         .then(async(res)=>{
           await axios.get("/api/plan_estudios/" + this.resolucion)
