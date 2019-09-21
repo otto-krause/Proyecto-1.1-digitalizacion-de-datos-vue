@@ -34,9 +34,7 @@
                 <textarea name="descripcion" cols="50" rows="12" class="form-control"
                   placeholder="descripcion"
                   v-model="descripcion"
-                  required
-                  oninvalid="this.setCustomValidity('Ingrese la resolucion')"
-                  oninput="setCustomValidity('')"></textarea>
+                  ></textarea>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">

@@ -157,7 +157,6 @@
                 <th scope="col">Materia</th>
                 <th scope="col">Profesor</th>
                 <th scope="col">Division</th>
-                <th scope="col">Horario</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -166,7 +165,6 @@
                 <th scope="col">{{cursada.titulo}}</th>
                 <th scope="col">{{cursada.dniProfesor}} - {{cursada.nombre}},{{cursada.apellido}}</th>
                 <th scope="col">{{cursada.especialidad}} {{cursada.año}}/{{cursada.numDivision}}</th>
-                <th scope="col">{{cursada.entrada ? cursada.entrada.slice(0,5) : ' - '}}-{{cursada.salida ? cursada.salida.slice(0,5) : ' - '}}</th>
                 <th scope="col">
                   <router-link
                     :to="{ name: 'CursadaCompleta', params: {cursada} }"

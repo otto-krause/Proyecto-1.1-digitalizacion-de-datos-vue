@@ -83,21 +83,21 @@
                     <th>Ciclo Lectivo</th>
                     <td>{{cursada.cicloLectivo}}</td>
                   </tr>
-                  <!-- <tr>
+                  <tr>
                     <th>Opciones</th>
                     <td>
-                      <button
+                      <!-- <button
                         type="button"
                         class="nav-link btn btn-danger fas fa-trash"
                         data-toggle="modal"
                         data-target=".deleteModal"
-                      ></button>
+                      ></button> -->
                       <router-link
-                        :to="{ name: 'EditarDivision', params: {cursada} }"
+                        :to="{ name: 'EditarCursada', params: {cursada} }"
                         class="nav-link btn btn-info fas fa-edit"
                       ></router-link>
                     </td>
-                  </tr> -->
+                  </tr>
                 </tbody>
               </table>
             </div>

@@ -36,7 +36,7 @@ import ActaPreviaCompleta from '@/components/ActasPrevia/ActaPreviaCompleta'
 import Cursada from '@/components/Cursada/Cursada'
 import AgregarCursada from '@/components/Cursada/AgregarCursada'
 import CursadaCompleta from '@/components/Cursada/CursadaCompleta'
-
+import EditarCursada from '@/components/Cursada/EditarCursada'
 
 Vue.use(Router)
 
@@ -239,6 +239,12 @@ export default new Router({
       path: '/CursadaCompleta',
       name: 'CursadaCompleta',
       component: CursadaCompleta,
+      props:true
+    },
+    {
+      path: '/EditarCursada',
+      name: 'EditarCursada',
+      component: EditarCursada,
       props:true
     },
     {

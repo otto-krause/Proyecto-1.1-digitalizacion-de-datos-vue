@@ -3,14 +3,14 @@
     <navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light" >
-        <router-link to="/Cursada" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link :to="{ name: 'CursadaCompleta', params:{cursada}}" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
     <div class="col-md-8 col-lg-5 mx-auto mt-3">
       <div class="card">
         <div class="row no-gutters">
           <div class="card-body">
-            <h3 class="card-title text-center mb-4">Nueva acta cursada</h3>
+            <h3 class="card-title text-center mb-4">Editar cursada</h3>
             <form autocomplete="off" v-on:submit.prevent="PostNewCursada">
               <div class="form-group">
                   <label class="input-group-text text-center">Profesor</label>
@@ -42,23 +42,8 @@
                 </select>
                 </div>
               </div>
-              <!-- <article class="card-group-item">
-                <label class="input-group-text text-center">Dia</label>
-                <div class="form-group input-group">
-                  <multiselect v-model="diaSeleccionado" :options="dias" track-by="value" label="name" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Dias"></multiselect>
-                </div>
-              </article>
-              <article class="card-group-item">
-                <label class="input-group-text text-center">Horario</label>
-                <div class="form-group input-group">
-                  <label class="input-group-text text-center">Inicio</label>
-                  <input class="col-sm-4" type="time" v-model="horarioInicioString" placeholder="Horario inicio">
-                  <label class="input-group-text text-center">Fin</label>
-                  <input class="col-sm-4" type="time" v-model="horarioFinString" placeholder="Horario final">
-                </div>
-              </article> -->
               <div class="form-group">
-                <button class="btn btn-danger btn-block" type="submit" >Crear acta cursada</button>
+                <button class="btn btn-danger btn-block" type="submit" >Guardar cambios</button>
               </div>
             </form>
           </div>
@@ -75,40 +60,35 @@ import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
-  name: "AgregarCursada",
+  name: "EditarCursada",
+  props: ["cursada"],
   components: {
     Navigation,
     Multiselect
   },
   data() {
     return {
-      especialidad: '',
-      año: '',
+      año: this.cursada.año,
       optionsaño:[],
-      division:'',
+      division:this.cursada.numDivision,
       optionsdivision:[],
       divisiones:[],
-      cicloLectivoSeleccionado:'',
+      cicloLectivoSeleccionado:this.cursada.cicloLectivo,
       ciclosLectivos:[],
-      especialidadSeleccionada:'',
+      especialidadSeleccionada: this.cursada.especialidad,
       especialidades:['Ciclo Basico','computacion','electronica','electricidad','construcciones','mecanica','quimica'],
-      puedeTomarLista:false,
-      profesorSeleccionado:'',
+      puedeTomarLista:this.cursada.tomarLista ? true : false,
+      profesorSeleccionado:[],
       profesores:[],
       materiaSeleccionada:[],
       materias:[],
-      diaSeleccionado:'',
-      dias:[
-        {name:'lunes', value:0},
-        {name:'martes', value:1},
-        {name:'miercoles', value:2},
-        {name:'jueves', value:3},
-        {name:'viernes', value:4},
-        ],
-      horarioInicioString:'',
-      horarioFinString:'',
       isInvalid: false
     };
+  },
+  mounted() {
+    if(!this.cursada){
+      this.$router.push({ name: 'Cursada'})
+    }
   },
   created(){
     this.GetProfesores();
@@ -161,7 +141,7 @@ export default {
       return titulo + ` - resolucion: ` + resolucion + ` - ` + ' horas catedra: ' + cantHoras;
     },
     validar () {
-      if (!this.turnoSeleccionado){
+      if (!this.turno){
         this.isInvalid = true
         return false
       }else
@@ -170,11 +150,18 @@ export default {
     GetProfesores(){
       axios.get("/api/autoridad/profesores").then(result =>{
         this.profesores = result.data;
+        this.profesorSeleccionado = this.profesores.find(profesor =>{
+          return profesor.dniAutoridad == this.cursada.dniProfesor;
+        })
+
       })
     },
     GetMaterias() {
       axios.get("/api/materia/planmateria").then(result => {
         this.materias = result.data;
+        this.materiaSeleccionada = this.materias.find(materia =>{
+          return materia.idMateria == this.cursada.idMateria;
+        });
       });
     },
     GetDivisiones() {
@@ -207,22 +194,23 @@ export default {
       this.ciclosLectivos = unique;
     },
     async PostNewCursada() {
-      await axios.post("/api/cursada/add", {
-          idDivision: this.filteredDivisiones[0].idDivision,
-          idMateria: this.materiaSeleccionada.idMateria,
-          dniProfesor: this.profesorSeleccionado.dniAutoridad,
-          tomarLista: this.puedeTomarLista == 'true',
-          // dia: this.diaSeleccionado.value,
-          // entrada: new Date().setHours(this.horarioInicioString.split(':')[0],this.horarioInicioString.split(':')[1]),
-          // salida: new Date().setHours(this.horarioFinString.split(':')[0],this.horarioFinString.split(':')[1])
+      await axios.post("/api/cursada/update", {
+        idCursada:this.cursada.idCursada,
+        idDivision: this.filteredDivisiones[0].idDivision,
+        idMateria: this.materiaSeleccionada.idMateria,
+        dniProfesor: this.profesorSeleccionado.dniAutoridad,
+        tomarLista: this.puedeTomarLista == 'true',
         })
-        .then(res=>{this.$router.push({ name: 'Cursada', params: {SuccessCountDownCreationProp: 4 }})})
-        .catch(err=>{
-          if(err.message.includes('409')){
-            this.$router.push({ name: 'Cursada', params: {ErrorCountDownCreationRepeatedProp: 7 }})
-          }else
-            this.$router.push({ name: 'Cursada', params: {ErrorCountDownCreationProp: 6 }})
+        .then(async(res)=>{
+          await axios.get("/api/cursada/completa/" + this.cursada.idCursada)
+          .then((res)=>{
+            this.$router.push({ name: 'CursadaCompleta', params: {cursada:res.data[0], SuccessCountDownEditProp: 6 }})
           })
+        })
+        .catch(err=>{this.$router.push({ name: 'CursadaCompleta', params: {cursada:this.cursada, ErrorCountDownEditProp: 7 }})})
+    },
+    onTouch () {
+      this.isTouched = true
     }
   },
   watch: {
@@ -243,14 +231,10 @@ export default {
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
-input {
-  border: 1px solid #ccc;
-  color: #888;
-  vertical-align: middle;
-  outline: 0;
-  padding: 0.5em 1em;
-  border-radius: 4px;
-  width: calc(100% - 3em - 2px);
-  font-family: sans-serif;
+.container {
+  padding: 0 !important;
+}
+[class*="container-fluid"] {
+  padding: 0 !important;
 }
 </style>
