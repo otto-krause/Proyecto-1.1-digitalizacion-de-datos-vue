@@ -44,7 +44,7 @@
           </div>
           <h4 class="modal-title">Eliminar acta de cursada</h4>
           <div class="modal-body">
-            <p>Desea eliminar esta acta? Este proceso no puede deshacerse.</p>
+            <p>¿Desea eliminar esta acta? Este proceso no puede deshacerse.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
@@ -72,7 +72,7 @@
                     <td>{{cursada.año}}</td>
                   </tr>
                   <tr>
-                    <th>Division</th>
+                    <th>División</th>
                     <td>{{cursada.numDivision}}</td>
                   </tr>
                   <tr>
@@ -126,7 +126,7 @@
                     <td>{{cursada.apellido}}</td>
                   </tr>
                   <tr>
-                    <th>Puede tomar lista?</th>
+                    <th>¿Puede tomar lista?</th>
                     <td>{{cursada.tomarLista ? 'Si' : 'No'}}</td>
                   </tr>
                 </tbody>
@@ -140,11 +140,11 @@
               <table class="table">
                 <tbody>
                   <tr>
-                    <th>Titulo</th>
+                    <th>Título</th>
                     <td>{{cursada.titulo}}</td>
                   </tr>
                   <tr>
-                    <th>Descripcion</th>
+                    <th>Descripción</th>
                     <td><p class="form-control">{{cursada.descripcion}}</p></td>
                   </tr>
                   <tr>
@@ -210,7 +210,7 @@
               <table class="table">
             <thead>
               <tr>
-                <th scope="col">Dia</th>
+                <th scope="col">Día</th>
                 <th scope="col">Hora Entrada</th>
                 <th scope="col">Hora salida</th>
                 <th scope="col">Opciones</th>

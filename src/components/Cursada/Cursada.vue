@@ -68,7 +68,7 @@
                     id="computacion"
                     v-model="computacion"
                   />
-                  <label class="custom-control-label" for="computacion">Computacion</label>
+                  <label class="custom-control-label" for="computacion">Computación</label>
                 </div>
                 <div class="custom-control custom-checkbox">
                   <input
@@ -77,7 +77,7 @@
                     id="electronica"
                     v-model="electronica"
                   />
-                  <label class="custom-control-label" for="electronica">Electronica</label>
+                  <label class="custom-control-label" for="electronica">Electrónica</label>
                 </div>
                 <div class="custom-control custom-checkbox">
                   <input
@@ -95,7 +95,7 @@
                     id="quimica"
                     v-model="quimica"
                   />
-                  <label class="custom-control-label" for="quimica">Quimica</label>
+                  <label class="custom-control-label" for="quimica">Química</label>
                 </div>
                 <div class="custom-control custom-checkbox">
                   <input
@@ -113,7 +113,7 @@
                     id="mecanica"
                     v-model="mecanica"
                   />
-                  <label class="custom-control-label" for="mecanica">Mecanica</label>
+                  <label class="custom-control-label" for="mecanica">Mecánica</label>
                 </div>
                 <div class="custom-control custom-checkbox">
                   <input
@@ -122,13 +122,13 @@
                     id="CicloBasico"
                     v-model="CicloBasico"
                   />
-                  <label class="custom-control-label" for="CicloBasico">Ciclo Basico</label>
+                  <label class="custom-control-label" for="CicloBasico">Ciclo Básico</label>
                 </div>
               </div>
             </article>
             <article class="card-group-item">
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="title">Año y division</h6>
+                <h6 class="title">Año y división</h6>
                 <div class="form-group input-group">
                   <multiselect class="col-sm-5" v-model="año" :options="optionsaño" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Años"></multiselect>
                   <multiselect class="col-sm-7" v-model="division" :options="optionsdivision" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Divisiones"></multiselect>
@@ -156,7 +156,7 @@
               <tr>
                 <th scope="col">Materia</th>
                 <th scope="col">Profesor</th>
-                <th scope="col">Division</th>
+                <th scope="col">División</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -265,25 +265,25 @@ export default {
             this.division ? Cursada.numDivision.toString().includes(this.division) : true
           ) &&
           (
-            this.computacion ? Cursada.especialidad == 'computacion' : true
+            this.computacion ? Cursada.especialidad == 'Computación' : true
           ) &&
           (
-            this.electronica ? Cursada.especialidad == 'electronica' : true
+            this.electronica ? Cursada.especialidad == 'Electrónica' : true
           ) &&
           (
-            this.electricidad ? Cursada.especialidad == 'electricidad' : true
+            this.electricidad ? Cursada.especialidad == 'Electricidad' : true
           ) &&
           (
-            this.quimica ? Cursada.especialidad == 'quimica' : true
+            this.quimica ? Cursada.especialidad == 'Química' : true
           ) &&
           (
-            this.mecanica ? Cursada.especialidad == 'mecanica' : true
+            this.mecanica ? Cursada.especialidad == 'Mecánica' : true
           ) &&
           (
-            this.construcciones ? Cursada.especialidad == 'construcciones' : true
+            this.construcciones ? Cursada.especialidad == 'Construcciones' : true
           ) &&
           (
-            this.CicloBasico ? Cursada.especialidad == 'Ciclo Basico' : true
+            this.CicloBasico ? Cursada.especialidad == 'Ciclo Básico' : true
           )
         );
       });

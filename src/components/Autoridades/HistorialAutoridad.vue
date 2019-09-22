@@ -10,7 +10,7 @@
       <div class="col-md-9 col-lg-6 mx-auto mt-4">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title text-center mb-4">Historial de Altas de la autoridad <br>Nombre: {{autoridad.nombre}}, Apellido: {{autoridad.apellido}} <br>DNI:{{autoridad.dni}}</h4>
+            <h4 class="card-title text-center mb-4">Historial de Altas de la autoridad <br>Nombre: {{autoridad.nombre}}, Apellido: {{autoridad.apellido}} <br>DNI:{{autoridad.dniAutoridad}}</h4>
             <div class="table-responsive">
               <table class="table">
                 <thead>

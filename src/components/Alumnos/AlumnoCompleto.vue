@@ -163,7 +163,7 @@
                     <td>{{alumno.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? alumno.fechaNacimiento.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                   <tr>
-                    <th>es Repetidor?</th>
+                    <th>¿Es repetidor?</th>
                     <td>{{alumno.repetidor ? 'Si' : 'No'}}</td>
                   </tr>
                   <tr>
@@ -207,9 +207,10 @@
               <table class="table">
                 <thead>
                   <tr>
+                    <th scope="col">DNI</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
-                    <th scope="col">Relacion</th>
+                    <th scope="col">Relación</th>
                     <th scope="col">Celular</th>
                     <th scope="col">Mail</th>
                     <th scope="col">Opciones</th>
@@ -217,6 +218,7 @@
                 </thead>
                 <tbody v-for="contactoAlumno in contactosAlumno" :key="contactoAlumno.idContacto">
                   <tr>
+                    <th scope="col">{{contactoAlumno.dniContacto}}</th>
                     <th scope="col">{{contactoAlumno.nombre}}</th>
                     <th scope="col">{{contactoAlumno.apellido}}</th>
                     <th scope="col">{{contactoAlumno.relacion}}</th>

@@ -111,7 +111,7 @@ export default {
       turnoSeleccionado:'',
       turnos:[{ name: 'Mañana', value: 0 },{ name: 'Tarde', value: 1 }],
       especialidadSeleccionada:'',
-      especialidades:['Ciclo Basico','computacion','electronica','electricidad','construcciones','mecanica','quimica'],
+      especialidades:['Ciclo Básico','Computación','Electrónica','Electricidad','Construcciones','Mecánica','Química'],
       preceptorSeleccionado:[''],
       preceptores: [''],
       isInvalid: false

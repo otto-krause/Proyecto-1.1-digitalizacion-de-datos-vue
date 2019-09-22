@@ -25,7 +25,7 @@
                 </div>
               </div>
               <div class="form-group">
-                  <label class="input-group-text text-center">Division</label>
+                  <label class="input-group-text text-center">División</label>
                 <div class="form-group input-group">
                   <multiselect class="col-sm-5 px-0" v-model="especialidadSeleccionada" :options="especialidades" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Especialidad"></multiselect>
                   <multiselect class="col-sm-3 px-0" :disabled= "especialidadSeleccionada ? false : true" v-model="cicloLectivoSeleccionado" :options="ciclosLectivos" :searchable="true" :close-on-select="true" :show-labels="false" placeholder="ciclo lectivo"></multiselect>
@@ -34,10 +34,10 @@
                 </div>
               </div>
               <div class="form-group">
-                  <label class="input-group-text text-center">Puede tomar lista el profesor?</label>
+                  <label class="input-group-text text-center">¿Puede tomar lista el profesor?</label>
                 <div>
                   <select class="form-control" name="puedeTomarLista" v-model="puedeTomarLista">
-                  <option value=true>Si</option>
+                  <option value=true>Sí</option>
                   <option value=false selected>No</option>
                 </select>
                 </div>
@@ -76,7 +76,7 @@ export default {
       cicloLectivoSeleccionado:this.cursada.cicloLectivo,
       ciclosLectivos:[],
       especialidadSeleccionada: this.cursada.especialidad,
-      especialidades:['Ciclo Basico','computacion','electronica','electricidad','construcciones','mecanica','quimica'],
+      especialidades:['Ciclo Básico','Computación','Electrónica','Electricidad','Construcciones','Mecánica','Química'],
       puedeTomarLista:this.cursada.tomarLista ? true : false,
       profesorSeleccionado:[],
       profesores:[],
@@ -109,25 +109,25 @@ export default {
             this.division ? division.numDivision.toString().includes(this.division) : true
           ) &&
           (
-            this.especialidadSeleccionada == 'computacion' ? division.especialidad == 'computacion' : true
+            this.especialidadSeleccionada == 'Computación' ? division.especialidad == 'Computación' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'electronica' ? division.especialidad == 'electronica' : true
+            this.especialidadSeleccionada == 'Electrónica' ? division.especialidad == 'Electrónica' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'electricidad' ? division.especialidad == 'electricidad' : true
+            this.especialidadSeleccionada == 'Electricidad' ? division.especialidad == 'Electricidad' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'quimica' ? division.especialidad == 'quimica' : true
+            this.especialidadSeleccionada == 'Química' ? division.especialidad == 'Química' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'mecanica' ? division.especialidad == 'mecanica' : true
+            this.especialidadSeleccionada == 'Mecánica' ? division.especialidad == 'Mecánica' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'construcciones' ? division.especialidad == 'construcciones' : true
+            this.especialidadSeleccionada == 'Construcciones' ? division.especialidad == 'Construcciones' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'Ciclo Basico' ? division.especialidad == 'Ciclo Basico' : true
+            this.especialidadSeleccionada == 'Ciclo Básico' ? division.especialidad == 'Ciclo Básico' : true
           )
         );
       });

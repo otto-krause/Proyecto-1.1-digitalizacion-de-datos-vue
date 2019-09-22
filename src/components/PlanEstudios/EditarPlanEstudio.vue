@@ -17,6 +17,7 @@
                   <label class="input-group-text">Resolucion</label>
                 </div>
                 <input
+                disabled
                   type="text"
                   name="resolucion"
                   class="form-control"

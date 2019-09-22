@@ -76,9 +76,12 @@
                     <td>{{autoridad.apellido}}</td>
                   </tr>
                   <tr>
-                    <tr>
                     <th>Direccion</th>
                     <td>{{autoridad.direccion}}</td>
+                  </tr>
+                  <tr>
+                    <th>Telefono</th>
+                    <td>{{autoridad.telefono}}</td>
                   </tr>
                   <tr>
                     <th>Fecha de Ingreso</th>
@@ -166,9 +169,7 @@ export default {
   methods: {
     SetRoles() {
       this.rolesMostrar = this.roles.filter(rol => {
-        return this.autoridad.idRol
-          .split(",")
-          .some(elemento => elemento == rol.idRol);
+        return this.autoridad.idRol.split(",").some(elemento => elemento == rol.idRol);
       });
     },
     async DeleteAutoridad() {

@@ -114,7 +114,7 @@
                   <label class="input-group-text text-center">Cargos</label>
                 <div>
                   <multiselect v-model="cargos" placeholder="Lista de cargos" label="rol" track-by="idRol" :options="roles" :multiple="true"></multiselect>
-                  <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar al menos un rol</label>
+                  <label class="typo__label form__label" v-if="isInvalid">*Debe seleccionar al menos un rol</label>
                 </div>
               </div>
               <div class="form-group">

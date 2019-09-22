@@ -91,7 +91,7 @@ export default {
       cicloLectivoSeleccionado:'',
       ciclosLectivos:[],
       especialidadSeleccionada:'',
-      especialidades:['Ciclo Basico','computacion','electronica','electricidad','construcciones','mecanica','quimica'],
+      especialidades:['Ciclo Básico','Computación','Electrónica','Electricidad','Construcciones','Mecánica','Química'],
       puedeTomarLista:false,
       profesorSeleccionado:'',
       profesores:[],
@@ -129,25 +129,25 @@ export default {
             this.division ? division.numDivision.toString().includes(this.division) : true
           ) &&
           (
-            this.especialidadSeleccionada == 'computacion' ? division.especialidad == 'computacion' : true
+            this.especialidadSeleccionada == 'Computación' ? division.especialidad == 'Computación' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'electronica' ? division.especialidad == 'electronica' : true
+            this.especialidadSeleccionada == 'Electrónica' ? division.especialidad == 'Electrónica' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'electricidad' ? division.especialidad == 'electricidad' : true
+            this.especialidadSeleccionada == 'Electricidad' ? division.especialidad == 'Electricidad' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'quimica' ? division.especialidad == 'quimica' : true
+            this.especialidadSeleccionada == 'Química' ? division.especialidad == 'Química' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'mecanica' ? division.especialidad == 'mecanica' : true
+            this.especialidadSeleccionada == 'Mecánica' ? division.especialidad == 'Mecánica' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'construcciones' ? division.especialidad == 'construcciones' : true
+            this.especialidadSeleccionada == 'Construcciones' ? division.especialidad == 'Construcciones' : true
           ) &&
           (
-            this.especialidadSeleccionada == 'Ciclo Basico' ? division.especialidad == 'Ciclo Basico' : true
+            this.especialidadSeleccionada == 'Ciclo Básico' ? division.especialidad == 'Ciclo Básico' : true
           )
         );
       });

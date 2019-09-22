@@ -91,7 +91,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">RESOLUCION</th>
+                <th scope="col">Resolución</th>
                 <th scope="col">Vigencia Desde</th>
                 <th scope="col">Vigencia Hasta</th>
                 <th scope="col">Opciones</th>

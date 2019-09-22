@@ -24,7 +24,7 @@
           </div>
           <h4 class="modal-title">Archivar plan de estudios</h4>
           <div class="modal-body">
-            <p>Desea archivar este plan de estudios? Este proceso no puede deshacerse.</p>
+            <p>¿Desea archivar este plan de estudios? Este proceso no puede deshacerse.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>

@@ -111,7 +111,7 @@ export default {
       numDivision: this.division.numDivision,
       cicloLectivo: this.division.cicloLectivo,
       turnos:[{ name: 'Mañana', value: 0 },{ name: 'Tarde', value: 1 }],
-      especialidades:['Ciclo Basico','computacion','electronica','electricidad','construcciones','mecanica','quimica'],
+      especialidades:['Ciclo Básico','Computación','Electrónica','Electricidad','Construcciones','Mecánica','Química'],
       preceptorSeleccionado:[''],
       preceptores: [''],
       isInvalid: false
@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     LabelPreceptor({dniAutoridad,nombre,apellido}){
-      return dniAutoridad + ` - ` + nombre + ', ' + apellido;
+      return dniAutoridad + ` - ` + nombre + ' ' + apellido;
     },
     async GetPreceptor(){
       await axios.get("/api/autoridad/" + this.division.dniPreceptor)
