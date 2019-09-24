@@ -196,8 +196,14 @@
       <div class="col-10 mx-auto">
         <div class="card mt-5">
           <div class="card-body">
-            <nav class="navbar">
-              <h4 class="card-title">Horarios</h4>
+            <nav class="navbar row">
+              <h4 class="card-title nav-item mr-auto">Horarios</h4>
+              <div class="form-group input-group col-sm-12 col-md-6 form-inline nav-item ml-auto mx-0">
+                <multiselect class="col ml-auto px-0" v-model="diaSeleccionado" :options="dias" :searchable="false" track-by="value" label="name" :close-on-select="true" :show-labels="false" placeholder="Dia"></multiselect>
+                <multiselect class="col ml-auto px-0" :disabled= "diaSeleccionado ? false : true" v-model="horarioInicioSeleccionado" :options="horariosInicio" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Inicio"></multiselect>
+                <multiselect class="col ml-auto px-0" :disabled= "diaSeleccionado ? false : true" v-model="horarioFinSeleccionado" :options="horariosFin" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Fin"></multiselect>
+                 <button type="submit" class="btn btn-info col-sm-3 ml-auto" :disabled= 'horarioInicioSeleccionado && horarioFinSeleccionado ? false : true' v-on:click="PostNewHorario">Agregar</button>
+              </div>
               <!-- <button
                 type="button"
                 class="nav-link btn btn-info"
@@ -218,7 +224,7 @@
             </thead>
             <tbody v-for="horario in horarios" :key="horario.idHorario">
               <tr>
-                <th scope="col">{{dia}}</th>
+                <th scope="col">{{horario.dia}}</th>
                 <th scope="col">{{horario.entrada ? horario.entrada.slice(0,5) : ' - '}}</th>
                 <th scope="col">{{horario.salida ? horario.salida.slice(0,5) : ' - '}}</th>
                 <th scope="col"></th>
@@ -234,6 +240,8 @@
 </template>
 <script>
 import Navigation from "../Navegacion/Navigation";
+
+import Multiselect from 'vue-multiselect'
 import axios from "axios";
 
 export default {
@@ -244,7 +252,8 @@ export default {
     "ErrorCountDownEditProp"
   ],
   components: {
-    Navigation
+    Navigation,
+    Multiselect
   },
   data() {
     return {
@@ -253,6 +262,18 @@ export default {
       ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       preceptor:{},
       alumnos:[],
+      diaSeleccionado:'',
+      horarioInicioSeleccionado:'',
+      horarioFinSeleccionado:'',
+      dias:[{name:'Lunes',value:1},
+            {name:'Martes',value:2},
+            {name:'Miercoles',value:3},
+            {name:'Jueves',value:4},
+            {name:'Viernes',value:5}
+            ],
+      horariosTotales:['7:45','8:25','9:05','9:20','10:00','10:40','10:50','11:30','12:10'],
+      horariosInicio:['7:45','8:25','9:05','9:20','10:00','10:40','10:50','11:30','12:10'],
+      horariosFin:[],
       horarios:[]
     };
   },
@@ -294,6 +315,25 @@ export default {
         this.horarios = res.data;
       })
     },
+    PostNewHorario() {
+      console.log('tuvieja')
+      axios.post("/api/dia_horario/add", {
+        idCursada:this.cursada.idCursada,
+        dia:this.diaSeleccionado.value,
+        entrada:this.horarioInicioSeleccionado,
+        salida:this.horarioFinSeleccionado
+        })
+        .then(res=>{
+          this.SuccessCountDownCreationProp = 4,
+          this.GetHorarios()
+          })
+        .catch(err=>{
+          if(err.message.includes('409')){
+            thisErrorCountDownCreationRepeatedProp = 7
+          }else
+            this.ErrorCountDownCreationProp = 6
+          })
+    },
     async DeleteCursada() {
       $("#myModal").modal("toggle");
       await axios
@@ -316,9 +356,21 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     }
+  },
+  watch : {
+    horarioInicioSeleccionado:function (){
+      this.horariosFin = this.horariosTotales;
+      this.horariosFin = this.horariosFin.slice((this.horariosFin.indexOf(this.horarioInicioSeleccionado)) + 1)
+    },
+    horarioFinSeleccionado:function (){
+      this.horariosInicio = this.horariosTotales;
+      this.horariosInicio = this.horariosInicio.slice(0,(this.horariosInicio.indexOf(this.horarioFinSeleccionado)))
+    },
   }
 };
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 .container {
