@@ -19,6 +19,7 @@ import EditarAlumno from '@/components/Alumnos/EditarAlumno'
 import AgregarContactoAlumno from '@/components/Alumnos/AgregarContactoAlumno'
 import EditarContactoAlumno from '@/components/Alumnos/EditarContactoAlumno'
 import HistorialAlumno from '@/components/Alumnos/HistorialAlumno'
+import HistorialAlumnoDivision from '@/components/Alumnos/HistorialAlumnoDivision'
 import Divisiones from '@/components/Division/Divisiones'
 import AgregarDivision from '@/components/Division/AgregarDivision'
 import DivisionCompleta from '@/components/Division/DivisionCompleta'
@@ -145,6 +146,12 @@ export default new Router({
       name: 'HistorialAlumno',
       component: HistorialAlumno,
       props:true
+    },
+    {
+      path: '/HistorialAlumnoDivision',
+      name: 'HistorialAlumnoDivision',
+      component: HistorialAlumnoDivision,
+      props: true
     },
     {
       path: '/Divisiones',

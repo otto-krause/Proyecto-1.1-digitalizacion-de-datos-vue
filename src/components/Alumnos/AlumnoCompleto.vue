@@ -138,7 +138,16 @@
       <div class="col col-sm-6 mx-5">
         <div class="card mt-5">
           <div class="card-body">
-            <h4 class="card-title">Alumno</h4>
+            <nav class="navbar">
+              <h4 class="card-title">Alumno</h4>
+              <button
+                type="button"
+                class="nav-link btn btn-info"
+                data-toggle="modal"
+                data-target=".AddDivision"
+              >Agregar División
+              </button>
+            </nav>
             <div class="table-responsive">
               <table class="table">
                 <tbody v-bind="alumno">
@@ -164,7 +173,7 @@
                   </tr>
                   <tr>
                     <th>¿Es repetidor?</th>
-                    <td>{{alumno.repetidor ? 'Si' : 'No'}}</td>
+                    <td>{{alumno.repetidor ? 'Sí' : 'No'}}</td>
                   </tr>
                   <tr>
                     <th>Opciones</th>
@@ -186,6 +195,15 @@
                     <td>
                       <router-link
                         :to="{ name: 'HistorialAlumno', params: {alumno} }"
+                        class="nav-link btn btn-info fas fa-clipboard"
+                      ></router-link>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Historial Divisiones</th>
+                    <td>
+                      <router-link
+                        :to="{ name: 'HistorialAlumnoDivision', params: {alumno} }"
                         class="nav-link btn btn-info fas fa-clipboard"
                       ></router-link>
                     </td>
@@ -417,5 +435,10 @@ export default {
 .trigger-btn {
   display: inline-block;
   margin: 100px auto;
+}
+
+#addDivision .modal-confirm
+{
+  padding:50%;
 }
 </style>
