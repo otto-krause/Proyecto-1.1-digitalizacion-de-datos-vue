@@ -53,184 +53,173 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col mx-4">
-        <div class="card mt-5">
-          <div class="card-body">
-            <nav class="navbar">
-              <h4 class="card-title">Cursada</h4>
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-                <tbody>
-                  <tr v-if="cursada.especialidad">
-                    <th>Especialidad</th>
-                    <td>{{cursada.especialidad}}</td>
-                  </tr>
-                  <tr>
-                    <th>Año</th>
-                    <td>{{cursada.año}}</td>
-                  </tr>
-                  <tr>
-                    <th>División</th>
-                    <td>{{cursada.numDivision}}</td>
-                  </tr>
-                  <tr>
-                    <th>Turno</th>
-                    <td>{{cursada.turno ? 'Tarde' : 'Mañana'}}</td>
-                  </tr>
-                  <tr>
-                    <th>Ciclo Lectivo</th>
-                    <td>{{cursada.cicloLectivo}}</td>
-                  </tr>
-                  <tr>
-                    <th>Opciones</th>
-                    <td>
-                      <!-- <button
-                        type="button"
-                        class="nav-link btn btn-danger fas fa-trash"
-                        data-toggle="modal"
-                        data-target=".deleteModal"
-                      ></button> -->
-                      <router-link
-                        :to="{ name: 'EditarCursada', params: {cursada} }"
-                        class="nav-link btn btn-info fas fa-edit"
-                      ></router-link>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col mx-4">
-        <div class="card mt-5">
-          <div class="card-body">
-            <nav class="navbar">
-              <h4 class="card-title">Profesor</h4>
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <th>DNI</th>
-                    <td>{{cursada.dniProfesor}}</td>
-                  </tr>
-                  <tr>
-                    <th>Nombre</th>
-                    <td>{{cursada.nombre}}</td>
-                  </tr>
-                  <tr>
-                    <th>Apellido</th>
-                    <td>{{cursada.apellido}}</td>
-                  </tr>
-                  <tr>
-                    <th>¿Puede tomar lista?</th>
-                    <td>{{cursada.tomarLista ? 'Si' : 'No'}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="dropdown-divider"></div>
-            <nav class="navbar">
-              <h4 class="card-title">Materia</h4>
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <th>Título</th>
-                    <td>{{cursada.titulo}}</td>
-                  </tr>
-                  <tr>
-                    <th>Descripción</th>
-                    <td><p class="form-control">{{cursada.descripcion}}</p></td>
-                  </tr>
-                  <tr>
-                    <th>Horas catedra</th>
-                    <td>{{cursada.cantHoras}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-10 mx-auto">
-        <div class="card mt-5">
-          <div class="card-body">
-            <nav class="navbar">
-              <h4 class="card-title">Alumnos</h4>
-              <!-- <button
-                type="button"
-                class="nav-link btn btn-info"
-                data-toggle="modal"
-                v-on:click="contactoSeleccionado = contactoAlumno"
-                data-target=".DeleteContactoAlumno"
-              >Agregar alumno</button> -->
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">DNI</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Telefono</th>
-              </tr>
-            </thead>
-            <tbody v-for="alumno in alumnos" :key="alumno.dniAlumno">
-              <tr>
-                <th scope="col">{{alumno.dniAlumno}}</th>
-                <th scope="col">{{alumno.nombre}}</th>
-                <th scope="col">{{alumno.apellido}}</th>
-                <th scope="col">{{alumno.telefono}}</th>
-              </tr>
-            </tbody>
-          </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-10 mx-auto">
-        <div class="card mt-5">
-          <div class="card-body">
-            <nav class="navbar row">
-              <h4 class="card-title nav-item mr-auto">Horarios</h4>
-              <div class="form-group input-group col-sm-12 col-md-6 form-inline nav-item ml-auto mx-0">
-                <multiselect class="col ml-auto px-0" v-model="diaSeleccionado" :options="dias" :searchable="false" track-by="value" label="name" :close-on-select="true" :show-labels="false" placeholder="Dia"></multiselect>
-                <multiselect class="col ml-auto px-0" :disabled= "diaSeleccionado ? false : true" v-model="horarioInicioSeleccionado" :options="horariosInicio" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Inicio"></multiselect>
-                <multiselect class="col ml-auto px-0" :disabled= "diaSeleccionado ? false : true" v-model="horarioFinSeleccionado" :options="horariosFin" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Fin"></multiselect>
-                 <button type="submit" class="btn btn-info col-sm-3 ml-auto" :disabled= 'horarioInicioSeleccionado && horarioFinSeleccionado ? false : true' v-on:click="PostNewHorario">Agregar</button>
+    <div class="container-fluid">
+      <div class="row mx-auto">
+        <div class="col mx-4">
+          <div class="card mt-5">
+            <div class="card-body">
+              <nav class="navbar">
+                <h4 class="card-title">Cursada</h4>
+              </nav>
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr v-if="cursada.especialidad">
+                      <th>Especialidad</th>
+                      <td>{{cursada.especialidad}}</td>
+                    </tr>
+                    <tr>
+                      <th>Año y Div</th>
+                      <td>{{cursada.año}} / {{cursada.numDivision}}</td>
+                    </tr>
+                    <tr>
+                      <th>Turno</th>
+                      <td>{{cursada.turno ? 'Tarde' : 'Mañana'}}</td>
+                    </tr>
+                    <tr>
+                      <th>Ciclo Lectivo</th>
+                      <td>{{cursada.cicloLectivo}}</td>
+                    </tr>
+                    <tr>
+                      <th>Opciones</th>
+                      <td>
+                        <!-- <button
+                          type="button"
+                          class="nav-link btn btn-danger fas fa-trash"
+                          data-toggle="modal"
+                          data-target=".deleteModal"
+                        ></button>-->
+                        <router-link
+                          :to="{ name: 'EditarCursada', params: {cursada} }"
+                          class="nav-link btn btn-info fas fa-edit"
+                        ></router-link>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <!-- <button
-                type="button"
-                class="nav-link btn btn-info"
-                data-toggle="modal"
-                v-on:click="contactoSeleccionado = contactoAlumno"
-                data-target=".DeleteContactoAlumno"
-              >Agregar alumno</button> -->
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Día</th>
-                <th scope="col">Hora Entrada</th>
-                <th scope="col">Hora salida</th>
-                <th scope="col">Opciones</th>
-              </tr>
-            </thead>
-            <tbody v-for="horario in horarios" :key="horario.idHorario">
-              <tr>
-                <th scope="col">{{horario.dia}}</th>
-                <th scope="col">{{horario.entrada ? horario.entrada.slice(0,5) : ' - '}}</th>
-                <th scope="col">{{horario.salida ? horario.salida.slice(0,5) : ' - '}}</th>
-                <th scope="col"></th>
-              </tr>
-            </tbody>
-          </table>
+              <div class="dropdown-divider"></div>
+              <nav class="navbar">
+                <h4 class="card-title">Profesor</h4>
+              </nav>
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>DNI</th>
+                      <td>{{cursada.dniProfesor}}</td>
+                    </tr>
+                    <tr>
+                      <th>Nombre</th>
+                      <td>{{cursada.nombre}} , {{cursada.apellido}}</td>
+                    </tr>
+                    <tr>
+                      <th>¿Puede tomar lista?</th>
+                      <td>{{cursada.tomarLista ? 'Si' : 'No'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="dropdown-divider"></div>
+              <nav class="navbar">
+                <h4 class="card-title">Materia</h4>
+              </nav>
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>Título</th>
+                      <td>{{cursada.titulo}}</td>
+                    </tr>
+                    <tr>
+                      <th>Descripción</th>
+                      <td>
+                        <p class="form-control">{{cursada.descripcion}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Horas catedra</th>
+                      <td>{{cursada.cantHoras}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 mx-auto">
+          <div class="card mt-5">
+            <div class="card-body">
+              <nav class="navbar">
+                <h4 class="card-title">Horarios</h4>
+                <div class="form-group input-group col col-md-7 form-inline">
+                  <multiselect
+                    class="col-xs-12 px-0"
+                    v-model="diaSeleccionado"
+                    :options="dias"
+                    :searchable="false"
+                    track-by="value"
+                    label="name"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    placeholder="Dia"
+                  ></multiselect>
+                  <multiselect
+                    class="col px-0"
+                    :disabled="diaSeleccionado ? false : true"
+                    v-model="horarioInicioSeleccionado"
+                    :options="horariosInicio"
+                    :searchable="false"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    placeholder="Inicio"
+                  ></multiselect>
+                  <multiselect
+                    class="col px-0"
+                    :disabled="diaSeleccionado ? false : true"
+                    v-model="horarioFinSeleccionado"
+                    :options="horariosFin"
+                    :searchable="false"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    placeholder="Fin"
+                  ></multiselect>
+                  <button
+                    type="submit"
+                    class="btn btn-info col"
+                    :disabled="horarioInicioSeleccionado && horarioFinSeleccionado && diaSeleccionado ? false : true"
+                    v-on:click="PostNewHorario"
+                  >Agregar</button>
+                </div>
+              </nav>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Día</th>
+                      <th scope="col">Hora Entrada</th>
+                      <th scope="col">Hora salida</th>
+                      <th scope="col">Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody v-for="horario in horarios" :key="horario.idHorario">
+                    <tr>
+                      <th scope="col">{{ParseDia(horario)}}</th>
+                      <th scope="col">{{horario.entrada ? horario.entrada.slice(0,5) : ' - '}}</th>
+                      <th scope="col">{{horario.salida ? horario.salida.slice(0,5) : ' - '}}</th>
+                      <th scope="col">
+                        <button
+                          type="button"
+                          class="nav-link btn btn-danger fas fa-trash"
+                          data-toggle="modal"
+                          data-target=".deleteHorario"
+                          :click="horarioSeleccionadoBorrar = horario.idHorario"
+                        ></button>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -241,16 +230,12 @@
 <script>
 import Navigation from "../Navegacion/Navigation";
 
-import Multiselect from 'vue-multiselect'
+import Multiselect from "vue-multiselect";
 import axios from "axios";
 
 export default {
   name: "CursadaCompleta",
-  props: [
-    "cursada",
-    "SuccessCountDownEditProp",
-    "ErrorCountDownEditProp"
-  ],
+  props: ["cursada", "SuccessCountDownEditProp", "ErrorCountDownEditProp"],
   components: {
     Navigation,
     Multiselect
@@ -258,81 +243,121 @@ export default {
   data() {
     return {
       rolesMostrar: [],
-      SuccessCountDownEdit: this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
-      ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
-      preceptor:{},
-      alumnos:[],
-      diaSeleccionado:'',
-      horarioInicioSeleccionado:'',
-      horarioFinSeleccionado:'',
-      dias:[{name:'Lunes',value:1},
-            {name:'Martes',value:2},
-            {name:'Miercoles',value:3},
-            {name:'Jueves',value:4},
-            {name:'Viernes',value:5}
-            ],
-      horariosTotales:['7:45','8:25','9:05','9:20','10:00','10:40','10:50','11:30','12:10'],
-      horariosInicio:['7:45','8:25','9:05','9:20','10:00','10:40','10:50','11:30','12:10'],
-      horariosFin:[],
-      horarios:[]
+      SuccessCountDownEdit: this.SuccessCountDownEditProp
+        ? this.SuccessCountDownEditProp
+        : 0,
+      ErrorCountDownEdit: this.ErrorCountDownEditProp
+        ? this.ErrorCountDownEditProp
+        : 0,
+      preceptor: {},
+      diaSeleccionado: "",
+      horarioInicioSeleccionado: "",
+      horarioFinSeleccionado: "",
+      dias: [
+        { name: "Lunes", value: 0 },
+        { name: "Martes", value: 1 },
+        { name: "Miercoles", value: 2 },
+        { name: "Jueves", value: 3 },
+        { name: "Viernes", value: 4 }
+      ],
+      horariosTotales: [
+        "07:45",
+        "08:25",
+        "09:05",
+        "09:20",
+        "10:00",
+        "10:05",
+        "10:40",
+        "10:50",
+        "11:20",
+        "11:30",
+        "12:50",
+        "13:30",
+        "14:10",
+        "14:50",
+        "15:00",
+        "15:40",
+        "15:50",
+        "16:30",
+        "16:35",
+        "17:10",
+        "17:15",
+        "17:55"
+      ],
+      horariosInicio: [
+        "07:45",
+        "08:25",
+        "09:05",
+        "09:45",
+        "10:00",
+        "10:40",
+        "11:20",
+        "11:30",
+        "12:00",
+        "12:10",
+        "13:30",
+        "14:10",
+        "14:50",
+        "15:30",
+        "15:40",
+        "16:20",
+        "16:30",
+        "17:10",
+        "17:15",
+        "17:50",
+        "17:55"
+      ],
+      horariosFin: [],
+      horarios: [],
+      horarioSeleccionadoBorrar:''
     };
   },
   mounted() {
     if (!this.cursada) {
       this.$router.push({ name: "Cursada" });
     }
-    this.GetAlumnos();
-  },
-  computed:{
-    dia(){
-      if(this.cursada.dia == 0){
-        return 'Lunes'
-      }
-      if(this.cursada.dia == 1){
-        return 'Martes'
-      }
-      if(this.cursada.dia == 2){
-        return 'Miercoles'
-      }
-      if(this.cursada.dia == 3){
-        return 'Jueves'
-      }
-      if(this.cursada.dia == 4){
-        return 'Viernes'
-      }
-    }
+    this.GetHorarios();
   },
   methods: {
-    GetAlumnos(){
-      axios.get('/api/alumno/HistorialDivision/' + this.cursada.idDivision)
-      .then(res=>{
-        this.alumnos = res.data;
-      })
+    ParseDia(DiaHorario) {
+      if (DiaHorario.dia == 0) {
+        return "Lunes";
+      }
+      if (DiaHorario.dia == 1) {
+        return "Martes";
+      }
+      if (DiaHorario.dia == 2) {
+        return "Miercoles";
+      }
+      if (DiaHorario.dia == 3) {
+        return "Jueves";
+      }
+      if (DiaHorario.dia == 4) {
+        return "Viernes";
+      }
+      return "Desconocido";
     },
-    GetHorarios(){
-      axios.get('/api/cursada/horarios/' + this.cursada.idCursada)
-      .then(res=>{
+    GetHorarios() {
+      axios.get("/api/cursada/horarios/" + this.cursada.idCursada).then(res => {
         this.horarios = res.data;
-      })
+      });
     },
     PostNewHorario() {
-      console.log('tuvieja')
-      axios.post("/api/dia_horario/add", {
-        idCursada:this.cursada.idCursada,
-        dia:this.diaSeleccionado.value,
-        entrada:this.horarioInicioSeleccionado,
-        salida:this.horarioFinSeleccionado
+      axios
+        .post("/api/dia_horario/add", {
+          idCursada: this.cursada.idCursada,
+          dia: this.diaSeleccionado.value,
+          entrada: this.horarioInicioSeleccionado,
+          salida: this.horarioFinSeleccionado
         })
-        .then(res=>{
-          this.SuccessCountDownCreationProp = 4,
-          this.GetHorarios()
-          })
-        .catch(err=>{
-          if(err.message.includes('409')){
-            thisErrorCountDownCreationRepeatedProp = 7
-          }else
-            this.ErrorCountDownCreationProp = 6
-          })
+        .then(res => {
+          (this.SuccessCountDownCreationProp = 4), this.GetHorarios();
+        })
+        .catch(err => {
+          if (err.message.includes("409")) {
+            thisErrorCountDownCreationRepeatedProp = 7;
+          } else this.ErrorCountDownCreationProp = 6;
+        });
     },
     async DeleteCursada() {
       $("#myModal").modal("toggle");
@@ -353,19 +378,39 @@ export default {
           });
         });
     },
+    async DeleteHorario(idHorario) {
+      $("#modalHorario").modal("toggle");
+      await axios
+        .post("/api/dia_horario/delete", {
+          idHorario
+        })
+        .then(res => {
+          this.SuccessCountDownDeletion= 4;
+        })
+        .catch(err => {
+          ErrorCountDownDeletionProp=6;
+        });
+        this.GetHorarios();
+        this.horarioSeleccionadoBorrar = '';
+    },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     }
   },
-  watch : {
-    horarioInicioSeleccionado:function (){
+  watch: {
+    horarioInicioSeleccionado: function() {
       this.horariosFin = this.horariosTotales;
-      this.horariosFin = this.horariosFin.slice((this.horariosFin.indexOf(this.horarioInicioSeleccionado)) + 1)
+      this.horariosFin = this.horariosFin.slice(
+        this.horariosFin.indexOf(this.horarioInicioSeleccionado) + 1
+      );
     },
-    horarioFinSeleccionado:function (){
+    horarioFinSeleccionado: function() {
       this.horariosInicio = this.horariosTotales;
-      this.horariosInicio = this.horariosInicio.slice(0,(this.horariosInicio.indexOf(this.horarioFinSeleccionado)))
-    },
+      this.horariosInicio = this.horariosInicio.slice(
+        0,
+        this.horariosInicio.indexOf(this.horarioFinSeleccionado)
+      );
+    }
   }
 };
 </script>

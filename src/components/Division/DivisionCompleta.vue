@@ -7,6 +7,26 @@
       </nav>
     </div>
     <b-alert
+      :show="ErrorCountDownAlumnoRepetido"
+      dismissible
+      variant="info"
+      @dismissed="ErrorCountDownAlumnoRepetido =0"
+      @dismiss-count-down="countDownChanged"
+      class="col-md-10 col-lg-7 mx-auto mt-3"
+    >
+      <p>El alumno ya se encuentra en la division</p>
+    </b-alert>
+    <b-alert
+      :show="ErrorCountDownAlumno"
+      dismissible
+      variant="danger"
+      @dismissed="ErrorCountDownAlumno =0"
+      @dismiss-count-down="countDownChanged"
+      class="col-md-10 col-lg-7 mx-auto mt-3"
+    >
+      <p>El alumno no pudo ser encontrado</p>
+    </b-alert>
+    <b-alert
       :show="SuccessCountDownEdit"
       dismissible
       variant="success"
@@ -71,7 +91,71 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div
+      class="modal fade DeleteAlumno"
+      id="modalDeleteAlumno"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="DeleteAlumno"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-confirm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box">
+              <i class="material-icons fas fa-times"></i>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>
+          <h4 class="modal-title">Eliminar alumno?</h4>
+          <div class="modal-body">
+            <p>Desea eliminar este alumno de la division?</p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger" v-on:click="DeleteDivision">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade AgregarAlumno"
+      id="modalAgregarAlumno"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="AgregarAlumno"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-confirm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Alumno</h4>
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>DNI</th>
+                      <td>{{AlumnoAgregar.dniAlumno}}</td>
+                    </tr>
+                    <tr>
+                      <th>Nombre</th>
+                      <td>{{AlumnoAgregar.nombre}} , {{AlumnoAgregar.apellido}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-Success" v-on:click="PostNewAlumno">Agregar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-auto">
       <div class="col mx-5">
         <div class="card mt-5">
           <div class="card-body">
@@ -164,6 +248,44 @@
           </div>
         </div>
       </div>
+      <div class="col-10 mx-auto px-0">
+          <div class="card mt-5">
+            <div class="card-body">
+              <nav class="navbar">
+                <h4 class="card-title">Alumnos</h4>
+                <div class="form-group ml-auto col-sm-7 col-lg-4 form-inline">
+                  <input class="col mr-3 form-control" type="number" placeholder="Buscador" v-model="searchAlumnoAgregar"/>
+                  <button
+                  :disabled="searchAlumnoAgregar ? false : true"
+                  type="button"
+                  class="col btn btn-info"
+                  v-on:click="GetAlumno"
+                >Agregar alumno</button>
+                </div>
+              </nav>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">DNI</th>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Apellido</th>
+                      <th scope="col">Telefono</th>
+                    </tr>
+                  </thead>
+                  <tbody v-for="alumno in alumnos" :key="alumno.dniAlumno">
+                    <tr>
+                      <th scope="col">{{alumno.dniAlumno}}</th>
+                      <th scope="col">{{alumno.nombre}}</th>
+                      <th scope="col">{{alumno.apellido}}</th>
+                      <th scope="col">{{alumno.telefono}}</th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </template>
@@ -191,25 +313,88 @@ export default {
       ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
       SuccessCountDownDeletion:0,
       ErrorCountDownDeletion:0,
-      preceptor:{}
+      ErrorCountDownAlumno:0,
+      ErrorCountDownAlumnoRepetido:0,
+      preceptor:{},
+      alumnos: [],
+      searchAlumnoAgregar:'',
+      AlumnoAgregar:''
     };
   },
   mounted() {
     if (!this.division) {
-      this.$router.push({ name: "divisiones" });
+      this.$router.push({ name: "Divisiones" });
     }
+    this.GetAlumnos();
     this.GetPreceptor();
   },
   methods: {
-    async GetPreceptor(){
-      await axios.get("/api/autoridad/" + this.division.dniPreceptor)
+    GetAlumnos() {
+      axios
+        .get("/api/alumno/HistorialDivision/" + this.division.idDivision)
+        .then(res => {
+          this.alumnos = res.data;
+        });
+    },
+    GetPreceptor(){
+      axios.get("/api/autoridad/" + this.division.dniPreceptor)
       .then(res =>{
         this.preceptor = res.data[0];
       });
     },
-    async DeleteDivision() {
+    DeleteDivision() {
       $("#DeleteDivision").modal("toggle");
-      await axios
+      axios
+        .post("/api/division/delete", {
+          idDivision: this.division.idDivision
+        })
+        .then(res => {
+          this.$router.push({
+            name: "Divisiones",
+            params: { SuccessCountDownDeletionProp: 4 }
+          });
+        })
+        .catch(err => {
+          this.$router.push({
+            name: "Divisiones",
+            params: { ErrorCountDownDeletionProp: 6 }
+          });
+        });
+    },
+    PostNewAlumno(){
+      $("#modalAgregarAlumno").modal("toggle");
+      axios.post('/api/division/alumno/add',{
+        idDivision: this.division.idDivision,
+        dniAlumno: this.AlumnoAgregar.dniAlumno
+      })
+      .then(res=>{
+        //SuccessCountDownCreation = 4;
+        this.GetAlumnos();
+      })
+      .catch(err=>{})
+    },
+    GetAlumno(){
+      axios.get('/api/alumno/' + this.searchAlumnoAgregar)
+      .then(res => {
+        this.AlumnoAgregar = res.data[0];
+        if(this.AlumnoAgregar.dniAlumno == null){
+          this.ErrorCountDownAlumno = 6;
+        }else{
+          let AlumnoRepetido = this.alumnos.find(alumno=>{
+            return alumno.dniAlumno == this.AlumnoAgregar.dniAlumno;
+          })
+          if(!AlumnoRepetido){
+            $("#modalAgregarAlumno").modal("toggle");
+          }else{
+            this.ErrorCountDownAlumnoRepetido = 6;
+          }
+        }
+        })
+        .catch(err => {});
+    },
+    DeleteAlumno() {
+      $("#DeleteDivision").modal("toggle");
+      axios
         .post("/api/division/delete", {
           idDivision: this.division.idDivision
         })
