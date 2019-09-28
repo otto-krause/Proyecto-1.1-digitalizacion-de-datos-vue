@@ -23,7 +23,7 @@
                   placeholder="Resolucion"
                   v-model="resolucion"
                   required
-                  oninvalid="this.setCustomValidity('Ingrese numero de resolucion')"
+                  oninvalid="this.setCustomValidity('Debe ingresar la resolucion')"
                   oninput="setCustomValidity('')"
                 />
               </div>
@@ -40,7 +40,7 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text">Vigencia desde</label>
                 </div>
-                <input type="date" v-model="vigenciaDesde" name="vigenciaDesde" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha del comienzo de la vigencia')" oninput="setCustomValidity('')"/>
+                <input type="date" v-model="vigenciaDesde" name="vigenciaDesde" class="form-control" min='1970-01-01' max='2100-01-01' required oninvalid="this.setCustomValidity('Debe ingresar una fecha valida')" oninput="setCustomValidity('')"/>
               </div>
               <div class="form-group">
                 <button class="btn btn-danger btn-block" type="submit" >Crear nuevo plan de estudios</button>

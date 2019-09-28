@@ -52,7 +52,7 @@
           <div class="card rounded-0 border-0">
             <article>
               <div class="card-body" style="background-color:#FAFAFA">
-                <h6 class="card-title">Actas cursada</h6>
+                <h6 class="card-title">Cursadas</h6>
                 <div class="form-row">
                   <input type="text" placeholder="Buscador" v-model="searchCursada" class="form-control" />
                 </div>
@@ -131,25 +131,59 @@
                 <h6 class="title">Año y división</h6>
                 <div class="form-group input-group">
                   <multiselect class="col-sm-5" v-model="año" :options="optionsaño" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Años"></multiselect>
-                  <multiselect class="col-sm-7" v-model="division" :options="optionsdivision" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Divisiones"></multiselect>
+                  <multiselect class="col-sm-7" v-model="division" :options="optionsdivision" :disabled= "año ? false : true" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Divisiones"></multiselect>
                 </div>
               </div>
             </article>
-            <!-- <article class="card-group-item">
+            <article class="card-group-item">
+              <div class="card-body" style="background-color:#FAFAFA">
+                <h6 class="title">Dia</h6>
+                <div class="form-group input-group">
+                  <multiselect
+                    class="col-xs-12 px-0"
+                    v-model="diaSeleccionado"
+                    :options="dias"
+                    :searchable="false"
+                    track-by="value"
+                    label="name"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    placeholder="Dia"
+                  ></multiselect>
+                </div>
+              </div>
+            </article>
+            <article class="card-group-item">
               <div class="card-body" style="background-color:#FAFAFA">
                 <h6 class="title">Horario inicio-fin</h6>
                 <div class="form-group input-group">
-                  <input class="col-sm-5 mr-2" type="time" v-model="horarioInicioString" placeholder="Horario inicio">
-                  <input class="col-sm-5 ml-2" type="time" v-model="horarioFinString" placeholder="Horario final">
+                  <multiselect
+                    class="col"
+                    v-model="horarioInicioSeleccionado"
+                    :options="horariosInicio"
+                    :searchable="false"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    placeholder="inicio"
+                  ></multiselect>
+                  <multiselect
+                    class="col"
+                    v-model="horarioFinSeleccionado"
+                    :options="horariosFin"
+                    :searchable="false"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    placeholder="final"
+                  ></multiselect>
                 </div>
               </div>
-            </article> -->
+            </article>
           </div>
         </div>
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
-            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Actas cursada</h1>
-            <router-link :to="{ name: 'AgregarCursada' }" class="btn btn-info">Crear acta cursada</router-link>
+            <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Cursadas</h1>
+            <router-link :to="{ name: 'AgregarCursada' }" class="btn btn-info">Crear cursada </router-link>
           </nav>
           <table class="table">
             <thead>
@@ -214,8 +248,8 @@ export default {
   data() {
     return {
       searchCursada: '',
-      horarioInicioString: '',
-      horarioFinString:'',
+      horarioInicioSeleccionado: '',
+      horarioFinSeleccionado:'',
       horarioInicio: new Date(),
       horarioFin:new Date(),
       año: '',
@@ -227,6 +261,84 @@ export default {
       pages: [],
       divisiones: [],
       Cursadas:[],
+      diaSeleccionado: "",
+      dias: [
+        { name: "Lunes", value: 0 },
+        { name: "Martes", value: 1 },
+        { name: "Miercoles", value: 2 },
+        { name: "Jueves", value: 3 },
+        { name: "Viernes", value: 4 }
+      ],
+      horariosTotales: [
+        "07:45",
+        "08:25",
+        "09:05",
+        "09:20",
+        "10:00",
+        "10:05",
+        "10:40",
+        "10:50",
+        "11:20",
+        "11:30",
+        "12:50",
+        "13:30",
+        "14:10",
+        "14:50",
+        "15:00",
+        "15:40",
+        "15:50",
+        "16:30",
+        "16:35",
+        "17:10",
+        "17:15",
+        "17:55"
+      ],
+      horariosInicio: [
+        "07:45",
+        "08:25",
+        "09:05",
+        "09:45",
+        "10:00",
+        "10:40",
+        "11:20",
+        "11:30",
+        "12:00",
+        "12:10",
+        "13:30",
+        "14:10",
+        "14:50",
+        "15:30",
+        "15:40",
+        "16:20",
+        "16:30",
+        "17:10",
+        "17:15",
+        "17:50",
+        "17:55"
+      ],
+      horariosFin: [
+        "07:45",
+        "08:25",
+        "09:05",
+        "09:45",
+        "10:00",
+        "10:40",
+        "11:20",
+        "11:30",
+        "12:00",
+        "12:10",
+        "13:30",
+        "14:10",
+        "14:50",
+        "15:30",
+        "15:40",
+        "16:20",
+        "16:30",
+        "17:10",
+        "17:15",
+        "17:50",
+        "17:55"
+      ],
       dismissSecs: 4,
       SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
       ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
@@ -334,6 +446,19 @@ export default {
     filteredDivisiones() {
       this.page = 1;
       this.setDivisiones();
+    },
+    horarioInicioSeleccionado: function() {
+      this.horariosFin = this.horariosTotales;
+      this.horariosFin = this.horariosFin.slice(
+        this.horariosFin.indexOf(this.horarioInicioSeleccionado) + 1
+      );
+    },
+    horarioFinSeleccionado: function() {
+      this.horariosInicio = this.horariosTotales;
+      this.horariosInicio = this.horariosInicio.slice(
+        0,
+        this.horariosInicio.indexOf(this.horarioFinSeleccionado)
+      );
     }
   }
 };

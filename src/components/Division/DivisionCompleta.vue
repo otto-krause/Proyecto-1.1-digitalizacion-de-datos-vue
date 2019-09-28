@@ -254,9 +254,9 @@
               <nav class="navbar">
                 <h4 class="card-title">Alumnos</h4>
                 <div class="form-group ml-auto col-sm-7 col-lg-4 form-inline">
-                  <input class="col mr-3 form-control" type="number" placeholder="Buscador" v-model="searchAlumnoAgregar"/>
+                  <input class="col mr-3 form-control" type="number" placeholder="DNI alumno" v-model="searchAlumnoAgregar"/>
                   <button
-                  :disabled="searchAlumnoAgregar ? false : true"
+                  :disabled="searchAlumnoAgregar.length > 7 ? false : true"
                   type="button"
                   class="col btn btn-info"
                   v-on:click="GetAlumno"

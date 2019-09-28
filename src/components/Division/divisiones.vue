@@ -131,7 +131,7 @@
                 <h6 class="title">Año y division</h6>
                 <div class="form-group input-group">
                   <multiselect class="col-sm-5" v-model="año" :options="optionsaño" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Años"></multiselect>
-                  <multiselect class="col-sm-7" v-model="division" :options="optionsdivision" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Divisiones"></multiselect>
+                  <multiselect class="col-sm-7" v-model="division" :options="optionsdivision" :disabled= "año ? false : true" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Divisiones"></multiselect>
                 </div>
               </div>
             </article>

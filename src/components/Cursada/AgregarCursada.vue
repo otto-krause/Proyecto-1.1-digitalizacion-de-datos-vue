@@ -42,21 +42,6 @@
                 </select>
                 </div>
               </div>
-              <!-- <article class="card-group-item">
-                <label class="input-group-text text-center">Dia</label>
-                <div class="form-group input-group">
-                  <multiselect v-model="diaSeleccionado" :options="dias" track-by="value" label="name" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Dias"></multiselect>
-                </div>
-              </article>
-              <article class="card-group-item">
-                <label class="input-group-text text-center">Horario</label>
-                <div class="form-group input-group">
-                  <label class="input-group-text text-center">Inicio</label>
-                  <input class="col-sm-4" type="time" v-model="horarioInicioString" placeholder="Horario inicio">
-                  <label class="input-group-text text-center">Fin</label>
-                  <input class="col-sm-4" type="time" v-model="horarioFinString" placeholder="Horario final">
-                </div>
-              </article> -->
               <div class="form-group">
                 <button class="btn btn-danger btn-block" type="submit" >Crear acta cursada</button>
               </div>

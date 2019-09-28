@@ -92,13 +92,13 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de Alta</label>
                 </div>
-                <input type="date" v-model="fechaAlta" name="fechaAlta" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha de alta del alumno')" oninput="setCustomValidity('')"/>
+                <input type="date" v-model="fechaAlta" name="fechaAlta" class="form-control" min='1970-01-01' max='2100-01-01' required oninvalid="this.setCustomValidity('Debe ingrese una fecha mayor a 01/01/1970')" oninput="setCustomValidity('')"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de cumpleaños</label>
                 </div>
-                <input type="date" v-model="fechaNacimiento" name="fechaNacimiento" class="form-control" />
+                <input type="date" v-model="fechaNacimiento" name="fechaNacimiento" class="form-control" min='1970-01-01' max='2100-01-01' />
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">

@@ -12,43 +12,34 @@
           <div class="card-body">
             <h3 class="card-title text-center mb-4">Nueva division</h3>
             <form autocomplete="off" v-on:submit.prevent="PostNewDivision">
+              <div class="form-group">
+                  <label class="input-group-text text-center">Especialidades</label>
+                <div>
+                  <multiselect v-model="especialidadSeleccionada" placeholder="Lista de especialidades" :searchable="true" :options="especialidades" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                </div>
+              </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Año</label>
                 </div>
-                <input
-                  type="text"
-                  name="año"
-                  class="form-control"
-                  placeholder="Año"
-                  v-model="año"
-                  min="1" max="6"
-                  required
-                  oninvalid="this.setCustomValidity('Ingrese el Año (1ro a 6to)')"
-                  oninput="setCustomValidity('')"
-                />
+                <multiselect :disabled= "especialidadSeleccionada ? false : true" v-model="añoSeleccionado" :options="años" class="form-control" :allow-empty="false" :close-on-select="true" :show-labels="false" placeholder="Año"></multiselect>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                   <label class="input-group-text">Division</label>
                 </div>
                 <input
-                  type="text"
+                  :disabled= "especialidadSeleccionada ? false : true"
+                  type="number"
                   name="numDivision"
                   class="form-control"
                   placeholder="Division"
                   v-model="numDivision"
                   min="1"
                   required
-                  oninvalid="this.setCustomValidity('Ingrese el numero de division')"
+                  oninvalid="this.setCustomValidity('Debe ingresar una division mayor o igual a 1')"
                   oninput="setCustomValidity('')"
                 />
-              </div>
-              <div class="form-group">
-                  <label class="input-group-text text-center">Especialidades</label>
-                <div>
-                  <multiselect v-model="especialidadSeleccionada" placeholder="Lista de especialidades" :searchable="true" :options="especialidades" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
-                </div>
               </div>
               <div class="form-group">
                   <label class="input-group-text text-center">Turno</label>
@@ -66,9 +57,11 @@
                   name="cicloLectivo"
                   class="form-control"
                   placeholder="Ciclo Lectivo"
+                  min="1970"
+                  max="2100"
                   v-model="cicloLectivo"
                   required
-                  oninvalid="this.setCustomValidity('Ingrese el Ciclo lectivo')"
+                  oninvalid="this.setCustomValidity('Debe ingresar un ciclo lectivo valido')"
                   oninput="setCustomValidity('')"
                 />
               </div>
@@ -105,7 +98,8 @@ export default {
   data() {
     return {
       especialidad: '',
-      año: '',
+      añoSeleccionado: '',
+      años:[],
       numDivision: '',
       cicloLectivo: '',
       turnoSeleccionado:'',
@@ -143,7 +137,7 @@ export default {
       await axios.post("/api/division/add", {
           dniPreceptor: this.preceptorSeleccionado.dniAutoridad,
           especialidad: this.especialidadSeleccionada,
-          año: this.año,
+          año: this.añoSeleccionado,
           turno: this.turnoSeleccionado.value,
           numDivision: this.numDivision,
           cicloLectivo: this.cicloLectivo,
@@ -151,6 +145,17 @@ export default {
         .then(res=>{this.$router.push({ name: 'Divisiones', params: {SuccessCountDownCreationProp: 4 }})})
         .catch(err=>{this.$router.push({ name: 'Divisiones', params: {ErrorCountDownCreationProp: 6 }})})
 
+      }
+    }
+  },
+  watch:{
+    especialidadSeleccionada: function(){
+      if(this.especialidadSeleccionada == 'Ciclo Básico'){
+        this.añoSeleccionado = 1;
+        this.años = [1,2];
+      }else{
+        this.añoSeleccionado = 3;
+        this.años = [3,4,5,6];
       }
     }
   }

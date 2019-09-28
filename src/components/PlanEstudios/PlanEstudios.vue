@@ -66,6 +66,7 @@
                     <label>Desde</label>
                     <input
                       type="date"
+                      min='1970-01-01' max='2100-01-01'
                       v-model="fechaInicio"
                       id="fechaInicio"
                       class="form-control"
@@ -73,6 +74,7 @@
                     <label>Hasta</label>
                     <input
                       type="date"
+                      min='1970-01-01' max='2100-01-01'
                       v-model="fechaFin"
                       id="fechaFin"
                       class="form-control"
