@@ -6,26 +6,6 @@
         <router-link to="/Autoridades" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
-    <b-alert
-      :show="SuccessCountDownEdit"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>La autoridad se modifico correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownEdit"
-      dismissible
-      variant="warning"
-      @dismissed="ErrorCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>La autoridad no pudo ser modificada</p>
-    </b-alert>
     <div
       class="modal fade deleteModal"
       id="myModal"
@@ -141,23 +121,14 @@ import axios from "axios";
 export default {
   name: "AutoridadCompleta",
   props: [
-    "autoridad",
-    "roles",
-    "SuccessCountDownEditProp",
-    "ErrorCountDownEditProp"
+    "autoridad","roles","title","message","type","timer"
   ],
   components: {
     Navigation
   },
   data() {
     return {
-      rolesMostrar: [],
-      SuccessCountDownEdit: this.SuccessCountDownEditProp
-        ? this.SuccessCountDownEditProp
-        : 0,
-      ErrorCountDownEdit: this.ErrorCountDownEditProp
-        ? this.ErrorCountDownEditProp
-        : 0
+      rolesMostrar: []
     };
   },
   mounted() {
@@ -165,6 +136,9 @@ export default {
       this.$router.push({ name: "Autoridades" });
     }
     this.SetRoles();
+    if(this.timer){
+      this.makeToast(this.title,this.timer,this.type,this.message)
+    }
   },
   methods: {
     SetRoles() {
@@ -181,18 +155,25 @@ export default {
         .then(res => {
           this.$router.push({
             name: "Autoridades",
-            params: { SuccessCountDownDeletionProp: 4 }
+            params: { title:"Autoridad eliminada",timer: 4,type:"success",message:"La autoridad ha sido eliminada correctamente" }
           });
         })
         .catch(err => {
           this.$router.push({
             name: "Autoridades",
-            params: { ErrorCountDownDeletionProp: 6 }
+            params: { title:"Error",timer: 6,type:"danger",message:"La autoridad no ha podido ser eliminada" }
           });
         });
     },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };

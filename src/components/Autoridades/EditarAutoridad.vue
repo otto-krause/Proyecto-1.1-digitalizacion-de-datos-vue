@@ -202,11 +202,10 @@ export default {
           await axios.get("/api/autoridad/" + this.dniAutoridad)
           .then(result =>{
             this.autoridadesReenviar = result.data[0]
-            this.$router.push({ name: 'AutoridadCompleta', params: {autoridad:this.autoridadesReenviar,roles:rolesReenviar, SuccessCountDownEditProp: 6 }})
+            this.$router.push({ name: 'AutoridadCompleta', params: {title:"Autoridad modificada",timer: 6,type:"success",message:"La autoridad se modifico correctamente",autoridad:this.autoridadesReenviar,roles:rolesReenviar}})
           })
         })
-        .catch(err=>{this.$router.push({ name: 'AutoridadCompleta', params: {autoridad,roles:rolesReenviar, ErrorCountDownEditProp: 7 }})})
-
+        .catch(err=>{this.$router.push({ name: 'AutoridadCompleta', params: {title:"Error",timer: 7,type:"danger",message:"La autoridad no pudo ser modificada",autoridad,roles:rolesReenviar}})})
       }
     },
     onTouch () {

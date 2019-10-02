@@ -186,14 +186,24 @@ export default {
           fichaMedica: this.fichaMedica,
           cargos: this.cargos
         })
-        .then(res=>{this.$router.push({ name: 'Autoridades', params: {SuccessCountDownCreationProp: 4 }})})
+        .then(res=>{this.$router.push({ name: 'Autoridades', params: {title:"Exito",timer: 5,type:"success",message:"La autoridad se ha creado correctamente"}})})
         .catch(err=>{
           if(err.message.includes('409')){
-            this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationRepeatedProp: 7 }})
+            this.makeToast('Autoridad existente',6,'warning',"(DNI Existente) - La autoridad ya existe. Debe darla de baja para registrarla nuevamente");
           }else
-            this.$router.push({ name: 'Autoridades', params: {ErrorCountDownCreationProp: 6 }})
+            this.makeToast('Error',6,'danger',"La autoridad no ha podido ser creada. Posiblemente haya un problema con los datos ingresados");
           })
       }
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };
