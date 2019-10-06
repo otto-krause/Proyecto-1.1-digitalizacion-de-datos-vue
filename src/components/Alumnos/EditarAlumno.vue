@@ -167,10 +167,10 @@ export default {
           await axios.get("/api/alumno/" + this.dniAlumno)
           .then(result =>{
             this.alumnoReenviar = result.data[0]
-            this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumnoReenviar,SuccessCountDownEditProp: 6 }})
+            this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumnoReenviar,title:"Alumno modificado",timer: 6,type:"success",message:"El alumno se modifico correctamente" }})
           })
         })
-        .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,ErrorCountDownEditProp: 7 }})})
+        .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,title:"Error",timer: 7,type:"danger",message:"El alumno no pudo ser modificado" }})})
     }
   }
 };

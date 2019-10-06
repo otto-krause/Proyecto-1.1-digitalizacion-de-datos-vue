@@ -132,8 +132,8 @@ export default {
         dniContacto: this.dniContacto,
         relacion: this.relacion,
       })
-      .then(res=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,SuccessCountDownCreationProp: 4 }})})
-      .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,ErrorCountDownCreationProp: 6 }})})
+      .then(res=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,title:"Contacto creado",timer: 4,type:"success",message:"El contacto se ha creado correctamente" }})})
+      .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno,title:"Error",timer: 6,type:"danger",message:"El contacto no ha podido ser creado. Posiblemente haya un problema con los datos ingresados"  }})})
     }
   }
 };

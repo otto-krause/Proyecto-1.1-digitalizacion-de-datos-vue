@@ -143,9 +143,9 @@ export default {
         dniContacto:this.dniContacto
       })
       .then(async(res)=>{
-        this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,SuccessCountDownEditContactoProp: 4 }})
+        this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,title:"Contacto modificado",timer: 4,type:"success",message:"El contacto se ha modificado correctamente" }})
       })
-      .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,ErrorCountDownEditContactoProp: 6 }})})
+      .catch(err=>{this.$router.push({ name: 'AlumnoCompleto', params: {alumno:this.alumno,title:"Error",timer: 6,type:"danger",message:"El contacto no ha podido ser modificado"}})})
     }
   }
 };

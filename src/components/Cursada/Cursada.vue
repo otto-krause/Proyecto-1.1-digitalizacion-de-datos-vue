@@ -356,6 +356,9 @@ export default {
   },
   mounted() {
     this.GetCursadas()
+    if(this.timer){
+      this.makeToast(this.type);
+    }
   },
   beforeUpdate(){
     this.horarioInicio = new Date().setHours(this.horarioInicioString.split(':')[0],this.horarioInicioString.split(':')[1])
@@ -433,6 +436,16 @@ export default {
       for (let i = 1; i <= numberOfDivisiones; i++) {
         this.pages.push(i);
       }
+    },
+    makeToast(variant = null) {
+      this.$bvToast.toast(this.message, {
+        title: this.title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay: this.timer * 1000,
+        appendToast: true
+      })
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;

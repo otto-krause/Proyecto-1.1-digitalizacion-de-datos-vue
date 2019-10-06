@@ -130,6 +130,9 @@ export default {
   },
   mounted() {
     this.GetActas()
+    if(this.timer){
+      this.makeToast(this.type);
+    }
   },
   computed: {
     filteredActas() {
@@ -162,6 +165,16 @@ export default {
       for (let i = 1; i <= numberOfActas; i++) {
         this.pages.push(i);
       }
+    },
+    makeToast(variant = null) {
+      this.$bvToast.toast(this.message, {
+        title: this.title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay: this.timer * 1000,
+        appendToast: true
+      })
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;

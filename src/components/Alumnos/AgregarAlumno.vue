@@ -157,13 +157,23 @@ export default {
         fechaNacimiento: this.fechaNacimiento,
         repetidor: this.repetidor,
       })
-      .then(res=>{this.$router.push({ name: 'Alumnos', params: {SuccessCountDownCreationProp: 4 }})})
+      .then(res=>{this.$router.push({ name: 'Alumnos', params: {title:"Alumno creado",timer: 4,type:"success",message:"El alumno se ha creado correctamente" }})})
       .catch(err=>{
         if(err.message.includes('409')){
-          this.$router.push({ name: 'Alumnos', params: {ErrorCountDownCreationRepeatedProp: 6 }})
+          this.makeToast('Alumno existente',6,'warning',"(DNI Existente) - El alumno ya existe. Debe darlo de baja para registrarlo nuevamente");
         }else
-          this.$router.push({ name: 'Alumnos', params: {ErrorCountDownCreationProp: 6 }})
+          this.makeToast('Error',6,'danger',"El alumno no ha podido ser creado. Posiblemente haya un problema con los datos ingresados");
         })
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };

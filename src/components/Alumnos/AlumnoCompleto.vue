@@ -60,80 +60,6 @@
         </div>
       </div>
     </div>
-    <b-alert
-          :show="SuccessCountDownEditContacto"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownEditContacto =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto se ha modificado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownEditContacto"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownEditContacto =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto no ha podido ser modificado</p>
-        </b-alert>
-    <b-alert
-          :show="SuccessCountDownDeletion"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownDeletion =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto se ha eliminado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownDeletion"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownDeletion =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto no ha podido ser eliminado</p>
-        </b-alert>
-    <b-alert
-          :show="SuccessCountDownCreation"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownCreation =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto se ha creado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownCreation"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownCreation = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El contacto no ha podido ser creado. Posiblemente haya un problema con los datos ingresados</p>
-        </b-alert>
-    <b-alert
-          :show="SuccessCountDownEdit"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownEdit =0"
-          @dismiss-count-down="countDownChanged"
-          class="col-md-10 col-lg-7 mx-auto mt-3"
-        >
-          <p>El alumno se modifico correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownEdit"
-          dismissible
-          variant="warning"
-          @dismissed="ErrorCountDownEdit =0"
-          @dismiss-count-down="countDownChanged"
-          class="col-md-10 col-lg-7 mx-auto mt-3"
-        >
-          <p>El alumno no pudo ser modificado</p>
-        </b-alert>
     <div class="row">
       <div class="col col-sm-6 mx-5">
         <div class="card mt-5">
@@ -271,7 +197,7 @@ import axios from "axios";
 
 export default {
   name: "AlumnoCompleto",
-  props: ["alumno","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp","SuccessCountDownEditContactoProp","ErrorCountDownEditContactoProp"],
+  props: ["alumno","title","message","type","timer"],
   components: {
     Navigation
   },
@@ -279,14 +205,6 @@ export default {
     return {
       contactosAlumno: [],
       contactoSeleccionado: {},
-      SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
-      ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
-      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
-      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
-      SuccessCountDownEditContacto:this.SuccessCountDownEditContactoProp ? this.SuccessCountDownEditContactoProp : 0,
-      ErrorCountDownEditContacto:this.ErrorCountDownEditContactoProp ? this.ErrorCountDownEditContactoProp : 0,
-      SuccessCountDownDeletion:0,
-      ErrorCountDownDeletion:0
     };
   },
   mounted() {
@@ -294,6 +212,9 @@ export default {
       this.$router.push({ name: "Alumnos" });
     }
     this.GetContactos();
+    if(this.timer){
+      this.makeToast(this.title,this.timer,this.type,this.message)
+    }
   },
   methods: {
     GetContactos() {
@@ -312,13 +233,13 @@ export default {
         .then(res => {
           this.$router.push({
             name: "Alumnos",
-            params: { SuccessCountDownDeletionProp: 4 }
+            params: { title:"Alumno eliminado",timer: 4,type:"success",message:"El alumno ha sido eliminado correctamente" }
           });
         })
         .catch(err => {
           this.$router.push({
             name: "Alumnos",
-            params: { ErrorCountDownDeletionProp: 6 }
+            params: { title:"Error",timer: 6,type:"danger",message:"El alumno no ha podido ser eliminado" }
           });
         });
     },
@@ -329,13 +250,23 @@ export default {
           idContacto: this.contactoSeleccionado.idContacto
         })
         .then(res => {
-          this.SuccessCountDownDeletion = 4
+          this.makeToast('Contacto eliminado',4,'success',"El contacto se ha eliminado correctamente");
           this.GetContactos();
         })
         .catch(err => {
-          this.ErrorCountDownDeletion = 6
+          this.makeToast('Error',6,'danger',"El contacto no ha podido ser eliminado");
           this.GetContactos();
         });
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
