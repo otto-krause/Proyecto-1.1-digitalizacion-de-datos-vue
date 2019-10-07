@@ -125,10 +125,10 @@ export default {
         .then(async(res)=>{
           await axios.get("/api/materia/" + this.materia.idMateria)
           .then(result =>{
-            this.$router.push({ name: 'MateriaCompleta', params: {materia:result.data[0],SuccessCountDownEditProp: 6 }})
+            this.$router.push({ name: 'MateriaCompleta', params: {materia:result.data[0],title:"Materia modificada",timer: 4,type:"success",message:"La materia se modifico correctamente" }})
           })
         })
-        .catch(err=>{this.$router.push({ name: 'MateriaCompleta', params: {materia:this.materia,ErrorCountDownEditProp: 7 }})})
+        .catch(err=>{this.$router.push({ name: 'MateriaCompleta', params: {materia:this.materia,title:"Error",timer: 6,type:"danger",message:"La materia no pudo ser modificado" }})})
       }
     }
   }

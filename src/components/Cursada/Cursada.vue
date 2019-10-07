@@ -2,51 +2,6 @@
   <div>
     <navigation />
     <div class="container-fluid">
-      <b-alert
-          :show="ErrorCountDownCreationRepeated"
-          dismissible
-          variant="warning"
-          @dismissed="ErrorCountDownCreationRepeated =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>(Cursada Existente) - La cursada ya existe. Debe darla de baja para registrarla nuevamente</p>
-        </b-alert>
-        <b-alert
-          :show="SuccessCountDownCreation"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownCreation =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La cursada se ha creado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownCreation"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownCreation = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La cursada no pudo ser creada. Posiblemente haya un problema con los datos ingresados</p>
-        </b-alert>
-        <b-alert
-          :show="SuccessCountDownDeletion"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownDeletion = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La cursada ha sido eliminada correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownDeletion"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownDeletion = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La cursada no ha podido ser eliminada</p>
-        </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
@@ -240,7 +195,7 @@ import axios from "axios";
 
 export default {
   name: "Cursada",
-  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp ","ErrorCountDownCreationRepeatedProp"],
+  props: ["title","message","type","timer"],
   components: {
     Navigation,
     Multiselect
@@ -340,11 +295,6 @@ export default {
         "17:55"
       ],
       dismissSecs: 4,
-      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
-      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
-      SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
-      ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
-      ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0,
       computacion:false,
       electronica:false,
       electricidad:false,
@@ -446,9 +396,6 @@ export default {
         autoHideDelay: this.timer * 1000,
         appendToast: true
       })
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
     }
   },
   watch: {

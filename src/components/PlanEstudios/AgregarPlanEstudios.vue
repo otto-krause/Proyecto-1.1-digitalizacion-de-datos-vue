@@ -77,13 +77,23 @@ export default {
         descripcion: this.descripcion,
         vigenciaDesde: this.vigenciaDesde
       })
-      .then(res=>{this.$router.push({ name: 'PlanEstudios', params: {SuccessCountDownCreationProp: 4 }})})
+      .then(res=>{this.$router.push({ name: 'PlanEstudios', params: {title:"Plan de estudios creado",timer: 4,type:"success",message:"El plan de estudios se ha creado correctamente" }})})
       .catch(err=>{
         if(err.message.includes('409')){
-          this.$router.push({ name: 'PlanEstudios', params: {ErrorCountDownCreationRepeatedProp: 6 }})
+          this.makeToast('Plan de estudios existente',6,'warning',"(resolucion Existente) - El plan de estudios ya existe.");
         }else
-          this.$router.push({ name: 'PlanEstudios', params: {ErrorCountDownCreationProp: 6 }})
+          this.makeToast('Error',6,'danger',"El plan de estudios no ha podido ser creado.");
         })
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };

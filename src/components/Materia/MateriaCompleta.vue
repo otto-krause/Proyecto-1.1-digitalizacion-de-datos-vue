@@ -33,62 +33,6 @@
         </div>
       </div>
     </div>
-    <b-alert
-      :show="SuccessCountDownDeletion"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownDeletion =0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>La materia se ha eliminado correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownDeletion"
-      dismissible
-      variant="danger"
-      @dismissed="ErrorCountDownDeletion =0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>La materia no ha podido ser eliminado</p>
-    </b-alert>
-    <b-alert
-      :show="SuccessCountDownCreation"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownCreation =0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>La materia se ha creado correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownCreation"
-      dismissible
-      variant="danger"
-      @dismissed="ErrorCountDownCreation = 0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>La materia no ha podido ser creado. Posiblemente haya un problema con los datos ingresados</p>
-    </b-alert>
-    <b-alert
-      :show="SuccessCountDownEdit"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>La materia se modifico correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownEdit"
-      dismissible
-      variant="warning"
-      @dismissed="ErrorCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>La materia no pudo ser modificado</p>
-    </b-alert>
     <div class="row">
       <div class="col-md-8 col-lg-5 mx-auto">
         <div class="card mt-4">
@@ -144,7 +88,7 @@ import axios from "axios";
 
 export default {
   name: "MateriaCompleta",
-  props: ["materia","SuccessCountDownEditProp","ErrorCountDownEditProp","SuccessCountDownCreationProp","ErrorCountDownCreationProp"],
+  props: ["materia","title","message","type","timer"],
   components: {
     Navigation
   },
@@ -164,6 +108,9 @@ export default {
       this.$router.push({ name: "Materias" });
     }
     this.GetResolucion();
+    if(this.timer){
+      this.makeToast(this.title,this.timer,this.type,this.message)
+    }
   },
   methods: {
     GetResolucion() {
@@ -180,18 +127,25 @@ export default {
         .then(res => {
           this.$router.push({
             name: "Materias",
-            params: { SuccessCountDownDeletionProp: 4 }
+            params: { title:"Materia eliminada",timer: 4,type:"success",message:"La materia ha sido eliminada correctamente" }
           });
         })
         .catch(err => {
           this.$router.push({
             name: "Materias",
-            params: { ErrorCountDownDeletionProp: 6 }
+            params: { title:"Error",timer: 6,type:"danger",message:"La materia no ha podido ser eliminada" }
           });
         });
     },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };

@@ -106,8 +106,8 @@ export default {
       turnos:[{ name: 'Mañana', value: 0 },{ name: 'Tarde', value: 1 }],
       especialidadSeleccionada:'',
       especialidades:['Ciclo Básico','Computación','Electrónica','Electricidad','Construcciones','Mecánica','Química'],
-      preceptorSeleccionado:[''],
-      preceptores: [''],
+      preceptorSeleccionado:[{dniAutoridad: '', nombre: '', apellido: 'No seleccionar Preceptor'}],
+      preceptores: [{dniAutoridad: '', nombre: '', apellido: 'No seleccionar Preceptor'}],
       isInvalid: false
     };
   },
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     LabelPreceptor({dniAutoridad,nombre,apellido}){
-      return dniAutoridad + ` - ` + nombre + ', ' + apellido;
+      return dniAutoridad + ` - ` + nombre + ' ' + apellido;
     },
     validar () {
       if (!this.turnoSeleccionado){
@@ -142,10 +142,24 @@ export default {
           numDivision: this.numDivision,
           cicloLectivo: this.cicloLectivo,
         })
-        .then(res=>{this.$router.push({ name: 'Divisiones', params: {SuccessCountDownCreationProp: 4 }})})
-        .catch(err=>{this.$router.push({ name: 'Divisiones', params: {ErrorCountDownCreationProp: 6 }})})
-
+        .then(res=>{this.$router.push({ name: 'Divisiones', params: {title:"Division creada",timer: 4,type:"success",message:"La division se ha creado correctamente"}})})
+        .catch(err=>{
+          if(err.message.includes('409')){
+            this.makeToast('Division existente',5,'warning',"(division Existente) - La division ya existe. Debe darla de baja para registrarla nuevamente");
+          }else
+            this.makeToast('Error',6,'danger',"La division no ha podido ser creada.");
+          })
       }
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   },
   watch:{

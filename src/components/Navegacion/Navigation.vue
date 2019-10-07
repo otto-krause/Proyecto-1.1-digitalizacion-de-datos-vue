@@ -25,7 +25,7 @@
           <router-link to="/" class="nav-link">Notas</router-link>
         </li>
       </ul>
-      <ul class="navbar-nav mr-5">
+      <ul class="navbar-nav mr-2">
         <li class="nav-item dropdown mr-5">
           <a
             class="nav-link dropdown-toggle"
@@ -51,6 +51,14 @@
             <div class="dropdown-divider"></div>
             <router-link to="/ActasPrevia" class="dropdown-item">Actas de previas</router-link>
           </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-5">
+        <li class="nav-item active">
+            <router-link to="/" class="nav-link">Maikhol Sozaki</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/" class="nav-link">Log Out</router-link>
         </li>
       </ul>
     </div>

@@ -89,10 +89,10 @@ export default {
         .then(async(res)=>{
           await axios.get("/api/plan_estudios/" + this.resolucion)
           .then(result =>{
-            this.$router.push({ name: 'PlanEstudioCompleto', params: {PlanEstudio:result.data[0],SuccessCountDownEditProp: 6 }})
+            this.$router.push({ name: 'PlanEstudioCompleto', params: {PlanEstudio:result.data[0],title:"Plan de estudios modificado",timer: 4,type:"success",message:"El plan de estudio se modifico correctamente" }})
           })
         })
-        .catch(err=>{this.$router.push({ name: 'PlanEstudioCompleto', params: {PlanEstudio:this.PlanEstudio,ErrorCountDownEditProp: 7 }})})
+        .catch(err=>{this.$router.push({ name: 'PlanEstudioCompleto', params: {PlanEstudio:this.PlanEstudio,title:"Error",timer: 6,type:"danger",message:"El plan de estudio no pudo ser modificado" }})})
     }
   }
 };

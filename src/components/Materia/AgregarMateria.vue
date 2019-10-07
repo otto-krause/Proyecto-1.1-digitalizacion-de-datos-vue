@@ -117,14 +117,24 @@ export default {
         cantHoras: this.cantHoras,
         resoluciones: this.Selectedresoluciones,
       })
-      .then(res=>{this.$router.push({ name: 'Materias', params: {SuccessCountDownCreationProp: 4 }})})
+      .then(res=>{this.$router.push({ name: 'Materias', params: {title:"Materia creada",timer: 4,type:"success",message:"La materia se ha creado correctamente" }})})
       .catch(err=>{
         if(err.message.includes('409')){
-          this.$router.push({ name: 'Materias', params: {ErrorCountDownCreationRepeatedProp: 6 }})
+          this.makeToast('Materia existente',6,'warning',"(Materia Existente) - La materia ya existe.");
         }else
-          this.$router.push({ name: 'Materias', params: {ErrorCountDownCreationProp: 6 }})
+          this.makeToast('Error',6,'danger',"La materia no ha podido ser creada.");
         })
       }
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };

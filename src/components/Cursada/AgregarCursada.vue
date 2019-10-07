@@ -197,17 +197,24 @@ export default {
           idMateria: this.materiaSeleccionada.idMateria,
           dniProfesor: this.profesorSeleccionado.dniAutoridad,
           tomarLista: this.puedeTomarLista == 'true',
-          // dia: this.diaSeleccionado.value,
-          // entrada: new Date().setHours(this.horarioInicioString.split(':')[0],this.horarioInicioString.split(':')[1]),
-          // salida: new Date().setHours(this.horarioFinString.split(':')[0],this.horarioFinString.split(':')[1])
         })
-        .then(res=>{this.$router.push({ name: 'Cursada', params: {SuccessCountDownCreationProp: 4 }})})
+        .then(res=>{this.$router.push({ name: 'Cursada', params: {title:"Cursada creada",timer: 4,type:"success",message:"La cursada se ha creado correctamente" }})})
         .catch(err=>{
           if(err.message.includes('409')){
-            this.$router.push({ name: 'Cursada', params: {ErrorCountDownCreationRepeatedProp: 7 }})
+            this.makeToast('Cursada existente',4,'warning',"(Cursada Existente) - La cursada ya existe. Debe darla de baja para registrarla nuevamente");
           }else
-            this.$router.push({ name: 'Cursada', params: {ErrorCountDownCreationProp: 6 }})
+            this.$router.push({ name: 'Cursada', params: {title:"Error",timer: 6,type:"danger",message:"La cursada no pudo ser creada. Posiblemente haya un problema con los datos ingresados" }})
           })
+    },
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   },
   watch: {

@@ -267,9 +267,6 @@ export default {
         autoHideDelay:timer * 1000,
         appendToast: true
       })
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
     }
   }
 };

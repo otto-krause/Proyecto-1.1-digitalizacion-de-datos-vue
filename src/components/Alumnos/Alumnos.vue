@@ -171,9 +171,6 @@ export default {
         autoHideDelay: this.timer * 1000,
         appendToast: true
       })
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
     }
   },
   watch: {

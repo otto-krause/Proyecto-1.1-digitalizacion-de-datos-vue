@@ -2,51 +2,6 @@
   <div>
     <navigation />
     <div class="container-fluid">
-      <b-alert
-          :show="ErrorCountDownRol"
-          dismissible
-          variant="warning"
-          @dismissed="ErrorCountDownRol =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La autoridad no puede ser creada porque no existen roles para asignarle. Cree un rol para poder continuar</p>
-        </b-alert>
-        <b-alert
-          :show="SuccessCountDownCreation"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownCreation =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La division se ha creado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownCreation"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownCreation = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La division no ha podido ser creada. Posiblemente haya un problema con los datos ingresados o esten duplicados</p>
-        </b-alert>
-        <b-alert
-          :show="SuccessCountDownDeletion"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownDeletion = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La division ha sido eliminada correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownDeletion"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownDeletion = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>La division no ha podido ser eliminada</p>
-        </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
@@ -199,7 +154,7 @@ import axios from "axios";
 
 export default {
   name: "Divisiones",
-  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
+  props: ["title","message","type","timer"],
   components: {
     Navigation,
     Multiselect
@@ -216,11 +171,6 @@ export default {
       pages: [],
       divisiones: [],
       dismissSecs: 4,
-      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
-      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
-      SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
-      ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
-      ErrorCountDownRol:0,
       computacion:false,
       electronica:false,
       electricidad:false,
@@ -232,6 +182,9 @@ export default {
   },
   mounted() {
     this.GetDivisiones()
+    if(this.timer){
+      this.makeToast(this.type);
+    }
   },
   computed: {
     filteredDivisiones() {
@@ -304,8 +257,15 @@ export default {
         this.pages.push(i);
       }
     },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    makeToast(variant = null) {
+      this.$bvToast.toast(this.message, {
+        title: this.title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay: this.timer * 1000,
+        appendToast: true
+      })
     }
   },
   watch: {

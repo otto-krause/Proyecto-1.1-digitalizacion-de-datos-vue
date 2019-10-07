@@ -6,64 +6,6 @@
         <router-link to="/Divisiones" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
-    <b-alert
-      :show="ErrorCountDownAlumnoRepetido"
-      dismissible
-      variant="info"
-      @dismissed="ErrorCountDownAlumnoRepetido =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>El alumno ya se encuentra en la division</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownAlumno"
-      dismissible
-      variant="danger"
-      @dismissed="ErrorCountDownAlumno =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>El alumno no pudo ser encontrado</p>
-    </b-alert>
-    <b-alert
-      :show="SuccessCountDownEdit"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>La division se modifico correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownEdit"
-      dismissible
-      variant="warning"
-      @dismissed="ErrorCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>La division no pudo ser modificada</p>
-    </b-alert>
-    <b-alert
-      :show="SuccessCountDownDeletion"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownDeletion =0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>La division se ha eliminado correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownDeletion"
-      dismissible
-      variant="danger"
-      @dismissed="ErrorCountDownDeletion =0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>La division no ha podido ser eliminado</p>
-    </b-alert>
     <div
       class="modal fade DeleteDivision"
       id="DeleteDivision"
@@ -296,25 +238,13 @@ import axios from "axios";
 
 export default {
   name: "DivisionCompleta",
-  props: [
-    "division",
-    "SuccessCountDownEditProp",
-    "ErrorCountDownEditProp",
-    "SuccessCountDownDeletionProp",
-    "ErrorCountDownDeletionProp"
-  ],
+  props: ["division","title","message","type","timer"],
   components: {
     Navigation
   },
   data() {
     return {
       rolesMostrar: [],
-      SuccessCountDownEdit: this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
-      ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
-      SuccessCountDownDeletion:0,
-      ErrorCountDownDeletion:0,
-      ErrorCountDownAlumno:0,
-      ErrorCountDownAlumnoRepetido:0,
       preceptor:{},
       alumnos: [],
       searchAlumnoAgregar:'',
@@ -327,6 +257,9 @@ export default {
     }
     this.GetAlumnos();
     this.GetPreceptor();
+    if(this.timer){
+      this.makeToast(this.title,this.timer,this.type,this.message)
+    }
   },
   methods: {
     GetAlumnos() {
@@ -351,13 +284,13 @@ export default {
         .then(res => {
           this.$router.push({
             name: "Divisiones",
-            params: { SuccessCountDownDeletionProp: 4 }
+            params: { title:"Division eliminada",timer: 4,type:"success",message:"La division ha sido eliminada correctamente" }
           });
         })
         .catch(err => {
           this.$router.push({
             name: "Divisiones",
-            params: { ErrorCountDownDeletionProp: 6 }
+            params: { title:"Error",timer: 6,type:"danger",message:"La division no ha podido ser eliminada" }
           });
         });
     },
@@ -368,17 +301,19 @@ export default {
         dniAlumno: this.AlumnoAgregar.dniAlumno
       })
       .then(res=>{
-        //SuccessCountDownCreation = 4;
+        this.makeToast('Alumno agregado',4,'success',"El alumno ha sido agregado a la division");
         this.GetAlumnos();
       })
-      .catch(err=>{})
+      .catch(err=>{
+        this.makeToast('Error',6,'danger',"El alumno no ha podido ser agregado.");
+      })
     },
     GetAlumno(){
       axios.get('/api/alumno/' + this.searchAlumnoAgregar)
       .then(res => {
         this.AlumnoAgregar = res.data[0];
         if(this.AlumnoAgregar.dniAlumno == null){
-          this.ErrorCountDownAlumno = 6;
+          this.makeToast('Alumno no encontrado',6,'warning',"El alumno no pudo ser encontrado");
         }else{
           let AlumnoRepetido = this.alumnos.find(alumno=>{
             return alumno.dniAlumno == this.AlumnoAgregar.dniAlumno;
@@ -386,7 +321,7 @@ export default {
           if(!AlumnoRepetido){
             $("#modalAgregarAlumno").modal("toggle");
           }else{
-            this.ErrorCountDownAlumnoRepetido = 6;
+            this.makeToast('Alumno existente',5,'warning',"El alumno ya se encuentra en la division");
           }
         }
         })
@@ -401,18 +336,25 @@ export default {
         .then(res => {
           this.$router.push({
             name: "Divisiones",
-            params: { SuccessCountDownDeletionProp: 4 }
+            params: { title:"Division eliminada",timer: 4,type:"success",message:"La division se ha eliminado correctamente" }
           });
         })
         .catch(err => {
           this.$router.push({
             name: "Divisiones",
-            params: { ErrorCountDownDeletionProp: 6 }
+            params: { title:"Error",timer: 6,type:"danger",message:"La division no ha podido ser eliminada" }
           });
         });
     },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   }
 };

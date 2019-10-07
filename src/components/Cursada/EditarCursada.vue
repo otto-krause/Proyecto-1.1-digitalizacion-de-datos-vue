@@ -204,10 +204,10 @@ export default {
         .then(async(res)=>{
           await axios.get("/api/cursada/completa/" + this.cursada.idCursada)
           .then((res)=>{
-            this.$router.push({ name: 'CursadaCompleta', params: {cursada:res.data[0], SuccessCountDownEditProp: 6 }})
+            this.$router.push({ name: 'CursadaCompleta', params: {cursada:res.data[0], title:"Cursada editada",timer: 5,type:"success",message:"La cursada se modifico correctamente" }})
           })
         })
-        .catch(err=>{this.$router.push({ name: 'CursadaCompleta', params: {cursada:this.cursada, ErrorCountDownEditProp: 7 }})})
+        .catch(err=>{this.$router.push({ name: 'CursadaCompleta', params: {cursada:this.cursada, title:"Error",timer: 6,type:"danger",message:"El acta de cursada no pudo ser modificada" }})})
     },
     onTouch () {
       this.isTouched = true

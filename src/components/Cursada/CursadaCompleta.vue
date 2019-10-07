@@ -6,26 +6,6 @@
         <router-link to="/Cursada" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
-    <b-alert
-      :show="SuccessCountDownEdit"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>El acta de cursada se modifico correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownEdit"
-      dismissible
-      variant="warning"
-      @dismissed="ErrorCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>El acta de cursada no pudo ser modificada</p>
-    </b-alert>
     <div
       class="modal fade deleteModal"
       id="myModal"
@@ -235,7 +215,7 @@ import axios from "axios";
 
 export default {
   name: "CursadaCompleta",
-  props: ["cursada", "SuccessCountDownEditProp", "ErrorCountDownEditProp"],
+  props: ["cursada","title","message","type","timer"],
   components: {
     Navigation,
     Multiselect
@@ -243,12 +223,6 @@ export default {
   data() {
     return {
       rolesMostrar: [],
-      SuccessCountDownEdit: this.SuccessCountDownEditProp
-        ? this.SuccessCountDownEditProp
-        : 0,
-      ErrorCountDownEdit: this.ErrorCountDownEditProp
-        ? this.ErrorCountDownEditProp
-        : 0,
       preceptor: {},
       diaSeleccionado: "",
       horarioInicioSeleccionado: "",
@@ -339,6 +313,9 @@ export default {
       this.$router.push({ name: "Cursada" });
     }
     this.GetHorarios();
+    if(this.timer){
+      this.makeToast(this.type);
+    }
   },
   methods: {
     ParseDia(DiaHorario) {
@@ -373,12 +350,13 @@ export default {
           salida: this.horarioFinSeleccionado
         })
         .then(res => {
-          (this.SuccessCountDownCreationProp = 4), this.GetHorarios();
+          this.makeToast('Horario agregado',4,'success',"El horario ha sido creado correctamente");
+          this.GetHorarios();
         })
         .catch(err => {
           if (err.message.includes("409")) {
-            thisErrorCountDownCreationRepeatedProp = 7;
-          } else this.ErrorCountDownCreationProp = 6;
+            this.makeToast('Horario existente',5,'warning',"El horario ya existe.");
+          } else this.makeToast('Error',6,'danger',"El horario no pudo ser creado.");
         });
     },
     async DeleteCursada() {
@@ -390,13 +368,13 @@ export default {
         .then(res => {
           this.$router.push({
             name: "Autoridades",
-            params: { SuccessCountDownDeletionProp: 4 }
+            params: { title:"Cursada eliminada",timer: 4,type:"success",message:"La cursada ha sido eliminada correctamente" }
           });
         })
         .catch(err => {
           this.$router.push({
             name: "Autoridades",
-            params: { ErrorCountDownDeletionProp: 6 }
+            params: { title:"Error",timer: 6,type:"danger",message:"La cursada no ha podido ser eliminada" }
           });
         });
     },
@@ -415,8 +393,15 @@ export default {
         this.GetHorarios();
         this.horarioSeleccionadoBorrar = '';
     },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    makeToast(title,timer,variant = null,message) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-left",
+        autoHideDelay:timer * 1000,
+        appendToast: true
+      })
     }
   },
   watch: {
