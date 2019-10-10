@@ -33,6 +33,7 @@ import MateriaCompleta from '@/components/Materia/MateriaCompleta'
 import EditarMateria from '@/components/Materia/EditarMateria'
 import AgregarMateria from '@/components/Materia/AgregarMateria'
 import ActasPrevia from '@/components/ActasPrevia/ActasPrevia'
+import AgregarActaPrevia from '@/components/ActasPrevia/AgregarActaPrevia'
 import ActaPreviaCompleta from '@/components/ActasPrevia/ActaPreviaCompleta'
 import Cursada from '@/components/Cursada/Cursada'
 import AgregarCursada from '@/components/Cursada/AgregarCursada'
@@ -225,6 +226,11 @@ export default new Router({
       path: '/ActasPrevia',
       name: 'ActasPrevia',
       component: ActasPrevia
+    },
+    {
+      path: '/AgregarActaPrevia',
+      name: 'AgregarActaPrevia',
+      component: AgregarActaPrevia
     },
     {
       path: '/ActaPreviaCompleta',

@@ -54,22 +54,22 @@
         <div class="col">
           <nav class="navbar navbar-light" style="background-color:#1a1a1d">
             <h1 class="navbar-brand text-white col-sm-3 col-md-2 mr-0">Actas de previas</h1>
-            <router-link :to="{ name: 'AgregarMateria' }" class="btn btn-info">Crear Acta de previa</router-link>
+            <router-link :to="{ name: 'AgregarActaPrevia' }" class="btn btn-info">Crear Acta de previa</router-link>
           </nav>
           <table class="table">
             <thead>
               <tr>
+                <th scope="col">ID Acta</th>
                 <th scope="col">Materia</th>
-                <th scope="col">Alumno</th>
-                <th scope="col">Profesor</th>
-                <th scope="col">Opciones</th>
+                <th scope="col">Turno</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody v-for="actaPrevia in displayedActas" :key="actaPrevia.idActa">
               <tr>
+                <th scope="col">{{actaPrevia.idActa}}</th>
                 <th scope="col">{{actaPrevia.idMateria}}</th>
-                <th scope="col">{{actaPrevia.titulo}}</th>
-                <th scope="col">{{actaPrevia.cantHoras}}</th>
+                <th scope="col">{{actaPrevia.turno}}</th>
                 <th scope="col">
                   <router-link
                     :to="{ name: 'ActaPreviaCompleta', params: {actaPrevia} }"
