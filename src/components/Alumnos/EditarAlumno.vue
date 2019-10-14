@@ -141,7 +141,7 @@ export default {
       nombre: this.alumno.nombre,
       apellido: this.alumno.apellido,
       fechaAlta: this.alumno.fechaAlta.slice(0,10),
-      fechaNacimiento: this.alumno.fechaNacimiento.slice(0,10),
+      fechaNacimiento: this.alumno.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? this.alumno.fechaNacimiento.slice(0,10) : new Date(null).toISOString(),
       repetidor: this.alumno.repetidor,
       alumnoReenviar: this.alumno
     };

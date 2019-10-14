@@ -2,42 +2,6 @@
   <div>
     <navigation />
     <div class="container-fluid">
-        <b-alert
-          :show="SuccessCountDownCreation"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownCreation =0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El acta se ha creado correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownCreation"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownCreation = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El acta no ha podido ser creada. Posiblemente haya un problema con los datos ingresados</p>
-        </b-alert>
-        <b-alert
-          :show="SuccessCountDownDeletion"
-          dismissible
-          variant="success"
-          @dismissed="SuccessCountDownDeletion = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El acta ha sido eliminada correctamente</p>
-        </b-alert>
-        <b-alert
-          :show="ErrorCountDownDeletion"
-          dismissible
-          variant="danger"
-          @dismissed="ErrorCountDownDeletion = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>El acta no ha podido ser eliminada</p>
-        </b-alert>
       <div class="row">
         <div class="col-3 col-lg-2" style="height:100vh; background-color:#FAFAFA">
           <div class="card rounded-0 border-0">
@@ -59,17 +23,17 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">ID Acta</th>
+                <th scope="col">Alumno</th>
+                <th scope="col">Profesor</th>
                 <th scope="col">Materia</th>
-                <th scope="col">Turno</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody v-for="actaPrevia in displayedActas" :key="actaPrevia.idActa">
               <tr>
-                <th scope="col">{{actaPrevia.idActa}}</th>
-                <th scope="col">{{actaPrevia.idMateria}}</th>
-                <th scope="col">{{actaPrevia.turno}}</th>
+                <th scope="col">{{actaPrevia.dniAlumno}} - {{actaPrevia.NombreAlumno}}, {{actaPrevia.ApellidoAlumno}}</th>
+                <th scope="col">{{actaPrevia.dniAutoridad}} - {{actaPrevia.NombreAutoridad}}, {{actaPrevia.ApellidoAutoridad}}</th>
+                <th scope="col">{{actaPrevia.titulo}}</th>
                 <th scope="col">
                   <router-link
                     :to="{ name: 'ActaPreviaCompleta', params: {actaPrevia} }"
@@ -79,7 +43,7 @@
               </tr>
             </tbody>
           </table>
-          <nav class="d-flex justify-content-center" v-if="ActasPrevias.length >9">
+          <nav class="d-flex justify-content-center" v-if="ActasPrevias.length >10">
           <ul class="pagination">
             <li class="page-item" v-if="page != 1">
               <a class="page-link" href="#" v-on:click="page = 1">
@@ -109,7 +73,7 @@ import axios from "axios";
 
 export default {
   name: "ActasPrevia",
-  props: ["SuccessCountDownCreationProp", "ErrorCountDownCreationProp","ErrorCountDownCreationRepeatedProp","SuccessCountDownDeletionProp","ErrorCountDownDeletionProp"],
+  props: ["title","message","type","timer"],
   components: {
     Navigation
   },
@@ -120,12 +84,7 @@ export default {
       perPage: 10,
       pages: [],
       ActasPrevias: [],
-      dismissSecs: 4,
-      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
-      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
-      SuccessCountDownDeletion:this.SuccessCountDownDeletionProp ? this.SuccessCountDownDeletionProp : 0,
-      ErrorCountDownDeletion:this.ErrorCountDownDeletionProp ? this.ErrorCountDownDeletionProp : 0,
-      ErrorCountDownCreationRepeated:this.ErrorCountDownCreationRepeatedProp ? this.ErrorCountDownCreationRepeatedProp : 0
+      dismissSecs: 4
     };
   },
   mounted() {
@@ -175,9 +134,6 @@ export default {
         autoHideDelay: this.timer * 1000,
         appendToast: true
       })
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
     }
   },
   watch: {

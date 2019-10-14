@@ -11,21 +11,22 @@
         <div class="row no-gutters">
           <div class="card-body">
             <h3 class="card-title text-center mb-4">Nueva Acta Previa</h3>
-            <form autocomplete="off" v-on:submit.prevent="PostNewAlumno">
-              <div class="form-group input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text">ID Acta Previa</label>
+            <form autocomplete="off" v-on:submit.prevent="PostNewActaPrevia">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="input-group-text text-center">Alumno</label>
+                  <div>
+                      <multiselect v-model="alumnoSeleccionado" :options="alumnos" placeholder="Lista de alumnos" :custom-label="LabelAlumno" track-by="dniAlumno" :searchable="true" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  name="id acta previa"
-                  class="form-control"
-                  placeholder="ID Acta Previa"
-                  v-model="idActaPrevia"
-                  required
-                  oninvalid="this.setCustomValidity('Ingrese el id de acta previa)"
-                  oninput="setCustomValidity('')"
-                />
+              </div>
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="input-group-text text-center">Profesor</label>
+                  <div>
+                      <multiselect v-model="profesorSeleccionado" :options="profesores" placeholder="Lista de profesores" :custom-label="LabelProfesor" track-by="dniAutoridad" :searchable="true" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                  </div>
+                </div>
               </div>
               <div class="form-group">
                 <div class="form-group">
@@ -39,14 +40,14 @@
               <div class="form-group">
                 <label class="input-group-text text-center">Turno</label>
                 <div>
-                  <multiselect v-model="turnoSeleccionado" placeholder="Lista de Turnos" label="name" track-by="value" :searchable="true" :options="turnos" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                  <multiselect v-model="turnoSeleccionado" placeholder="Lista de Turnos" label="name" track-by="value" :searchable="false" :options="turnos" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
                   <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar el turno</label>
                 </div>
               </div>
               <div class="form-group">
                 <label class="input-group-text text-center">Situaciones</label>
                 <div>
-                    <multiselect v-model="situacionSeleccionado" placeholder="Lista de Situaciones" label="situacion" track-by="value" :options="situaciones" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                    <multiselect v-model="situacionSeleccionada" placeholder="Lista de Situaciones" label="situacion" track-by="value" :searchable="false" :options="situaciones" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
                     <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar al menos una situación</label>
                 </div>
               </div>
@@ -76,57 +77,72 @@ export default {
   data() {
     return {
       idActa: '',
-      idMateria: '',
       situacion: '',
-      fechaCierre: '',
       turnoSeleccionado:'',
       turnos:[{ name: 'Mañana', value: 0 },{ name: 'Tarde', value: 1 }],
-      materiaSeleccionado: '',
+      materiaSeleccionada: '',
       materias: [],
-      situacionSeleccionado: '',
+      profesores:[],
+      profesorSeleccionado:'',
+      alumnos:[],
+      alumnoSeleccionado:'',
+      situacionSeleccionada: '',
       situaciones: [
-        {situacion: 'Mi mamá no me quiere pagar la cuota', value: 0}, 
-        {situacion: 'Se me murió el perro', value: 1},
-        {situacion: 'No sé que es un acta previa, por lo tanto, no sé que poner', value: 2}
+        {situacion: 'Diciembre', value: 0},
+        {situacion: 'Marzo', value: 1},
+        {situacion: 'Previa', value: 2}
       ]
     };
   },
   created(){
     this.GetMaterias();
+    this.GetAlumnos();
+    this.GetProfesores();
   },
   methods: {
     LabelMateria({resolucion,titulo,cantHoras}){
       return titulo + ` - Resolución: ` + resolucion + ` - ` + ' Horas Cátedra: ' + cantHoras;
+    },
+    LabelAlumno({dniAlumno,nombre,apellido}){
+      return dniAlumno + ` - ` + nombre + ', ' + apellido;
+    },
+    LabelProfesor({dniAutoridad,nombre,apellido}){
+      return dniAutoridad + ` - ` + nombre + ', ' + apellido;
     },
     GetMaterias(){
       axios.get("/api/materia/planmateria").then(result => {
         this.materias = result.data;
       })
     },
+    GetAlumnos(){
+      axios.get("/api/alumno").then(result => {
+        this.alumnos = result.data;
+      });
+    },
+    GetProfesores(){
+      axios.get("/api/autoridad/profesores").then(result => {
+        this.profesores = result.data;
+      });
+    },
     validar () {
-      if (!this.situacionSeleccionado && !this.materiaSeleccionado){
+      if (!this.situacionSeleccionada && !this.materiaSeleccionada){
         this.isInvalid = true
         return false
       }else
         return true
     },
-    async PostNewAutoridad() {
-      if(this.validar()){
-      await axios.post("/api/acta_previa/add", {
-          idActa: this.idActa,
-          idMateria: this.idMateria,
-          situacion: this.situacion,
-          fechaCierre: this.fechaCierre,
-          turno: this.turno
+    PostNewActaPrevia() {
+      axios.post("/api/acta_previa/add", {
+          dniAlumno: this.alumnoSeleccionado.dniAlumno,
+          dniAutoridad: this.profesorSeleccionado.dniAutoridad,
+          idMateria: this.materiaSeleccionada.idMateria,
+          situacion: this.situacionSeleccionada.situacion,
+          turno: this.turnoSeleccionado.value
         })
-        .then(res=>{this.$router.push({ name: 'ActaPrevia', params: {title:"Acta Previa creada",timer: 4,type:"success",message:"El Acta Previa se ha creado correctamente"}})})
+        .then(res=>{this.$router.push({ name: 'ActasPrevia', params: {title:"Acta Previa creada",timer: 4,type:"success",message:"El Acta Previa se ha creado correctamente"}})})
         .catch(err=>{
-          if(err.message.includes('409')){
-            this.makeToast('Acta Previa existente',6,'warning',"(ID Acta Existente) - El Acta Previa ya existe. Debe darla de baja para registrarla nuevamente");
-          }else
             this.makeToast('Error',6,'danger',"El Acta Previa no ha podido ser creada. Posiblemente haya un problema con los datos ingresados");
           })
-      }
     },
     makeToast(title,timer,variant = null,message) {
       this.$bvToast.toast(message, {
@@ -141,5 +157,6 @@ export default {
   }
 };
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 </style>

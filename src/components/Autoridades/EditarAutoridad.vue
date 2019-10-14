@@ -93,13 +93,13 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text">Fecha de Alta</label>
                 </div>
-                <input type="date" v-model="fechaAlta" id="fechaAlta" name="fechaAlta" class="form-control" required oninvalid="this.setCustomValidity('Ingrese la fecha de alta de la autoridad')" oninput="setCustomValidity('')"/>
+                <input type="date" v-model="fechaAlta" id="fechaAlta" name="fechaAlta" class="form-control" min='1970-01-01' max='2100-01-01' required oninvalid="this.setCustomValidity('Ingrese la fecha de alta de la autoridad')" oninput="setCustomValidity('')"/>
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text">Fecha de cumpleaños</label>
+                  <label class="input-group-text">Fecha de nacimiento</label>
                 </div>
-                <input type="date" v-model="fechaNacimiento" id="fechaNacimiento" name="fechaNacimiento" class="form-control" />
+                <input type="date" v-model="fechaNacimiento" id="fechaNacimiento" name="fechaNacimiento" min='1970-01-01' max='2100-01-01' class="form-control" />
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -151,7 +151,7 @@ export default {
       nombre: this.autoridad.nombre,
       apellido: this.autoridad.apellido,
       fechaAlta: this.autoridad.fechaAlta.slice(0,10),
-      fechaNacimiento: this.autoridad.fechaNacimiento.slice(0,10),
+      fechaNacimiento: this.autoridad.fechaNacimiento != '1970-01-01T03:00:00.000Z' ? this.autoridad.fechaNacimiento.slice(0,10) : new Date(null).toISOString(),
       fichaMedica: this.autoridad.fichaMedica,
       cargos:this.rolesMostrar,
       roles: [],

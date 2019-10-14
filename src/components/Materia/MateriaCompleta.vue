@@ -58,7 +58,6 @@
                     <td><div v-for="resolucion in resoluciones" v-bind:key="resolucion.resolucion">{{resolucion.resolucion}}</div></td>
                   </tr>
                   <tr>
-                  <tr>
                     <th>Opciones</th>
                     <td>
                       <button
@@ -94,13 +93,7 @@ export default {
   },
   data() {
     return {
-      resoluciones:[],
-      SuccessCountDownEdit:this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
-      ErrorCountDownEdit:this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
-      SuccessCountDownCreation:this.SuccessCountDownCreationProp ? this.SuccessCountDownCreationProp : 0,
-      ErrorCountDownCreation:this.ErrorCountDownCreationProp ? this.ErrorCountDownCreationProp : 0,
-      SuccessCountDownDeletion:0,
-      ErrorCountDownDeletion:0
+      resoluciones:[]
     };
   },
   mounted() {

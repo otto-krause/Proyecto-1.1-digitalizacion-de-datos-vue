@@ -235,7 +235,8 @@ export default new Router({
     {
       path: '/ActaPreviaCompleta',
       name: 'ActaPreviaCompleta',
-      component: ActaPreviaCompleta
+      component: ActaPreviaCompleta,
+      props:true
     },
     {
       path: '/Cursada',

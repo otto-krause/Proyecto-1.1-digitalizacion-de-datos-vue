@@ -3,29 +3,9 @@
     <Navigation />
     <div class="container-fluid" style="background-color:#1a1a1d">
       <nav class="navbar navbar-expand-md navbar-light">
-        <router-link to="/Divisiones" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
+        <router-link to="/ActasPrevia" class="nav-link btn btn-info fas fa-arrow-circle-left"></router-link>
       </nav>
     </div>
-    <b-alert
-      :show="SuccessCountDownEdit"
-      dismissible
-      variant="success"
-      @dismissed="SuccessCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>El acta se modifico correctamente</p>
-    </b-alert>
-    <b-alert
-      :show="ErrorCountDownEdit"
-      dismissible
-      variant="warning"
-      @dismissed="ErrorCountDownEdit =0"
-      @dismiss-count-down="countDownChanged"
-      class="col-md-10 col-lg-7 mx-auto mt-3"
-    >
-      <p>El acta no pudo ser modificada</p>
-    </b-alert>
     <div
       class="modal fade deleteModal"
       id="myModal"
@@ -54,35 +34,53 @@
       </div>
     </div>
     <div class="row">
-      <div class="col mx-5">
-        <div class="card mt-5">
+      <div class="col-md-8 col-lg-5 mx-auto">
+        <div class="card mt-4">
           <div class="card-body">
             <nav class="navbar">
               <h4 class="card-title">Acta previa</h4>
             </nav>
             <div class="table-responsive">
               <table class="table">
-                <tbody v-bind="actaPrevia">
+                <tbody>
+                  <h5>Alumno</h5>
                   <tr>
-                    <th>Especialidad</th>
-                    <td>{{division.especialidad}}</td>
+                    <th>DNI</th>
+                    <td>{{actaPrevia.dniAlumno}}</td>
                   </tr>
                   <tr>
-                    <th>Año</th>
-                    <td>{{division.año}}</td>
+                    <th>Nombre</th>
+                    <td>{{actaPrevia.NombreAlumno}}, {{actaPrevia.ApellidoAlumno}}</td>
+                  </tr>
+                  <h5>Profesor</h5>
+                  <tr>
+                    <th>DNI</th>
+                    <td>{{actaPrevia.dniAutoridad}}</td>
                   </tr>
                   <tr>
-                    <th>Division</th>
-                    <td>{{division.numDivision}}</td>
+                    <th>Nombre</th>
+                    <td>{{actaPrevia.NombreAutoridad}}, {{actaPrevia.ApellidoAutoridad}}</td>
+                  </tr>
+                  <h5>Materia</h5>
+                  <tr>
+                    <th>Titulo</th>
+                    <td>{{materia.titulo}}</td>
                   </tr>
                   <tr>
-                    <th>Turno</th>
-                    <td>{{division.turno ? 'Tarde' : 'Mañana'}}</td>
+                    <th>Horas catedra</th>
+                    <td>{{materia.cantHoras}}</td>
                   </tr>
                   <tr>
-                    <th>Ciclo Lectivo</th>
-                    <td>{{division.cicloLectivo}}</td>
+                    <th>Descripcion</th>
+                    <td>{{materia.descripcion}}</td>
                   </tr>
+                  <tr>
+                    <th>Resoluciones</th>
+                    <td><div v-for="resolucion in resoluciones" v-bind:key="resolucion.resolucion">{{resolucion.resolucion}}</div></td>
+                  </tr>
+                  <nav class="navbar">
+                    <h4 class="card-title">Opciones</h4>
+                  </nav>
                   <tr>
                     <th>Opciones</th>
                     <td>
@@ -93,52 +91,10 @@
                         data-target=".deleteModal"
                       ></button>
                       <router-link
-                        :to="{ name: 'EditarDivision', params: {division} }"
+                        :to="{ name: 'EditarDivision', params: {actaPrevia} }"
                         class="nav-link btn btn-info fas fa-edit"
                       ></router-link>
                     </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col mx-5">
-        <div class="card mt-5">
-          <div class="card-body">
-            <nav class="navbar">
-              <h4 class="card-title">Preceptor</h4>
-              <p v-if="!preceptor">No posee preceptor asignado</p>
-            </nav>
-            <div class="table-responsive">
-              <table class="table">
-                <tbody v-if="preceptor" v-bind="preceptor">
-                  <tr>
-                    <th>DNI</th>
-                    <td>{{preceptor.dniAutoridad}}</td>
-                  </tr>
-                  <tr>
-                    <th>Nombre</th>
-                    <td>{{preceptor.nombre}}</td>
-                  </tr>
-                  <tr>
-                    <th>Apellido</th>
-                    <td>{{preceptor.apellido}}</td>
-                  </tr>
-                  <tr>
-                    <tr>
-                    <th>Telefono</th>
-                    <td>{{preceptor.telefono}}</td>
-                  </tr>
-                  <tr>
-                    <tr>
-                    <th>Direccion</th>
-                    <td>{{preceptor.direccion}}</td>
-                  </tr>
-                  <tr>
-                    <th>Fecha de Ingreso</th>
-                    <td>{{preceptor.fechaIngreso != '1970-01-01T03:00:00.000Z' && preceptor.fechaIngreso != null ? preceptor.fechaIngreso.slice(0,10) : 'No tiene'}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -155,33 +111,32 @@ import axios from "axios";
 
 export default {
   name: "ActaPreviaCompleta",
-  props: [
-    "actaPrevia",
-    "SuccessCountDownEditProp",
-    "ErrorCountDownEditProp"
-  ],
+  props: ["actaPrevia"],
   components: {
     Navigation
   },
   data() {
     return {
-      rolesMostrar: [],
-      SuccessCountDownEdit: this.SuccessCountDownEditProp ? this.SuccessCountDownEditProp : 0,
-      ErrorCountDownEdit: this.ErrorCountDownEditProp ? this.ErrorCountDownEditProp : 0,
-      preceptor:{}
+      materia:{},
+      resoluciones:[]
     };
   },
   mounted() {
-    if (!this.division) {
-      this.$router.push({ name: "Divisiones" });
+    if (!this.actaPrevia) {
+      this.$router.push({ name: "ActasPrevia" });
     }
-    this.GetPreceptor();
+    this.GetMateria();
+    this.GetResolucion();
   },
   methods: {
-    async GetPreceptor(){
-      await axios.get("/api/autoridad/" + this.division.dniPreceptor)
-      .then(res =>{
-        this.preceptor = res.data[0];
+    GetMateria() {
+      axios.get("/api/materia/" + this.actaPrevia.idMateria).then(result => {
+        this.materia = result.data[0];
+      });
+    },
+    GetResolucion() {
+      axios.get("/api/materia/plan_Materia/Resolucion/"+ this.actaPrevia.idMateria).then(result => {
+        this.resoluciones = result.data;
       });
     },
     async DeleteActa() {
@@ -202,9 +157,6 @@ export default {
             params: { ErrorCountDownDeletionProp: 6 }
           });
         });
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
     }
   }
 };
