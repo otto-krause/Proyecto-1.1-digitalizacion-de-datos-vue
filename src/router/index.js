@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import Inicio from '@/components/Inicio/Inicio'
 import Navigation from '@/components/Navegacion/Navigation'
 import Login from '@/components/Login/Login'
 import SignUp from '@/components/Login/SignUp'
@@ -48,7 +49,7 @@ export default new Router({
     {
       path: '/',
       name: 'Inicio',
-      component: Navigation
+      component: Inicio
     },
     {
       path: '/login',

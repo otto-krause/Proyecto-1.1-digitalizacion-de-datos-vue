@@ -2,82 +2,113 @@
   <div>
     <Navigation/>
     <!-- Default form register -->
-    <form class="text-center border border-light p-5 container col-md-5 col-lg-3" action="#!">
-      <p class="h4 mb-4">Registro</p>
+    <form class="text-center p-5 container col-md-5 col-lg-4" action="#!">
+      <div id="signup">
+        <p class="h4 mb-4">Registro</p>
+        
+        <div class="form-group">
+            <label class="input-group-text text-center">Autoridades</label>
+          <div>
+            <multiselect v-model="autoridadSeleccionada" :options="autoridades" placeholder="Lista de autoridades" :custom-label="LabelAutoridades" track-by="idAutoridad" :searchable="true" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+          </div>
+        </div>
 
-      <div class="form-row mb-4">
-        <div class="col">
-          <!-- First name -->
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text">Usuario</label>
+          </div>
           <input
             type="text"
-            id="defaultRegisterFormFirstName"
+            name="Usuario"
             class="form-control"
-            placeholder="Usuario"
+            placeholder="Ejemplo: maria474"
+            v-model="Usuario"
+            required
+            oninvalid="this.setCustomValidity('Ingrese el usuario')"
+            oninput="setCustomValidity('')"
           />
         </div>
-        <div class="col">
-          <!-- Last name -->
+
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text">E-Mail</label>
+          </div>
           <input
             type="text"
-            id="defaultRegisterFormLastName"
+            name="mail"
             class="form-control"
-            placeholder="Apellido"
+            placeholder="Ejemplo: m.angene474@gmail.com"
+            v-model="mail"
           />
         </div>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text">Contraseña</label>
+          </div>
+          <input
+            type="password"
+            id="defaultRegisterFormPassword"
+            name="Contraseña"
+            class="form-control"
+            placeholder="Contraseña"
+            v-model="Contraseña"
+            required
+            oninvalid="this.setCustomValidity('Ingrese la Contraseña')"
+            oninput="setCustomValidity('')"
+            aria-describedby="defaultRegisterFormPasswordHelpBlock"
+          />
+        </div>
+        <small
+          id="defaultRegisterFormPasswordHelpBlock"
+          class="form-text text-muted mb-4"
+        >Como mínimo 8 dígitos y una mayúscula</small>
+
+        <!-- Sign up button -->
+        <button class="btn btn-danger my-4 btn-block" type="submit">Registrarse</button>
       </div>
-
-      <!-- E-mail -->
-      <input
-        type="email"
-        id="defaultRegisterFormEmail"
-        class="form-control mb-4"
-        placeholder="E-mail"
-      />
-
-      <!-- Password -->
-      <input
-        type="password"
-        id="defaultRegisterFormPassword"
-        class="form-control"
-        placeholder="Contraseña"
-        aria-describedby="defaultRegisterFormPasswordHelpBlock"
-      />
-      <small
-        id="defaultRegisterFormPasswordHelpBlock"
-        class="form-text text-muted mb-4"
-      >Como minimo 8 digitos y una mayuscula</small>
-
-      <!-- Sign up button -->
-      <button class="btn btn-danger my-4 btn-block" type="submit">Registrarse</button>
     </form>
     <!-- Default form register -->
   </div>
 </template>
 <script>
 import Navigation from "../Navegacion/Navigation";
+import Multiselect from 'vue-multiselect'
 
 import axios from "axios";
 
 export default {
   name: "SignUp",
   components: {
-    Navigation
+    Navigation,
+    Multiselect
   },
   data() {
-    return {};
+    return {
+      autoridades: []
+    };
   },
-  mounted() {
-    this.getTasks();
+  created() {
+    this.GetAutoridades();
   },
   methods: {
-    getTasks() {
-      axios.get("/api/tasks").then(result => {
-        console.log(result.data);
+    GetAutoridades() {
+      axios.get("/api/autoridad").then(result => {
+        this.autoridades = result.data;
       });
-    }
+    },
+    LabelAutoridades({nombre, apellido, dni}){
+      return nombre + ' - ' + apellido + ' - ' + 'DNI: ' + dni;
+    },
   }
 };
 </script>
 
 <style>
+#signup
+{
+  border: 1px rgb(199, 199, 199) solid;
+  border-radius: 5%;
+  padding: 10%;
+}
 </style>
