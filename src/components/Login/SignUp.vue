@@ -5,7 +5,7 @@
     <form class="text-center p-5 container col-md-5 col-lg-4" action="#!">
       <div id="signup">
         <p class="h4 mb-4">Registro</p>
-        
+
         <div class="form-group">
             <label class="input-group-text text-center">Autoridades</label>
           <div>
@@ -85,7 +85,8 @@ export default {
   },
   data() {
     return {
-      autoridades: []
+      autoridades: [],
+      autoridadSeleccionada:''
     };
   },
   created() {
@@ -97,13 +98,13 @@ export default {
         this.autoridades = result.data;
       });
     },
-    LabelAutoridades({nombre, apellido, dni}){
-      return nombre + ' - ' + apellido + ' - ' + 'DNI: ' + dni;
+    LabelAutoridades({nombre, apellido, dniAutoridad}){
+      return dniAutoridad + ' - ' + nombre + ', ' + apellido;
     },
   }
 };
 </script>
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 #signup
 {

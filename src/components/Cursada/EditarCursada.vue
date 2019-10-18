@@ -89,49 +89,47 @@ export default {
     if(!this.cursada){
       this.$router.push({ name: 'Cursada'})
     }
-  },
-  created(){
     this.GetProfesores();
     this.GetMaterias();
-    this.GetDivisiones()
+    this.GetDivisiones();
   },
   computed: {
-    filteredDivisiones() {
-      return this.divisiones.filter(division => {
-        return (
-          (
-            this.cicloLectivoSeleccionado ? division.cicloLectivo == this.cicloLectivoSeleccionado : true
-          ) &&
-          (
-            this.año ? division.año.toString().includes(this.año) : true
-          ) &&
-          (
-            this.division ? division.numDivision.toString().includes(this.division) : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Computación' ? division.especialidad == 'Computación' : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Electrónica' ? division.especialidad == 'Electrónica' : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Electricidad' ? division.especialidad == 'Electricidad' : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Química' ? division.especialidad == 'Química' : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Mecánica' ? division.especialidad == 'Mecánica' : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Construcciones' ? division.especialidad == 'Construcciones' : true
-          ) &&
-          (
-            this.especialidadSeleccionada == 'Ciclo Básico' ? division.especialidad == 'Ciclo Básico' : true
-          )
-        );
-      });
-    }
+    filteredDivisiones(){
+        return this.divisiones.filter(division => {
+          return (
+            (
+              this.cicloLectivoSeleccionado ? division.cicloLectivo.toString().includes(this.cicloLectivoSeleccionado) : true
+            ) &&
+            (
+              this.año ? division.año.toString().includes(this.año) : true
+            ) &&
+            (
+              this.division ? division.numDivision.toString().includes(this.division) : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Computación' ? division.especialidad == 'Computación' : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Electrónica' ? division.especialidad == 'Electrónica' : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Electricidad' ? division.especialidad == 'Electricidad' : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Química' ? division.especialidad == 'Química' : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Mecánica' ? division.especialidad == 'Mecánica' : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Construcciones' ? division.especialidad == 'Construcciones' : true
+            ) &&
+            (
+              this.especialidadSeleccionada == 'Ciclo Básico' ? division.especialidad == 'Ciclo Básico' : true
+            )
+          );
+        });
+      }
   },
   methods: {
     LabelProfesor({dniAutoridad,nombre,apellido}){
@@ -213,7 +211,7 @@ export default {
       this.isTouched = true
     }
   },
-  watch: {
+  watch:{
     año:function (){
       this.division = '';
       this.filterNumDiv();

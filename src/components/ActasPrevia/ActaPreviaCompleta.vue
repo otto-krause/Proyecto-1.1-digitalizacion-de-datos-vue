@@ -91,7 +91,7 @@
                         data-target=".deleteModal"
                       ></button>
                       <router-link
-                        :to="{ name: 'EditarDivision', params: {actaPrevia} }"
+                        :to="{ name: 'EditarActaPrevia', params: {actaPrevia} }"
                         class="nav-link btn btn-info fas fa-edit"
                       ></router-link>
                     </td>

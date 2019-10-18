@@ -21,11 +21,8 @@
         <li class="nav-item">
           <router-link to="/" class="nav-link">Asistencia</router-link>
         </li>
-        <li class="nav-item">
-          <router-link to="/" class="nav-link">Notas</router-link>
-        </li>
       </ul>
-      <ul class="navbar-nav mr-2">
+      <ul class="navbar-nav">
         <li class="nav-item dropdown mr-5">
           <a
             class="nav-link dropdown-toggle"
@@ -35,7 +32,7 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-          >Dase de Batos</a>
+          >Secciones</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link to="/autoridades" class="dropdown-item">Autoridades</router-link>
             <router-link to="/Roles" class="dropdown-item">Roles</router-link>

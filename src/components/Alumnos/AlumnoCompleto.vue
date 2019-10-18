@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col col-sm-6 mx-5">
+      <div class="col col-sm-4 mx-2">
         <div class="card mt-5">
           <div class="card-body">
             <nav class="navbar">
@@ -83,11 +83,7 @@
                   </tr>
                   <tr>
                     <th>Nombre</th>
-                    <td>{{alumno.nombre}}</td>
-                  </tr>
-                  <tr>
-                    <th>Apellido</th>
-                    <td>{{alumno.apellido}}</td>
+                    <td>{{alumno.nombre}}, {{alumno.apellido}}</td>
                   </tr>
                   <tr>
                     <th>Fecha de Alta</th>
@@ -140,7 +136,7 @@
           </div>
         </div>
       </div>
-      <div class="col mx-5">
+      <div class="col mx-2">
         <div class="card mt-5">
           <div class="card-body">
             <nav class="navbar">
@@ -153,7 +149,6 @@
                   <tr>
                     <th scope="col">DNI</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
                     <th scope="col">Relación</th>
                     <th scope="col">Celular</th>
                     <th scope="col">Mail</th>
@@ -163,8 +158,7 @@
                 <tbody v-for="contactoAlumno in contactosAlumno" :key="contactoAlumno.idContacto">
                   <tr>
                     <th scope="col">{{contactoAlumno.dniContacto}}</th>
-                    <th scope="col">{{contactoAlumno.nombre}}</th>
-                    <th scope="col">{{contactoAlumno.apellido}}</th>
+                    <th scope="col">{{contactoAlumno.nombre}}, {{contactoAlumno.apellido}}</th>
                     <th scope="col">{{contactoAlumno.relacion}}</th>
                     <th scope="col">{{contactoAlumno.celular}}</th>
                     <th scope="col">{{contactoAlumno.mail}}</th>
