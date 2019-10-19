@@ -40,14 +40,14 @@
               <div class="form-group">
                 <label class="input-group-text text-center">Turno</label>
                 <div>
-                  <multiselect v-model="turnoSeleccionado" placeholder="Lista de Turnos" label="name" track-by="value" :searchable="false" :options="turnos" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                  <multiselect v-model="turnoSeleccionado" placeholder="Lista de Turnos" :searchable="false" :options="turnos" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
                   <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar el turno</label>
                 </div>
               </div>
               <div class="form-group">
                 <label class="input-group-text text-center">Situaciones</label>
                 <div>
-                    <multiselect v-model="situacionSeleccionada" placeholder="Lista de Situaciones" label="situacion" track-by="value" :searchable="false" :options="situaciones" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
+                    <multiselect v-model="situacionSeleccionada" placeholder="Lista de Situaciones" :searchable="false" :options="situaciones" :close-on-select="true" :show-labels="false" :multiple="false"></multiselect>
                     <label class="typo__label form__label" v-if="isInvalid">*Debes seleccionar al menos una situación</label>
                 </div>
               </div>
@@ -77,9 +77,8 @@ export default {
   data() {
     return {
       idActa: '',
-      situacion: '',
       turnoSeleccionado:'',
-      turnos:[{ name: 'Mañana', value: 0 },{ name: 'Tarde', value: 1 }],
+      turnos:['Mañana','Tarde'],
       materiaSeleccionada: '',
       materias: [],
       profesores:[],
@@ -87,11 +86,8 @@ export default {
       alumnos:[],
       alumnoSeleccionado:'',
       situacionSeleccionada: '',
-      situaciones: [
-        {situacion: 'Diciembre', value: 0},
-        {situacion: 'Marzo', value: 1},
-        {situacion: 'Previa', value: 2}
-      ]
+      situaciones: ['Diciembre','Marzo','Previa'],
+      isInvalid: false
     };
   },
   created(){
@@ -131,13 +127,20 @@ export default {
       }else
         return true
     },
+    validar () {
+      if (this.cargos.length === 0){
+        this.isInvalid = true
+        return false
+      }else
+        return true
+    },
     PostNewActaPrevia() {
       axios.post("/api/acta_previa/add", {
           dniAlumno: this.alumnoSeleccionado.dniAlumno,
           dniAutoridad: this.profesorSeleccionado.dniAutoridad,
           idMateria: this.materiaSeleccionada.idMateria,
-          situacion: this.situacionSeleccionada.situacion,
-          turno: this.turnoSeleccionado.value
+          situacion: this.situacionSeleccionada,
+          turno: this.turnoSeleccionado
         })
         .then(res=>{this.$router.push({ name: 'ActasPrevia', params: {title:"Acta Previa creada",timer: 4,type:"success",message:"El Acta Previa se ha creado correctamente"}})})
         .catch(err=>{

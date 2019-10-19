@@ -39,6 +39,7 @@
           <div class="card-body">
             <nav class="navbar">
               <h4 class="card-title">Acta previa</h4>
+              <h5>Situacion: {{actaPrevia.situacion}}</h5>
             </nav>
             <div class="table-responsive">
               <table class="table">
