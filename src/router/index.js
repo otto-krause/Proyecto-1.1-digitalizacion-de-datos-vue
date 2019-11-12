@@ -41,10 +41,10 @@ import Cursada from '@/components/Cursada/Cursada'
 import AgregarCursada from '@/components/Cursada/AgregarCursada'
 import CursadaCompleta from '@/components/Cursada/CursadaCompleta'
 import EditarCursada from '@/components/Cursada/EditarCursada'
-import VerAsistencia from '@/components/Asistencia/VerAsistencia'
 import Asistencia from '@/components/Asistencia/Asistencia'
 import TomarAsistencia from '@/components/Asistencia/TomarAsistencia'
-
+import VerAsistenciaDivision from '@/components/Asistencia/VerAsistenciaDivision'
+import ModificarAsistencia from '@/components/Asistencia/ModificarAsistencia'
 
 Vue.use(Router)
 
@@ -274,19 +274,26 @@ export default new Router({
       props:true
     },
     {
-      path: '/VerAsistencia',
-      name: 'VerAsistencia',
-      component: VerAsistencia
+      path: '/VerAsistenciaDivision',
+      name: 'VerAsistenciaDivision',
+      component: VerAsistenciaDivision
     },
     {
       path: '/Asistencia',
       name: 'Asistencia',
-      component: Asistencia
+      component: Asistencia,
+      props:true
     },
     {
       path: '/TomarAsistencia',
       name: 'TomarAsistencia',
       component: TomarAsistencia,
+      props:true
+    },
+    {
+      path: '/ModificarAsistencia',
+      name: 'ModificarAsistencia',
+      component: ModificarAsistencia,
       props:true
     },
     {

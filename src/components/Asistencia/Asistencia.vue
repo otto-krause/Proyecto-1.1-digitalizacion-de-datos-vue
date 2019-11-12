@@ -3,7 +3,22 @@
     <navigation/>
     <div>
       <nav class="navbar navbar-expand-xs navbar-dark border-bottom border-dark" style="background-color:#1a1a1d">
-        <a class="navbar-brand" href="#">Tomar Lista</a>
+     
+        <b-form-group>
+          <b-form-radio-group
+            id="botonesOpcion"
+            v-model="tomarLista"
+            :options= "[
+          { text: 'Tomar Lista', value: true },
+          { text: 'Modificar Asistencias', value: false }]"
+            buttons
+            button-variant="outline-info"
+            size="lg"
+            class="mt-3"
+            name="radio-btn-outline"
+          ></b-form-radio-group>
+        </b-form-group>
+
         <button
           class="btn btn-info"
           type="button"
@@ -17,51 +32,53 @@
         </button>
 
         <div class="collapse navbar-collapse" id="Filtros">
-          <article class="card-group-item">
-            <header class="card-title">
-              <h3 class="mt-1 mb-0" style="color:#FAFAFA">Especialidad</h3>
-            </header>
-            <div class="card-body">
-              <div class="form-row">
-                <div class="form-group col-sm-8">
-                  <article class="card-group-item">
-                    <multiselect class="col-sm-7" v-model="especialidadFiltro" :options="especialidades" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Especialidad"></multiselect>
-                  </article>
-                </div>
-              </div>
+          <div class="container-fluid row">
+            <div class="col-sm-6">
+              <article class="card-group-item">
+                <h3 class="mt-1 mb-0" style="color:#FAFAFA">Especialidad</h3>
+                <multiselect class="col-sm-7" v-model="especialidadFiltro" :options="especialidades" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Especialidad"></multiselect>
+              </article>
             </div>
-          </article>
-          <article class="card-group-item" v-if="especialidadFiltro != ''">
-            <header class="card-title">
-              <h3 class="mt-1 mb-0" style="color:#FAFAFA">Año</h3>
-            </header>
-            <div class="card-body">
-              <div class="form-row">
-                <div class="form-group col-sm-8">
-                  <article class="card-group-item">
-                    <multiselect class="col-sm-7" v-model="añoFiltro" :options="años" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Año"></multiselect>
-                  </article>
-                </div>
-              </div>
+            
+            <div class="col-sm-6">
+              <article class="card-group-item" v-if="especialidadFiltro != ''">
+                <h3 class="mt-1 mb-0" style="color:#FAFAFA">Año</h3>
+                <multiselect class="col-sm-7" v-model="añoFiltro" :options="años" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Año"></multiselect>
+              </article>
             </div>
-          </article>
+          </div>
         </div>
       </nav>
     </div>
     <!--Fin Segunda Barra -->
-    <h1>Seleccione una división para tomar lista</h1>
 
-    <div v-for="(division, index) in DivisionesFiltradas" v-bind:key="index" class="container-fluid">
-      <router-link
-        :to="{ name: 'TomarAsistencia', params: {division} }"
-      >
-        <button type="button" class="btn btn-danger pl-5 pr-5 my-2 btn-block">
-          <span>
-            <h3> {{division.año}} {{division.especialidad}} {{division.numDivision}} </h3> 
-            <h4> Turno {{division.turno ? 'tarde' : 'mañana'}} </h4>
-          </span>
-        </button>
-      </router-link>
+    <div v-for="(division, index) in DivisionesFiltradas" v-bind:key="index">
+      <template v-if="tomarLista">
+        <router-link
+          :to="{ name: 'TomarAsistencia', params: {division} }" class="text-decoration-none"
+        >
+          <button type="button" class="btn btn-info pl-5 pr-5 my-2 btn-block">
+            <span>
+              <h3> {{division.año}} {{division.especialidad}} {{division.numDivision}} </h3> 
+              <h4> Turno {{division.turno ? 'tarde' : 'mañana'}} </h4>
+            </span>
+          </button>
+        </router-link>
+      </template>
+      
+      <template v-else>
+        <router-link
+          :to="{ name: 'ModificarAsistencia', params: {division} }" class="text-decoration-none"
+        >
+          <button type="button" class="btn btn-info pl-5 pr-5 my-2 btn-block">
+            <span>
+              <h3> {{division.año}} {{division.especialidad}} {{division.numDivision}} </h3> 
+              <h4> Turno {{division.turno ? 'tarde' : 'mañana'}} </h4>
+            </span>
+          </button>
+        </router-link>
+      </template>
+      
     </div>
   </div>
 </template>
@@ -72,14 +89,16 @@ import axios from "axios";
 import multiselect from 'vue-multiselect';
 
 export default {
+  name: "Asistencia",
+  props: ["title","message","type","timer"],
   components:
   {
     Navigation,
     multiselect,
   },
-  name: "TomarLista",
   data() {
     return {
+      tomarLista:true,
       divisiones:[],
       especialidades:['Computación', 'Electrónica', 'Eléctrica', 'Mecánica', 'Química', 'Construcciones', 'Ciclo Básico'],
       especialidadFiltro:'',
@@ -103,6 +122,9 @@ export default {
   },
   mounted() {
     this.ObtenerDivisiones();
+    if(this.timer){
+      this.makeToast(this.type);
+    }
   },
   watch:{
     especialidadFiltro: function(){
@@ -121,10 +143,25 @@ export default {
         this.divisiones = result.data;
       });
     },
+    makeToast(variant = null) {
+      this.$bvToast.toast(this.message, {
+        title: this.title,
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-bottom-left",
+        autoHideDelay: this.timer * 1000,
+        appendToast: true
+      })
+    }
   }
 };
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"> </style>
-<style>
-
+<style scoped>
+.container {
+  padding: 0 !important;
+}
+[class*="col"] {
+  padding: 0 !important;
+}
 </style>

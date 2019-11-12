@@ -19,7 +19,7 @@
             <router-link to="/" class="nav-link">Inicio</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/Asistencia" class="nav-link">Asistencia</router-link>
+          <router-link to="/Asistencia" class="nav-link">Tomar Lista</router-link>
         </li>
       </ul>
       <ul class="navbar-nav">
@@ -47,6 +47,8 @@
             <router-link to="/Materias" class="dropdown-item">Materias</router-link>
             <div class="dropdown-divider"></div>
             <router-link to="/ActasPrevia" class="dropdown-item">Actas de previas</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link to="/VerAsistenciaDivision" class="dropdown-item">Asistencia por Division</router-link>
           </div>
         </li>
       </ul>
