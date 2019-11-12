@@ -41,6 +41,10 @@ import Cursada from '@/components/Cursada/Cursada'
 import AgregarCursada from '@/components/Cursada/AgregarCursada'
 import CursadaCompleta from '@/components/Cursada/CursadaCompleta'
 import EditarCursada from '@/components/Cursada/EditarCursada'
+import VerAsistencia from '@/components/Asistencia/VerAsistencia'
+import Asistencia from '@/components/Asistencia/Asistencia'
+import TomarAsistencia from '@/components/Asistencia/TomarAsistencia'
+
 
 Vue.use(Router)
 
@@ -267,6 +271,22 @@ export default new Router({
       path: '/EditarCursada',
       name: 'EditarCursada',
       component: EditarCursada,
+      props:true
+    },
+    {
+      path: '/VerAsistencia',
+      name: 'VerAsistencia',
+      component: VerAsistencia
+    },
+    {
+      path: '/Asistencia',
+      name: 'Asistencia',
+      component: Asistencia
+    },
+    {
+      path: '/TomarAsistencia',
+      name: 'TomarAsistencia',
+      component: TomarAsistencia,
       props:true
     },
     {

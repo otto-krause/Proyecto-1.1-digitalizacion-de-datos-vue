@@ -19,7 +19,7 @@
             <router-link to="/" class="nav-link">Inicio</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/" class="nav-link">Asistencia</router-link>
+          <router-link to="/Asistencia" class="nav-link">Asistencia</router-link>
         </li>
       </ul>
       <ul class="navbar-nav">
